@@ -23,6 +23,7 @@ SOURCES +=
 HEADERS += \
     experimental/TypeList.h \
     experimental/TypeListTraits.h \
+    experimental/literals.h \
     source/tl_fwd.h \
     source/tl_utilities.h \
     source/type_list.h \
