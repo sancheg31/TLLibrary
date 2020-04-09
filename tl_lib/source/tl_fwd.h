@@ -29,31 +29,4 @@ template <typename TList, typename Cur = typename TList::__Current, typename Nex
 struct __empty;
 
 
-template <typename ... Tp>
-struct make_type_list;
-
-template <typename T>
-class type_list_wrapper;
-
-template <typename TList>
-constexpr int size();
-
-template <typename TList>
-constexpr int size(TList &&);
-
-template <typename TList>
-struct empty;
-
-template <typename TList, typename T>
-struct type_count;
-
-template <typename TList, std::size_t N>
-struct get_type;
-
-template <typename TList, typename Type>
-struct has_type;
-
-template <typename TList1, typename TList2>
-struct append;
-
 } //tl

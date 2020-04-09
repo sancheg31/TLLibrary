@@ -1,16 +1,9 @@
 #pragma once
 
+#include "NullType.h"
 
 namespace TL {
 namespace experimental {
-
-    /*
-     * Empty type. Used to mark end of the type list.
-     * */
-    struct NullType
-    {
-        NullType() = delete;
-    };
 
     /*
      * Forward declaration.

@@ -9,20 +9,17 @@
 namespace TL {
 
 template <typename TList>
+struct type_list_wrapper;
+
+template <typename TList>
 struct type_list_wrapper: TList
 {
     using self_type = type_list_wrapper<TList>;
     using result_type = TList;
-
-    static constexpr bool isEmpty() { return TL::empty<self_type>(); };
-    static constexpr int size() { return TL::size<self_type>(); }
-
-    template <typename T>
-    static constexpr bool hasType() { return TL::has_type<self_type, T>(); }
-
-    template <typename T>
-    static constexpr int typeCount() { return TL::type_count<self_type, T>(); }
 };
+
+template <typename ... Tp>
+struct make_type_list;
 
 template <typename T, typename ... Tp>
 struct  make_type_list<T, Tp...>
@@ -66,11 +63,21 @@ template <typename TList>
     return __count<typename TList::result_type>();
 }
 
+
+template <typename TList, typename T>
+struct type_count;
+
+template <typename TList, typename T>
+struct type_count;
+
 template <typename TList, typename T>
 struct  type_count
 {
     enum { value =  __type_count<typename TList::result_type, T>::value };
 };
+
+template <typename TList>
+struct empty;
 
 template <typename TList>
 struct  empty
@@ -79,10 +86,17 @@ struct  empty
 };
 
 template <>
-struct   empty<type_list_wrapper<__EmptyList>>
+struct empty<type_list_wrapper<__EmptyList>>
 {
     enum { value = true };
 };
+
+
+template <typename TList, std::size_t N>
+struct get_type;
+
+template <typename TList, typename Type>
+struct has_type;
 
 
 template <typename TList, std::size_t N>
@@ -127,6 +141,8 @@ struct append_impl<T, U, false, false>
     using type = typename __append_list<typename type_list<T>::result_type, typename type_list<U>::result_type>::type;
 };
 
+template <typename TList1, typename TList2>
+struct append;
 
 template <typename TList1, typename TList2>
 struct  append
