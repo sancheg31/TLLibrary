@@ -1,10 +1,11 @@
 
 #include <iostream>
 
-#include "type_list.h"
+#include "source/type_list.h"
 #include "tl_testers.h"
 #include "tl_test.h"
-#include "tl_utilities.h"
+#include "source/tl_utilities.h"
+#include "experimental/TypeListTraitsTest.h"
 
 using namespace TL;
 using namespace TL::testers;
@@ -18,6 +19,9 @@ using empty_list = type_list<>;
 
 int main()
 {
+    TL::experimental::test_length();
+    TL::experimental::test_empty();
+
     TL::test_operation<
         utilities::has_result_type,
         TArgs<integrals, Value<bool, true>>,

@@ -14,7 +14,7 @@ UI_DIR = $$PWD/build/$$DESTINATION_PATH/.ui
 LIBS += -L$$PWD/../binaries/$$DESTINATION_PATH -ltl_lib
 
 INCLUDEPATH += source
-INCLUDEPATH += ../tl_lib/source
+INCLUDEPATH += ../tl_lib
 
 CONFIG -= app_bundle
 
@@ -22,5 +22,6 @@ SOURCES += \
         source/main.cpp
 
 HEADERS += \
+    experimental/TypeListTraitsTest.h \
     source/tl_test.h \
     source/tl_testers.h
