@@ -21,8 +21,10 @@ INCLUDEPATH += source
 SOURCES +=
 
 HEADERS += \
+    experimental/NullType.h \
     experimental/TypeList.h \
     experimental/TypeListTraits.h \
+    experimental/TypeTraits.h \
     experimental/literals.h \
     source/tl_fwd.h \
     source/tl_utilities.h \

@@ -6,7 +6,7 @@
 
 
 namespace TL {
-namespace literals {
+namespace experimental {
 
     using empty_list = type_list<>;
     using integrals = type_list<int8_t, int16_t, int32_t, int64_t>;
