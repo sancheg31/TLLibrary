@@ -7,6 +7,8 @@
 #include <QString>
 #include <QVector>
 
+#include "source/type_list.h"
+
 namespace TL {
 
 class TestSuite: public QObject

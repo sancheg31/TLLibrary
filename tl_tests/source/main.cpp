@@ -21,6 +21,8 @@ int main()
 {
     TL::experimental::test_length();
     TL::experimental::test_empty();
+    TL::experimental::test_type_count();
+    TL::experimental::test_has_type();
 
     TL::test_operation<
         utilities::has_result_type,
