@@ -1,53 +1,9 @@
 #pragma once
 
 #include "source/tl_utilities.h"
+#include "experimental/TypeManipulators.h"
 
 namespace TL {
-
-template <typename T, T N>
-struct Value;
-
-template <typename T, T N>
-struct Value
-{
-    using type = T;
-    enum { value = N };
-    constexpr operator T() { return value; }
-};
-
-template <typename ... Tp>
-struct TArgs;
-
-template <typename T>
-struct TArgs<T>
-{
-    using _Result = T;
-};
-
-template <typename T1, typename T2>
-struct TArgs<T1, T2>
-{
-    using _1 = T1;
-    using _Result = T2;
-};
-
-template <typename T1, typename T2, typename T3>
-struct TArgs<T1, T2, T3>
-{
-    using _1 = T1;
-    using _2 = T2;
-    using _Result = T3;
-};
-
-template <typename T1, typename T2, typename T3, typename T4>
-struct TArgs<T1, T2, T3, T4>
-{
-    using _1 = T1;
-    using _2 = T2;
-    using _3 = T3;
-    using _Result = T4;
-};
-
 
 template <typename Operation, typename Result, bool type = utilities::has_type_alias_v<Operation>,
                                                 bool type2 = utilities::has_type_alias_v<Result>>
@@ -59,7 +15,7 @@ struct test_oper;
  * Operation's value is equal to Value::value.
  * */
 template <template <class ...> typename Operation, typename T, T V, typename ... Tp>
-struct test_oper<Operation<Tp...>, Value<T, V>, false, true>
+struct test_oper<Operation<Tp...>, TValue<T, V>, false, true>
 {
     static_assert((T)(Operation<Tp...>::value) == T(V), "test failed");
 };
@@ -91,7 +47,7 @@ struct test_oper<Operation<Tp...>, Result, false, false>
  * types are equal
  * */
 template <template <class ...> class Operation, typename T, T V, typename ... Tp>
-struct test_oper<Operation<Tp...>, Value<T, V>, true, true>
+struct test_oper<Operation<Tp...>, TValue<T, V>, true, true>
 {
     static_assert(std::is_same_v<Operation<Tp...>, T>, "test failed");
 };
