@@ -1,5 +1,5 @@
 
-#include "TestSuite.h"
+#include "TLTestSuite.h"
 
 
 namespace TL {

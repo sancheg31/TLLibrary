@@ -1,15 +1,12 @@
 #pragma once
 
-
-#include <type_traits>
-
-#include "TypeManipulators.h"
+#include "TLTypeWrappers.h"
 #include "source/tl_utilities.h"
 #include "source/type_list.h"
 
 
 namespace TL {
-
+namespace testing {
 
     template <class Operation, class Result>
     struct test_case;
@@ -36,7 +33,5 @@ namespace TL {
         static_assert(utilities::is_same<actual, expected>::value, "types are not equal");
     };
 
+} //testing
 } //tl
-
-
-

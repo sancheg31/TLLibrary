@@ -2,45 +2,48 @@
 
 #include <cstddef>
 
-#include "tl_test.h"
-#include "experimental/TypeList.h"
-#include "experimental/TypeListTraits.h"
+#include "TLTest.h"
+#include "TLTypeWrappers.h"
+
+#include "source/type_list.h"
+
+using namespace TL::testing;
 
 namespace TL {
 namespace experimental {
 
 
-    using zero_list = TL::experimental::TypeList<TL::experimental::NullType, TL::experimental::NullType>;
-    using one_list = TL::experimental::TypeList<int, TL::experimental::NullType>;
-    using three_list = TL::experimental::TypeList<int, TypeList<int, SingletonList<int>>>;
+    using zero_list = TypeList<NullType, NullType>;
+    using one_list = TypeList<int, NullType>;
+    using three_list = TypeList<int, TypeList<int, SingletonList<int>>>;
 
     void test_length() {
-        test_operation<size, TArgs<zero_list, Value<int, 0>>>();
-        test_operation<size, TArgs<one_list, Value<int, 1>>>();
-        test_operation<size, TArgs<three_list, Value<int, 3>>>();
+        test_operation<size, TArgs<zero_list, TValue<int, 0>>>();
+        test_operation<size, TArgs<one_list, TValue<int, 1>>>();
+        test_operation<size, TArgs<three_list, TValue<int, 3>>>();
     }
 
     void test_empty() {
-        test_operation<empty, TArgs<zero_list, Value<bool, true>>>();
-        test_operation<empty, TArgs<one_list, Value<bool, false>>>();
-        test_operation<empty, TArgs<three_list, Value<bool, false>>>();
+        test_operation<empty, TArgs<zero_list, TValue<bool, true>>>();
+        test_operation<empty, TArgs<one_list, TValue<bool, false>>>();
+        test_operation<empty, TArgs<three_list, TValue<bool, false>>>();
     }
 
     void test_type_count() {
-        test_operation<type_count, TArgs<zero_list, int, Value<int, 0>>>();
+        test_operation<type_count, TArgs<zero_list, int, TValue<int, 0>>>();
         //test_operation<type_count, TArgs<zero_list, TL::experimental::NullType, Value<int, 0>>>();
-        test_operation<type_count, TArgs<zero_list, double, Value<int, 0>>>();
-        test_operation<type_count, TArgs<one_list, int, Value<int, 1>>>();
-        test_operation<type_count, TArgs<three_list, int, Value<int, 3>>>();
-        test_operation<type_count, TArgs<three_list, double, Value<int, 0>>>();
+        test_operation<type_count, TArgs<zero_list, double, TValue<int, 0>>>();
+        test_operation<type_count, TArgs<one_list, int, TValue<int, 1>>>();
+        test_operation<type_count, TArgs<three_list, int, TValue<int, 3>>>();
+        test_operation<type_count, TArgs<three_list, double, TValue<int, 0>>>();
     }
 
     void test_has_type() {
-        test_operation<has_type, TArgs<zero_list, int, Value<bool, false>>>();
-        test_operation<has_type, TArgs<one_list, int, Value<bool, true>>>();
-        test_operation<has_type, TArgs<one_list, double, Value<bool, false>>>();
-        test_operation<has_type, TArgs<three_list, int, Value<bool, true>>>();
-        test_operation<has_type, TArgs<three_list, double, Value<bool, false>>>();
+        test_operation<has_type, TArgs<zero_list, int, TValue<bool, false>>>();
+        test_operation<has_type, TArgs<one_list, int, TValue<bool, true>>>();
+        test_operation<has_type, TArgs<one_list, double, TValue<bool, false>>>();
+        test_operation<has_type, TArgs<three_list, int, TValue<bool, true>>>();
+        test_operation<has_type, TArgs<three_list, double, TValue<bool, false>>>();
     }
 
     template <typename TList, typename Index, typename Result>
@@ -50,10 +53,10 @@ namespace experimental {
     };
 
     void test_get_type() {
-        test_operation_with_tester<test_get_type_tester, TArgs<one_list, Value<std::size_t, 0>, int>>();
-        test_operation_with_tester<test_get_type_tester, TArgs<one_list, Value<std::size_t, 0>, int>>();
-        test_operation_with_tester<test_get_type_tester, TArgs<three_list, Value<std::size_t, 1>, int>>();
-        test_operation_with_tester<test_get_type_tester, TArgs<three_list, Value<std::size_t, 2>, int>>();
+        test_operation_with_tester<test_get_type_tester, TArgs<one_list, TValue<std::size_t, 0>, int>>();
+        test_operation_with_tester<test_get_type_tester, TArgs<one_list, TValue<std::size_t, 0>, int>>();
+        test_operation_with_tester<test_get_type_tester, TArgs<three_list, TValue<std::size_t, 1>, int>>();
+        test_operation_with_tester<test_get_type_tester, TArgs<three_list, TValue<std::size_t, 2>, int>>();
     }
 
 } //experimental

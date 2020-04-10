@@ -1,10 +1,9 @@
 
 #include <iostream>
 
-#include "tl_testers.h"
-#include "tl_test.h"
-
-#include "experimental/TestCase.h"
+#include "TLPredefinedTesters.h"
+#include "TLTest.h"
+#include "TLTestCase.h"
 
 #include "source/type_list.h"
 #include "source/tl_utilities.h"
@@ -12,7 +11,7 @@
 
 
 using namespace TL;
-using namespace TL::testers;
+using namespace TL::testing;
 using namespace TL::utilities;
 
 using integrals = type_list<char, short, int, float, double>;
@@ -20,13 +19,14 @@ using doubles = type_list<float, double>;
 using doubles_integrals = type_list<float, double, char, short, int, float, double>;
 using integrals_doubles = type_list<char, short, int, float, double, float, double>;
 using empty_list = type_list<>;
+using error_list = type_list<NullType>;
 
 int main()
 {
-    test_case<size<integrals>, TValue<int, 5>>();
-    test_case<size<doubles>, TValue<int, 2>>();
-    test_case<size<empty_list>, TValue<int, 0>>();
-    test_case<size<doubles_integrals>, TValue<int, 7>>();
+    test_case<length<integrals>, TValue<int, 5>>();
+    test_case<length<doubles>, TValue<int, 2>>();
+    test_case<length<empty_list>, TValue<int, 0>>();
+    test_case<length<doubles_integrals>, TValue<int, 7>>();
 
     test_case<type_count<integrals, int>, TValue<int, 1>>();
     test_case<type_count<doubles, double>, TValue<int, 1>>();
@@ -50,11 +50,7 @@ int main()
     test_case<get_type<integrals, 0>, char>();
     test_case<get_type<doubles, 0>, float>();
     test_case<get_type<doubles, 1>, double>();
-    test_case<get_type<type_list<int>, 1>, NullType>();
     test_case<get_type<integrals, 4>, double>();
-
-
-    //test_case<has_type<doubles, NullType>, TValue<bool, true>>();
 
 /*
     TL::test_operation<
