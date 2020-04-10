@@ -1,14 +1,14 @@
 #pragma once
 
+#include "TLfwd.hpp"
 #include "TLUtility.hpp"
 
 namespace TL {
-
-    template <typename ... Tp>
-    struct type_list;
-
 namespace requires {
 
+    /*
+     * Forward declaration
+     * */
     template <typename TList>
     struct is_type_list;
 
@@ -23,6 +23,10 @@ namespace requires {
         static_assert(utilities::is_same_v<TList, InnerType>, "argument is not a type list");
     };
 
+
+    /*
+     * Forward declaration
+     * */
     template <typename Type>
     struct is_not_nulltype;
 
@@ -32,8 +36,12 @@ namespace requires {
         static_assert(!utilities::is_same_v<NullType, Type>, "NullType is an invalid template argument");
     };
 
-    template <std::size_t I, std::size_t N, template <std::size_t, std::size_t> class Relation>
-    struct is_satisfy_relation;
+
+    /*
+     * Forward declaration
+     * */
+    template <std::size_t I, std::size_t N>
+    struct less_than;
 
     template <std::size_t I, std::size_t N>
     struct less_than

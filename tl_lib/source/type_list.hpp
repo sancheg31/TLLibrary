@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <type_traits>
 
+#include "TLfwd.hpp"
 #include "TLNode.hpp"
 #include "TLTraits.hpp"
 #include "TLRequirements.hpp"
@@ -92,10 +93,6 @@ namespace TL {
     {
         enum { value = impl::list_has_type<typename TList::result_type, Type>::value };
     };
-
-    template <typename T, typename U, bool first = traits::is_type_list_v<T>,
-                                        bool second = traits::is_type_list_v<T>>
-    struct append_impl;
 
     template <typename TList1, typename TList2>
     struct append;
@@ -274,6 +271,9 @@ namespace impl {
         enum { value = true };
     };
 
+
+    template <typename TList, typename TList2>
+    struct append_list;
 
     template <typename TList1, typename TList2>
     struct append_list

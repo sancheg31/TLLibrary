@@ -1,17 +1,7 @@
 #pragma once
 
-#include <cstddef>
 
-#include "TLNode.hpp"
-#include "TLNulltype.hpp"
-#include "TLUtility.hpp"
-
-namespace TL {
-
-    template <typename ... Tp>
-    struct type_list;
-
-}
+#include "TLfwd.hpp"
 
 namespace TL {
 namespace traits {
