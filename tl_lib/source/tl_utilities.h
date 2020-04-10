@@ -73,7 +73,7 @@ namespace utilities {
     template <std::size_t N>
     struct index_out_of_range
     {
-        static_assert(N > 0, "Index is out of range");
+        static_assert(N == 0, "Index is out of range");
     };
 
     template <class T>

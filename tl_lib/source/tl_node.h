@@ -1,9 +1,9 @@
 #pragma once
 
 #include "tl_nulltype.h"
+#include "tl_utilities.h"
 
 namespace TL {
-namespace Implementation {
 
     /*
      * Forward declaration.
@@ -20,12 +20,6 @@ namespace Implementation {
         using Current = T;
         using Next = TypeList<Tp...>;
     };
-
-    /*
-     * NullType is not allowed as a type.
-     * */
-    template <typename ... Tp>
-    struct TypeList<NullType, TypeList<Tp...>>;
 
     /*
      * End of the list
@@ -58,5 +52,4 @@ namespace Implementation {
      * */
     using EmptyList = TypeList<NullType, NullType>;
 
-} //implementation
 } //tl
