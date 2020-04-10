@@ -10,6 +10,10 @@
 
 namespace TL {
 
+
+    /*
+     * Forward declaration
+     * */
     template <typename ... Tp>
     struct type_list;
 
@@ -45,6 +49,10 @@ namespace TL {
         return impl::list_size<typename type_list<Tp...>::result_type>::value;
     }
 
+
+    /*
+     * Forward declaration
+     * */
     template <typename TList>
     struct length;
 
@@ -54,6 +62,10 @@ namespace TL {
         enum { value = impl::list_size<typename TList::result_type>::value }  ;
     };
 
+
+    /*
+     * Forward declaration
+     * */
     template <typename TList, typename T>
     struct type_count;
 
@@ -64,6 +76,10 @@ namespace TL {
         enum { value =  impl::list_type_count<typename TList::result_type, T>::value };
     };
 
+
+    /*
+     * Forward declaration
+     * */
     template <typename TList>
     struct empty;
 
@@ -73,6 +89,10 @@ namespace TL {
         enum { value = impl::list_empty<typename TList::result_type>::value };
     };
 
+
+    /*
+     * Forward declaration
+     * */
     template <typename TList, std::size_t N>
     struct get_type;
 
@@ -84,6 +104,9 @@ namespace TL {
     };
 
 
+    /*
+     * Forward declaration
+     * */
     template <typename TList, typename Type>
     struct has_type;
 
@@ -94,6 +117,50 @@ namespace TL {
         enum { value = impl::list_has_type<typename TList::result_type, Type>::value };
     };
 
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList, template <class> class UnPred>
+    struct all_of;
+
+    template <typename TList, template <class> class UnPred>
+    struct all_of: requires::is_type_list<TList>, requires::has_value_variable<UnPred<NullType>>
+    {
+        enum { value = all_of_impl<typename TList::result_type, UnPred>::value };
+    };
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList, template <class> class UnPred>
+    struct any_of;
+
+    template <typename TList, template <class> class UnPred>
+    struct any_of: requires::is_type_list<TList>, requires::has_value_variable<UnPred<NullType>>
+    {
+        enum { value = any_of_impl<typename TList::result_type, UnPred>::value };
+    };
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList, template <class> class UnPred>
+    struct none_of;
+
+    template <typename TList, template <class> class UnPred>
+    struct none_of: requires::is_type_list<TList>, requires::has_value_variable<UnPred<NullType>>
+    {
+        enum { value = none_of_impl<typename TList::result_type, UnPred>::value };
+    };
+
+
+
+    /*
+     * Forward declaration
+     * */
     template <typename TList1, typename TList2>
     struct append;
 
@@ -124,6 +191,15 @@ namespace TL {
 
     template <typename T, typename U>
     using append_t = typename append<T, U>::type;
+
+    template <typename TList, template <class> class UnPred>
+    inline constexpr bool all_of_v = all_of<TList, UnPred>::value;
+
+    template <typename TList, template <class> class UnPred>
+    inline constexpr bool any_of_v = any_of<TList, UnPred>::value;
+
+    template <typename TList, template <class> class UnPred>
+    inline constexpr bool none_of_v = none_of<TList, UnPred>::value;
 
 } //tl
 
@@ -272,6 +348,84 @@ namespace impl {
     };
 
 
+    /*
+     * forward declaration
+     * */
+    template <typename TList, template <class> class UnPred>
+    struct all_of_impl;
+
+    template <typename T, typename U, template <class> class UnPred>
+    struct all_of_impl<TypeList<T, U>, UnPred>
+    {
+        enum { value = UnPred<T>::value && all_of_impl<U, UnPred>::value };
+    };
+
+    template <typename T, template <class> class UnPred>
+    struct all_of_impl<TypeList<T, NullType>, UnPred>
+    {
+        enum { value = UnPred<T>::value };
+    };
+
+    template <template <class> class UnPred>
+    struct all_of_impl<TypeList<NullType, NullType>, UnPred>
+    {
+        enum { value = true };
+    };
+
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList, template <class> class UnPred>
+    struct any_of_impl;
+
+    template <typename T, typename U, template <class> class UnPred>
+    struct any_of_impl<TypeList<T, U>, UnPred>
+    {
+        enum { value = UnPred<T>::value || all_of_impl<U, UnPred>::value };
+    };
+
+    template <typename T, template <class> class UnPred>
+    struct any_of_impl<TypeList<T, NullType>, UnPred>
+    {
+        enum { value = UnPred<T>::value };
+    };
+
+    template <template <class> class UnPred>
+    struct any_of_impl<TypeList<NullType, NullType>, UnPred>
+    {
+        enum { value = false };
+    };
+
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList, template <class> class UnPred>
+    struct none_of_impl;
+
+    template <typename T, typename U, template <class> class UnPred>
+    struct none_of_impl<TypeList<T, U>, UnPred>
+    {
+        enum { value = !UnPred<T>::value && all_of_impl<U, UnPred>::value };
+    };
+
+    template <typename T, template <class> class UnPred>
+    struct none_of_impl<TypeList<T, NullType>, UnPred>
+    {
+        enum { value = UnPred<T>::value };
+    };
+
+    template <template <class> class UnPred>
+    struct none_of_impl<TypeList<NullType, NullType>, UnPred>
+    {
+        enum { value = true };
+    };
+
+
+    /*
+     * forward declaration
+     * */
     template <typename TList, typename TList2>
     struct append_list;
 
