@@ -23,12 +23,10 @@ SOURCES +=
 
 HEADERS += \
     experimental/NullType.h \
-    experimental/TypeList.h \
-    experimental/TypeListTraits.h \
-    experimental/TypeTraits.h \
     experimental/literals.h \
     source/TLNode.h \
     source/TLNulltype.h \
+    source/TLRequirements.h \
     source/TLTraits.h \
     source/TLUtilities.h \
     source/type_list.h

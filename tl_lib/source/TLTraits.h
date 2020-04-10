@@ -8,15 +8,38 @@
 
 namespace TL {
 
-namespace utilities {
+    template <typename ... Tp>
+    struct type_list;
 
-    template <typename T>
-    inline constexpr int is_NullType = std::is_same_v<T, NullType>;
+}
 
-    template <typename T, typename U>
-    inline constexpr int is_same_safe = utilities::is_same_type<T, U> && !utilities::is_NullType<T>;
+namespace TL {
+namespace traits {
 
-} //utilities
+    template <typename TList>
+    struct is_type_list;
+
+    template <typename ... Tp>
+    struct is_type_list<type_list<Tp...>>
+    {
+        enum { value = true };
+    };
+
+    template <typename TList>
+    struct is_type_list
+    {
+    private:
+        enum { value = false };
+    };
+
+    template <typename TList>
+    inline constexpr bool is_type_list_v = is_type_list<TList>::value;
+
+} //traits
+} //tl
+
+namespace TL {
+namespace impl {
     /*
      * forward declaration
      * */
@@ -66,35 +89,26 @@ namespace utilities {
     template <typename TList, typename Type>
     struct list_type_count;
 
-    template <typename TList, typename Type>
-    struct list_type_count_impl;
-
     template <typename T, typename U, typename Type>
-    struct list_type_count<TypeList<T, U>, Type>: utilities::invalid_argument<Type>
-    {
-        enum { value = list_type_count_impl<TypeList<T, U>, Type>::value };
-    };
-
-    template <typename T, typename U, typename Type>
-    struct list_type_count_impl<TypeList<T, U>, Type>
+    struct list_type_count<TypeList<T, U>, Type>
     {
         enum { value = 0 + list_type_count<U, Type>::value };
     };
 
     template <typename U, typename Type>
-    struct list_type_count_impl<TypeList<Type, U>, Type>
+    struct list_type_count<TypeList<Type, U>, Type>
     {
         enum { value = 1 + list_type_count<U, Type>::value };
     };
 
     template <typename T, typename Type>
-    struct list_type_count_impl<TypeList<T, NullType>, Type>
+    struct list_type_count<TypeList<T, NullType>, Type>
     {
         enum { value = 0 };
     };
 
     template <typename Type>
-    struct list_type_count_impl<TypeList<Type, NullType>, Type>
+    struct list_type_count<TypeList<Type, NullType>, Type>
     {
         enum { value = 1 };
     };
@@ -143,39 +157,29 @@ namespace utilities {
     template <typename TList, typename Type>
     struct list_has_type;
 
-    template <typename TList, typename Type>
-    struct list_has_type_impl;
-
     template <typename T, typename U, typename Type>
-    struct list_has_type<TypeList<T, U>, Type>: utilities::invalid_argument<Type>
-    {
-        enum { value = list_has_type_impl<TypeList<T, U>, Type>::value };
-    };
-
-    template <typename T, typename U, typename Type>
-    struct list_has_type_impl<TypeList<T, U>, Type>
+    struct list_has_type<TypeList<T, U>, Type>
     {
         enum { value = list_has_type<U, Type>::value };
     };
 
     template <typename U, typename Type>
-    struct list_has_type_impl<TypeList<Type, U>, Type>
+    struct list_has_type<TypeList<Type, U>, Type>
     {
         enum { value = true };
     };
 
     template <typename T, typename Type>
-    struct list_has_type_impl<TypeList<T, NullType>, Type>
+    struct list_has_type<TypeList<T, NullType>, Type>
     {
         enum { value = false };
     };
 
     template <typename Type>
-    struct list_has_type_impl<TypeList<Type, NullType>, Type>
+    struct list_has_type<TypeList<Type, NullType>, Type>
     {
         enum { value = true };
     };
-
 
 
     template <typename TList1, typename TList2>
@@ -221,4 +225,5 @@ namespace utilities {
         using type = EmptyList;
     };
 
+} //traits
 } //tl

@@ -64,10 +64,24 @@ namespace utilities {
     template <typename T, typename U>
     inline constexpr static bool is_same_v = is_same<T, U>::value;
 
-    template <typename T>
+    template <typename IllegalType>
+    struct invalid_argument;
+
+    template <typename Illegal>
     struct invalid_argument
     {
-        static_assert(!is_same_v<T, NullType>, "NullType is an invalid template argument");
+    private:
+        struct InnerType { };
+        static_assert(is_same_v<Illegal, InnerType>, "invalid template argument");
+    };
+
+    template <typename ActualType, typename IllegalType>
+    struct is_valid_argument;
+
+    template <typename Actual, typename Illegal>
+    struct is_valid_argument
+    {
+        static_assert(!is_same_v<Actual, Illegal>, "invalid template argument");
     };
 
     template <std::size_t N>
@@ -86,16 +100,13 @@ namespace utilities {
     struct  has_type_alias: public impl_has_type_alias<T> { };
 
     template <typename T>
-     inline constexpr bool has_result_type_v = has_result_type<T>::value;
+    inline constexpr bool has_result_type_v = has_result_type<T>::value;
 
     template <typename T>
-     inline constexpr bool has_value_type_v = has_value_type<T>::value;
+    inline constexpr bool has_value_type_v = has_value_type<T>::value;
 
     template <typename T>
-     inline constexpr bool  has_type_alias_v = has_type_alias<T>::value;
-
-    template <typename T, typename U>
-     inline constexpr int is_same_type = std::is_same_v<T, U>;
+    inline constexpr bool  has_type_alias_v = has_type_alias<T>::value;
 
 
 } //utilities

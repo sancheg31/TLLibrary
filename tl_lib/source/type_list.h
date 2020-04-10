@@ -5,7 +5,7 @@
 
 #include "TLNode.h"
 #include "TLTraits.h"
-#include "TLUtilities.h"
+#include "TLRequirements.h"
 
 namespace TL {
 
@@ -13,14 +13,14 @@ namespace TL {
     struct type_list;
 
     template <typename T, typename ... Tp>
-    struct type_list<T, Tp...>: utilities::invalid_argument<T>
+    struct type_list<T, Tp...>: requires::is_not_nulltype<T>
     {
         using self_type = type_list<T, Tp...>;
         using result_type = TypeList<T, typename type_list<Tp...>::result_type>;
     };
 
     template <typename T>
-    struct type_list<T>: utilities::invalid_argument<T>
+    struct type_list<T>: requires::is_not_nulltype<T>
     {
         using self_type = type_list<T>;
         using result_type = TypeList<T, NullType>;
@@ -36,48 +36,50 @@ namespace TL {
 
     template <typename TList>
      constexpr int size() {
-        return list_size<typename TList::result_type>::value;
+        return impl::list_size<typename TList::result_type>::value;
     }
 
-    template <typename TList>
-     constexpr int size(TList &&) {
-        return list_size<typename TList::result_type>::value;
+    template <typename ... Tp>
+     constexpr int size(type_list<Tp...> &&) {
+        return impl::list_size<typename type_list<Tp...>::result_type>::value;
     }
 
     template <typename TList>
     struct length;
 
     template <typename TList>
-    struct length
+    struct length: requires::is_type_list<TList>
     {
-        enum { value = list_size<typename TList::result_type>::value }  ;
+        enum { value = impl::list_size<typename TList::result_type>::value }  ;
     };
 
     template <typename TList, typename T>
     struct type_count;
 
     template <typename TList, typename T>
-    struct type_count
+    struct type_count:  requires::is_type_list<TList>,
+                        requires::is_not_nulltype<T>
     {
-        enum { value =  list_type_count<typename TList::result_type, T>::value };
+        enum { value =  impl::list_type_count<typename TList::result_type, T>::value };
     };
 
     template <typename TList>
     struct empty;
 
     template <typename TList>
-    struct empty
+    struct empty: requires::is_type_list<TList>
     {
-        enum { value = list_empty<typename TList::result_type>::value };
+        enum { value = impl::list_empty<typename TList::result_type>::value };
     };
 
     template <typename TList, std::size_t N>
     struct get_type;
 
     template <typename TList, std::size_t N>
-    struct get_type
+    struct get_type:    requires::is_type_list<TList>,
+                        requires::less_than<N, length<TList>::value>
     {
-        using type = typename list_get_type<typename TList::result_type, N>::type;
+        using type = typename impl::list_get_type<typename TList::result_type, N>::type;
     };
 
 
@@ -85,38 +87,38 @@ namespace TL {
     struct has_type;
 
     template <typename TList, typename Type>
-    struct has_type
+    struct has_type:    requires::is_type_list<TList>,
+                        requires::is_not_nulltype<Type>
     {
-        enum { value = list_has_type<typename TList::result_type, Type>::value };
+        enum { value = impl::list_has_type<typename TList::result_type, Type>::value };
     };
 
-
-    template <typename T, typename U, bool first = utilities::has_result_type_v<T>,
-                                        bool second = utilities::has_result_type_v<U>>
+    template <typename T, typename U, bool first = traits::is_type_list_v<T>,
+                                        bool second = traits::is_type_list_v<T>>
     struct append_impl;
 
     template <typename T, typename U>
     struct append_impl<T, U, true, true>
     {
-        using type = typename append_list<typename T::result_type, typename U::result_type>::type;
+        using type = typename impl::append_list<typename T::result_type, typename U::result_type>::type;
     };
 
     template <typename T, typename U>
     struct append_impl<T, U, true, false>
     {
-        using type = typename append_list<typename T::result_type, typename type_list<U>::result_type>::type;
+        using type = typename impl::append_list<typename T::result_type, typename type_list<U>::result_type>::type;
     };
 
     template <typename T, typename U>
     struct append_impl<T, U, false, true>
     {
-        using type = typename append_list<typename type_list<T>::result_type, typename U::result_type>::type;
+        using type = typename impl::append_list<typename type_list<T>::result_type, typename U::result_type>::type;
     };
 
     template <typename T, typename U>
     struct append_impl<T, U, false, false>
     {
-        using type = typename append_list<typename type_list<T>::result_type, typename type_list<U>::result_type>::type;
+        using type = typename impl::append_list<typename type_list<T>::result_type, typename type_list<U>::result_type>::type;
     };
 
     template <typename TList1, typename TList2>
