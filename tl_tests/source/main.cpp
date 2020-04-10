@@ -20,6 +20,21 @@ using doubles_integrals = type_list<float, double, char, short, int, float, doub
 using integrals_doubles = type_list<char, short, int, float, double, float, double>;
 using empty_list = type_list<>;
 
+template <typename T>
+using is_int = traits::is_same<T, int>;
+
+template <class T>
+struct test_true
+{
+    enum { value = true };
+};
+
+template <class T>
+struct test_false
+{
+    enum { value = false };
+};
+
 int main()
 {
     test_case<length<integrals>, TValue<int, 5>>();
@@ -52,6 +67,29 @@ int main()
     test_case<get_type<doubles, 0>, float>();
     test_case<get_type<integrals, 4>, double>();
 
+    test_case<all_of<empty_list, test_true>, TValue<bool, true>>();
+    test_case<all_of<empty_list, test_false>, TValue<bool, true>>();
+    test_case<all_of<empty_list, traits::has_value_type>, TValue<bool, true>>();
+    test_case<all_of<integrals, test_true>, TValue<bool, true>>();
+    test_case<all_of<integrals, test_false>, TValue<bool, false>>();
+    test_case<all_of<integrals, traits::has_value_type>, TValue<bool, false>>();
+    test_case<all_of<integrals, is_int>, TValue<bool, false>>();
+    test_case<all_of<doubles, is_int>, TValue<bool, false>>();
+
+
+    test_case<none_of<empty_list, test_true>, TValue<bool, true>>();
+    test_case<none_of<empty_list, test_false>, TValue<bool, true>>();
+    test_case<none_of<integrals, test_false>, TValue<bool, true>>();
+    test_case<none_of<integrals, traits::has_value_type>, TValue<bool, true>>();
+    test_case<none_of<integrals, is_int>, TValue<bool, false>>();
+    test_case<none_of<doubles, is_int>, TValue<bool, true>>();
+
+    test_case<any_of<empty_list, test_true>, TValue<bool, false>>();
+    test_case<any_of<empty_list, test_false>, TValue<bool, false>>();
+    test_case<any_of<integrals, test_true>, TValue<bool, true>>();
+    test_case<any_of<integrals, test_false>, TValue<bool, false>>();
+    test_case<any_of<integrals, is_int>, TValue<bool, true>>();
+    test_case<any_of<doubles, is_int>, TValue<bool, false>>();
 /*
     TL::test_operation<
         utilities::has_result_type,

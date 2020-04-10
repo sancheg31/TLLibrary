@@ -11,7 +11,7 @@ namespace testing {
     template <class Operation, class Result>
     struct test_case;
 
-    template <class Operation, class Result, bool = utilities::has_type_alias_v<Operation>>
+    template <class Operation, class Result, bool = traits::has_type_alias_v<Operation>>
     struct test_case_impl;
 
     template <class Operation, class Result>
@@ -30,7 +30,7 @@ namespace testing {
     {
         using actual = typename Operation::type;
         using expected = Type;
-        static_assert(utilities::is_same<actual, expected>::value, "types are not equal");
+        static_assert(traits::is_same<actual, expected>::value, "types are not equal");
     };
 
 } //testing

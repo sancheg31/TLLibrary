@@ -116,6 +116,9 @@ namespace traits {
     template <class T>
     struct impl_has_value_variable<T, std::void_t<decltype(T::value)>>: true_argument { };
 
+    template <class T>
+    struct has_value_variable: impl_has_value_variable<T> { };
+
 
     template <typename TList>
     inline constexpr bool is_type_list_v = is_type_list<TList>::value;

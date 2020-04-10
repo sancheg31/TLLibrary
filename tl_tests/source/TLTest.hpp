@@ -6,8 +6,8 @@
 namespace TL {
 namespace testing {
 
-    template <typename Operation, typename Result, bool type = utilities::has_type_alias_v<Operation>,
-                                                    bool type2 = utilities::has_type_alias_v<Result>>
+    template <typename Operation, typename Result, bool type = traits::has_type_alias_v<Operation>,
+                                                    bool type2 = traits::has_type_alias_v<Result>>
     struct test_oper;
 
     /*

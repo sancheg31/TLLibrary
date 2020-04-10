@@ -125,9 +125,10 @@ namespace TL {
     struct all_of;
 
     template <typename TList, template <class> class UnPred>
-    struct all_of: requires::is_type_list<TList>, requires::has_value_variable<UnPred<NullType>>
+    struct all_of:  requires::is_type_list<TList>,
+                    requires::has_value_variable<UnPred<NullType>>
     {
-        enum { value = all_of_impl<typename TList::result_type, UnPred>::value };
+        enum { value = impl::all_of_impl<typename TList::result_type, UnPred>::value };
     };
 
 
@@ -138,9 +139,10 @@ namespace TL {
     struct any_of;
 
     template <typename TList, template <class> class UnPred>
-    struct any_of: requires::is_type_list<TList>, requires::has_value_variable<UnPred<NullType>>
+    struct any_of:  requires::is_type_list<TList>,
+                    requires::has_value_variable<UnPred<NullType>>
     {
-        enum { value = any_of_impl<typename TList::result_type, UnPred>::value };
+        enum { value = impl::any_of_impl<typename TList::result_type, UnPred>::value };
     };
 
 
@@ -151,9 +153,10 @@ namespace TL {
     struct none_of;
 
     template <typename TList, template <class> class UnPred>
-    struct none_of: requires::is_type_list<TList>, requires::has_value_variable<UnPred<NullType>>
+    struct none_of: requires::is_type_list<TList>,
+                    requires::has_value_variable<UnPred<NullType>>
     {
-        enum { value = none_of_impl<typename TList::result_type, UnPred>::value };
+        enum { value = impl::none_of_impl<typename TList::result_type, UnPred>::value };
     };
 
 
@@ -382,7 +385,7 @@ namespace impl {
     template <typename T, typename U, template <class> class UnPred>
     struct any_of_impl<TypeList<T, U>, UnPred>
     {
-        enum { value = UnPred<T>::value || all_of_impl<U, UnPred>::value };
+        enum { value = UnPred<T>::value || any_of_impl<U, UnPred>::value };
     };
 
     template <typename T, template <class> class UnPred>
@@ -407,13 +410,13 @@ namespace impl {
     template <typename T, typename U, template <class> class UnPred>
     struct none_of_impl<TypeList<T, U>, UnPred>
     {
-        enum { value = !UnPred<T>::value && all_of_impl<U, UnPred>::value };
+        enum { value = !UnPred<T>::value && none_of_impl<U, UnPred>::value };
     };
 
     template <typename T, template <class> class UnPred>
     struct none_of_impl<TypeList<T, NullType>, UnPred>
     {
-        enum { value = UnPred<T>::value };
+        enum { value = !UnPred<T>::value };
     };
 
     template <template <class> class UnPred>

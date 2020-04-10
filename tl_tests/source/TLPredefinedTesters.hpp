@@ -11,7 +11,7 @@ namespace testing {
     template <typename TList, typename Result>
     struct test_has_result_type
     {
-        static_assert(utilities::has_result_type<TList>::value == Result::value, "test_has_result_type");
+        static_assert(traits::has_result_type<TList>::value == Result::value, "test_has_result_type");
     };
 
     template <typename TList, typename Result>
