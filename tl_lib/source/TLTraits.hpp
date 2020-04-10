@@ -104,6 +104,19 @@ namespace traits {
     template <class T>
     struct  has_type_alias: public impl_has_type_alias<T> { };
 
+    /*
+     * Forward declaration
+     * */
+    template <class T>
+    struct has_value_variable;
+
+    template <class T, class = std::void_t<>>
+    struct impl_has_value_variable: false_argument { };
+
+    template <class T>
+    struct impl_has_value_variable<T, std::void_t<decltype(T::value)>>: true_argument { };
+
+
     template <typename TList>
     inline constexpr bool is_type_list_v = is_type_list<TList>::value;
 
@@ -114,7 +127,10 @@ namespace traits {
     inline constexpr bool has_value_type_v = has_value_type<T>::value;
 
     template <typename T>
-    inline constexpr bool  has_type_alias_v = has_type_alias<T>::value;
+    inline constexpr bool has_type_alias_v = has_type_alias<T>::value;
+
+    template <typename T>
+    inline constexpr bool has_value_variable_v = has_value_variable<T>::value;
 
     template <typename T, typename U>
     inline constexpr static bool is_same_v = is_same<T, U>::value;

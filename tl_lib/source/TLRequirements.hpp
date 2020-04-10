@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TLfwd.hpp"
-#include "TLUtility.hpp"
+#include "TLTraits.hpp"
 
 namespace TL {
 namespace requires {
@@ -12,15 +12,10 @@ namespace requires {
     template <typename TList>
     struct is_type_list;
 
-    template <typename ... Tp>
-    struct is_type_list<type_list<Tp...>> { };
-
     template <typename TList>
-    struct is_type_list
+    struct is_type_list: traits::is_type_list<TList>
     {
-    private:
-        struct InnerType { };
-        static_assert(utilities::is_same_v<TList, InnerType>, "argument is not a type list");
+        static_assert(is_type_list<TList>::value, "argument is not a type list");
     };
 
 
@@ -33,7 +28,7 @@ namespace requires {
     template <typename Type>
     struct is_not_nulltype
     {
-        static_assert(!utilities::is_same_v<NullType, Type>, "NullType is an invalid template argument");
+        static_assert(!traits::is_same<NullType, Type>::value, "NullType is an invalid template argument");
     };
 
 
