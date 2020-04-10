@@ -6,8 +6,8 @@
 #include "TLTestCase.h"
 
 #include "source/type_list.h"
-#include "source/tl_utilities.h"
-#include "source/tl_nulltype.h"
+#include "source/TLUtilities.h"
+#include "source/TLNulltype.h"
 
 
 using namespace TL;
@@ -19,7 +19,6 @@ using doubles = type_list<float, double>;
 using doubles_integrals = type_list<float, double, char, short, int, float, double>;
 using integrals_doubles = type_list<char, short, int, float, double, float, double>;
 using empty_list = type_list<>;
-using error_list = type_list<NullType>;
 
 int main()
 {

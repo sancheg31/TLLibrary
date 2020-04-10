@@ -17,6 +17,7 @@ CONFIG -= gui app_bundle
 DEFINES += TYPE_LIST_LIBRARY
 
 INCLUDEPATH += source
+INCLUDEPATH += experimental
 
 SOURCES +=
 
@@ -26,10 +27,10 @@ HEADERS += \
     experimental/TypeListTraits.h \
     experimental/TypeTraits.h \
     experimental/literals.h \
-    source/tl_node.h \
-    source/tl_nulltype.h \
-    source/tl_traits.h \
-    source/tl_utilities.h \
+    source/TLNode.h \
+    source/TLNulltype.h \
+    source/TLTraits.h \
+    source/TLUtilities.h \
     source/type_list.h
 
 message(tl-lib project dir: $${PWD})

@@ -18,9 +18,9 @@ namespace experimental {
     using three_list = TypeList<int, TypeList<int, SingletonList<int>>>;
 
     void test_length() {
-        test_operation<size, TArgs<zero_list, TValue<int, 0>>>();
-        test_operation<size, TArgs<one_list, TValue<int, 1>>>();
-        test_operation<size, TArgs<three_list, TValue<int, 3>>>();
+        test_operation<length, TArgs<zero_list, TValue<int, 0>>>();
+        test_operation<length, TArgs<one_list, TValue<int, 1>>>();
+        test_operation<length, TArgs<three_list, TValue<int, 3>>>();
     }
 
     void test_empty() {
