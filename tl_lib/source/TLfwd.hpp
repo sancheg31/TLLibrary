@@ -42,6 +42,17 @@ namespace TL {
     template <typename TList, typename Type>
     struct has_type;
 
+    template <typename TList, template <class> class UnPred>
+    struct all_of;
+
+    template <typename TList, template <class> class UnPred>
+    struct any_of;
+
+    template <typename TList, template <class> class UnPred>
+    struct none_of;
+
+
+
     template <typename TList1, typename TList2>
     struct append;
 
@@ -66,6 +77,15 @@ namespace impl {
 
     template <typename TList, typename Type>
     struct list_has_type;
+
+    template <typename TList, template <class> class UnPred>
+    struct all_of_impl;
+
+    template <typename TList, template <class> class UnPred>
+    struct any_of_impl;
+
+    template <typename TList, template <class> class UnPred>
+    struct none_of_impl;
 
     template <typename TList, typename TList2>
     struct append_list;
@@ -126,6 +146,18 @@ namespace requires {
 
     template <typename TList>
     struct is_type_list;
+
+    template <class T>
+    struct has_result_type;
+
+    template <class T>
+    struct has_value_type;
+
+    template <class T>
+    struct has_type_alias;
+
+    template <class T>
+    struct has_value_variable;
 
     template <typename Type>
     struct is_not_nulltype;
