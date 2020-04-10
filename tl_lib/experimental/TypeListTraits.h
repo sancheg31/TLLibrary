@@ -154,10 +154,10 @@ namespace experimental {
     };
 
     template <typename T, std::size_t N>
-    struct get_type<TypeList<T, NullType>, N>: index_out_of_range<N> { };
+    struct get_type<TypeList<T, NullType>, N>: experimental::index_out_of_range<N> { };
 
     template <std::size_t N>
-    struct get_type<TypeList<NullType, NullType>, N>: index_out_of_range<N> { };
+    struct get_type<TypeList<NullType, NullType>, N>: experimental::index_out_of_range<N> { };
 
 } //experimental
 } //tl

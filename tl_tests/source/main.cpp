@@ -45,8 +45,7 @@ int main()
         has_type,
         TArgs<integrals, int, Value<bool, true>>,
         TArgs<doubles, double, Value<bool, true>>,
-        TArgs<empty_list, double, Value<bool, false>>,
-        TArgs<empty_list, __NullType, Value<bool, false>>
+        TArgs<empty_list, double, Value<bool, false>>
     >();
 
     TL::test_operation_with_tester<
