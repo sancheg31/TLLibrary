@@ -78,20 +78,13 @@ namespace impl {
 namespace TL {
 namespace traits {
 
-    template <typename TList>
-    struct is_type_list;
-
-
-} //traits
-} //tl
-
-//TLUtilities
-namespace TL {
-namespace utilities {
 
     struct true_argument;
 
     struct false_argument;
+
+    template <typename TList>
+    struct is_type_list;
 
     template <class T>
     struct has_result_type;
@@ -104,6 +97,13 @@ namespace utilities {
 
     template <typename T, typename U>
     struct is_same;
+
+} //traits
+} //tl
+
+//TLUtilities
+namespace TL {
+namespace utilities {
 
     template <typename IllegalType>
     struct invalid_argument;
