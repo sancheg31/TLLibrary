@@ -3,8 +3,8 @@
 #include <cstddef>
 #include <type_traits>
 
-#include "tl_fwd.h"
-#include "type_list_impl.h"
+#include "tl_node.h"
+#include "tl_traits.h"
 
 namespace TL {
 
@@ -24,28 +24,28 @@ struct make_type_list;
 template <typename T, typename ... Tp>
 struct  make_type_list<T, Tp...>
 {
-    using sub_type = __TypeList<T, typename make_type_list<Tp...>::sub_type>;
+    using sub_type = Implementation::TypeList<T, typename make_type_list<Tp...>::sub_type>;
     using type = type_list_wrapper<sub_type>;
 };
 
 template <typename T, typename U>
-struct  make_type_list<__TypeList<T, U>>
+struct  make_type_list<Implementation::TypeList<T, U>>
 {
-    using sub_type = __TypeList<T, typename make_type_list<U>::sub_type>;
+    using sub_type = Implementation::TypeList<T, typename make_type_list<U>::sub_type>;
     using type = type_list_wrapper<sub_type>;
 };
 
 template <typename T>
-struct  make_type_list<__EndList<T>>
+struct  make_type_list<Implementation::SingletonList<T>>
 {
-    using sub_type = __EndList<T>;
+    using sub_type = Implementation::SingletonList<T>;
     using type = type_list_wrapper<sub_type>;
 };
 
 template <>
 struct  make_type_list<>
 {
-    using sub_type = __EmptyList;
+    using sub_type = Implementation::EmptyList;
     using type = type_list_wrapper<sub_type>;
 };
 
@@ -55,12 +55,12 @@ using type_list = typename make_type_list<Tp...>::type;
 
 template <typename TList>
  constexpr int size() {
-    return __count<typename TList::result_type>();
+    return Implementation::size<typename TList::result_type>::value;
 }
 
 template <typename TList>
  constexpr int size(TList &&) {
-    return __count<typename TList::result_type>();
+    return Implementation::size<typename TList::result_type>::value;
 }
 
 
@@ -73,7 +73,7 @@ struct type_count;
 template <typename TList, typename T>
 struct  type_count
 {
-    enum { value =  __type_count<typename TList::result_type, T>::value };
+    enum { value =  Implementation::type_count<typename TList::result_type, T>::value };
 };
 
 template <typename TList>
@@ -86,7 +86,7 @@ struct  empty
 };
 
 template <>
-struct empty<type_list_wrapper<__EmptyList>>
+struct empty<type_list_wrapper<Implementation::EmptyList>>
 {
     enum { value = true };
 };
@@ -102,14 +102,14 @@ struct has_type;
 template <typename TList, std::size_t N>
 struct  get_type
 {
-    using type = typename __get_type<typename TList::result_type, N>::type;
+    using type = typename Implementation::get_type<typename TList::result_type, N>::type;
 };
 
 
 template <typename TList, typename Type>
 struct  has_type
 {
-    enum { value = __has_type<typename TList::result_type, Type>::value };
+    enum { value = Implementation::has_type<typename TList::result_type, Type>::value };
 };
 
 
@@ -120,25 +120,25 @@ struct append_impl;
 template <typename T, typename U>
 struct append_impl<T, U, true, true>
 {
-    using type = typename __append_list<typename T::result_type, typename U::result_type>::type;
+    using type = typename Implementation::append_list<typename T::result_type, typename U::result_type>::type;
 };
 
 template <typename T, typename U>
 struct append_impl<T, U, true, false>
 {
-    using type = typename __append_list<typename T::result_type, typename type_list<U>::result_type>::type;
+    using type = typename Implementation::append_list<typename T::result_type, typename type_list<U>::result_type>::type;
 };
 
 template <typename T, typename U>
 struct append_impl<T, U, false, true>
 {
-    using type = typename __append_list<typename type_list<T>::result_type, typename U::result_type>::type;
+    using type = typename Implementation::append_list<typename type_list<T>::result_type, typename U::result_type>::type;
 };
 
 template <typename T, typename U>
 struct append_impl<T, U, false, false>
 {
-    using type = typename __append_list<typename type_list<T>::result_type, typename type_list<U>::result_type>::type;
+    using type = typename Implementation::append_list<typename type_list<T>::result_type, typename type_list<U>::result_type>::type;
 };
 
 template <typename TList1, typename TList2>
