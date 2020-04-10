@@ -3,7 +3,14 @@
 
 #include <type_traits>
 
-#include "TLNulltype.h"
+#include "TLNulltype.hpp"
+
+namespace TL {
+
+    template <typename ... Tp>
+    struct type_list;
+
+} //tl
 
 namespace TL {
 namespace utilities {
@@ -82,6 +89,21 @@ namespace utilities {
     struct is_valid_argument
     {
         static_assert(!is_same_v<Actual, Illegal>, "invalid template argument");
+    };
+
+    template <typename Type>
+    struct type_or_list;
+
+    template <typename Type>
+    struct type_or_list
+    {
+        using result = Type;
+    };
+
+    template <typename ... Tp>
+    struct type_or_list<type_list<Tp...>>
+    {
+        using result = typename type_list<Tp...>::result_type;
     };
 
     template <std::size_t N>

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "TLTypeWrappers.h"
-#include "source/TLUtilities.h"
-#include "source/type_list.h"
+#include "TLTypeWrappers.hpp"
+#include "source/TLUtility.hpp"
+#include "source/type_list.hpp"
 
 
 namespace TL {

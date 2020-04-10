@@ -1,7 +1,7 @@
 #pragma once
 
-#include "source/TLUtilities.h"
-#include "TLTypeWrappers.h"
+#include "source/TLUtility.hpp"
+#include "TLTypeWrappers.hpp"
 
 namespace TL {
 namespace testing {

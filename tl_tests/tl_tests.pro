@@ -28,9 +28,9 @@ SOURCES += \
         source/main.cpp
 
 HEADERS += \
-    experimental/TypeListTraitsTest.h \
-    source/TLPredefinedTesters.h \
-    source/TLTest.h \
-    source/TLTestCase.h \
-    source/TLTestSuite.h \
-    source/TLTypeWrappers.h
+    experimental/TypeListTraitsTest.hpp \
+    source/TLPredefinedTesters.hpp \
+    source/TLTest.hpp \
+    source/TLTestCase.hpp \
+    source/TLTestSuite.hpp \
+    source/TLTypeWrappers.hpp

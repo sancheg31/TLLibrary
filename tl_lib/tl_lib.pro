@@ -22,14 +22,14 @@ INCLUDEPATH += experimental
 SOURCES +=
 
 HEADERS += \
-    experimental/NullType.h \
-    experimental/literals.h \
-    source/TLNode.h \
-    source/TLNulltype.h \
-    source/TLRequirements.h \
-    source/TLTraits.h \
-    source/TLUtilities.h \
-    source/type_list.h
+    experimental/literals.hpp \
+    source/TLNulltype.hpp \
+    source/TLNode.hpp \
+    source/TLRequirements.hpp \
+    source/TLTraits.hpp \
+    source/TLUtility.hpp \
+    source/TLfwd.hpp \
+    source/type_list.hpp
 
 message(tl-lib project dir: $${PWD})
 message(tl-lib output dir: $${DESTDIR})

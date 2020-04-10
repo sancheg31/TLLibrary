@@ -1,7 +1,7 @@
 #pragma once
 
-#include "TLNulltype.h"
-#include "TLUtilities.h"
+#include "TLNulltype.hpp"
+#include "TLUtility.hpp"
 
 namespace TL {
 

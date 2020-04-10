@@ -2,8 +2,8 @@
 
 #include <type_traits>
 
-#include "source/type_list.h"
-#include "source/TLUtilities.h"
+#include "source/type_list.hpp"
+#include "source/TLUtility.hpp"
 
 namespace TL {
 namespace testing {

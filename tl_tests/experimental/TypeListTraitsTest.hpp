@@ -2,10 +2,10 @@
 
 #include <cstddef>
 
-#include "TLTest.h"
-#include "TLTypeWrappers.h"
+#include "TLTest.hpp"
+#include "TLTypeWrappers.hpp"
 
-#include "source/type_list.h"
+#include "source/type_list.hpp"
 
 using namespace TL::testing;
 

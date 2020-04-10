@@ -1,13 +1,13 @@
 
 #include <iostream>
 
-#include "TLPredefinedTesters.h"
-#include "TLTest.h"
-#include "TLTestCase.h"
+#include "TLPredefinedTesters.hpp"
+#include "TLTest.hpp"
+#include "TLTestCase.hpp"
 
-#include "source/type_list.h"
-#include "source/TLUtilities.h"
-#include "source/TLNulltype.h"
+#include "source/type_list.hpp"
+#include "source/TLUtility.hpp"
+#include "source/TLNulltype.hpp"
 
 
 using namespace TL;
@@ -49,6 +49,7 @@ int main()
     test_case<get_type<integrals, 0>, char>();
     test_case<get_type<doubles, 0>, float>();
     test_case<get_type<doubles, 1>, double>();
+    test_case<get_type<doubles, 0>, float>();
     test_case<get_type<integrals, 4>, double>();
 
 /*
