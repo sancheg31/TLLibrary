@@ -26,10 +26,11 @@ HEADERS += \
     experimental/TypeListTraits.h \
     experimental/TypeTraits.h \
     experimental/literals.h \
-    source/tl_fwd.h \
+    source/tl_node.h \
+    source/tl_nulltype.h \
+    source/tl_traits.h \
     source/tl_utilities.h \
-    source/type_list.h \
-    source/type_list_impl.h
+    source/type_list.h
 
 message(tl-lib project dir: $${PWD})
 message(tl-lib output dir: $${DESTDIR})
