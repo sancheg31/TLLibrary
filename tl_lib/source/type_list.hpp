@@ -561,8 +561,8 @@ namespace impl {
     template <typename TList, typename T, typename ... Tp>
     struct prepend_types<TList, T, Tp...>
     {
-        using new_type_list = typename prepend_type<TList, T>::type;
-        using type = typename prepend_types<new_type_list, Tp...>::type;
+        using new_type_list = typename prepend_types<TList, Tp...>::type;
+        using type = typename prepend_type<new_type_list, T>::type;
     };
 
     template <typename TList, typename T>

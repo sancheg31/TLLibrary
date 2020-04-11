@@ -113,6 +113,7 @@ int main()
     test_case<append<type_list<int>, double>, type_list<int, double>>();
     test_case<append<type_list<int, double>, char>, type_list<int, double, char>>();
     test_case<append<type_list<int>, type_list<double>>, type_list<int, double>>();
+    test_case<append<type_list<int, double>, type_list<char, double>>, type_list<int, double, char, double>>();
     test_case<append<type_list<>, type_list<>>, type_list<>>();
     test_case<append<type_list<>, type_list<int>>, type_list<int>>();
     test_case<append<type_list<int>, type_list<>>, type_list<int>>();
@@ -121,9 +122,15 @@ int main()
     test_case<push_back<type_list<int>, double>, type_list<int, double>>();
     test_case<push_back<type_list<int, double>, char>, type_list<int, double, char>>();
 
+
     test_case<prepend<empty_list, int>, type_list<int>>();
     test_case<prepend<type_list<int>, double>, type_list<double, int>>();
     test_case<prepend<type_list<int, double>, char>, type_list<char, int, double>>();
+    test_case<prepend<type_list<int>, type_list<double>>, type_list<double, int>>();
+    test_case<prepend<type_list<int, double>, type_list<char, double>>, type_list<char, double, int, double>>();
+    test_case<prepend<type_list<>, type_list<>>, type_list<>>();
+    test_case<prepend<type_list<>, type_list<int>>, type_list<int>>();
+    test_case<prepend<type_list<int>, type_list<>>, type_list<int>>();
 
     test_case<push_front<empty_list, int>, type_list<int>>();
     test_case<push_front<type_list<int>, double>, type_list<double, int>>();
