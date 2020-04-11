@@ -41,7 +41,7 @@ int main()
 
     using test_list = experimental::type_list<int, int, int>;
     using preffered = experimental::type_list<int, double, int>;
-    using actual = typename experimental::replace<test_list, double, 1>::result;
+    using actual = typename experimental::replace<test_list, double, 1>::type;
 
     using list_before = typename experimental::replace<test_list, double, 1>::list_before;
     using list_after = typename experimental::replace<test_list, double, 1>::list_after;
@@ -52,7 +52,7 @@ int main()
             "uupsie3");
 
     using test_list_2 = experimental::type_list<int, double, char>;
-    static_assert(std::is_same_v<typename experimental::reverse<test_list_2>::result,
+    static_assert(std::is_same_v<typename experimental::reverse<test_list_2>::type,
             experimental::type_list<char, double, int>>, "uupsie4");
 
     test_case<length<integrals>, TValue<int, 5>>();
@@ -108,63 +108,27 @@ int main()
     test_case<any_of<integrals, test_false>, TValue<bool, false>>();
     test_case<any_of<integrals, is_int>, TValue<bool, true>>();
     test_case<any_of<doubles, is_int>, TValue<bool, false>>();
-/*
-    TL::test_operation<
-        utilities::has_result_type,
-        TArgs<integrals, TValue<bool, true>>,
-        TArgs<double, TValue<bool, false>>,
-        TArgs<doubles, TValue<bool, true>>,
-        TArgs<empty_list, TValue<bool, true>>,
-        TArgs<Value<int, 0>, Value<bool, false>>
-    >();
 
-    TL::test_operation<
-        utilities::has_type_alias,
-        TArgs<integrals, TValue<bool, false>>,
-        TArgs<double, TValue<bool, false>>,
-        TArgs<doubles, TValue<bool, false>>,
-        TArgs<Value<bool, true>, TValue<bool, true>>
-    >();
+    test_case<append<empty_list, int>, type_list<int>>();
+    test_case<append<type_list<int>, double>, type_list<int, double>>();
+    test_case<append<type_list<int, double>, char>, type_list<int, double, char>>();
+    test_case<append<type_list<int>, type_list<double>>, type_list<int, double>>();
+    test_case<append<type_list<>, type_list<>>, type_list<>>();
+    test_case<append<type_list<>, type_list<int>>, type_list<int>>();
+    test_case<append<type_list<int>, type_list<>>, type_list<int>>();
 
-    TL::test_operation<
-        has_type,
-        TArgs<integrals, int, TValue<bool, false>>,
-        TArgs<doubles, double, TValue<bool, true>>,
-        TArgs<empty_list, double, Value<bool, false>>
-    >();
+    test_case<push_back<empty_list, int>, type_list<int>>();
+    test_case<push_back<type_list<int>, double>, type_list<int, double>>();
+    test_case<push_back<type_list<int, double>, char>, type_list<int, double, char>>();
 
-    TL::test_operation_with_tester<
-        test_size,
-        TArgs<integrals, TValue<int, 5>>,
-        TArgs<doubles, Value<int, 1>>,
-        TArgs<empty_list, Value<int, 0>>
-    >();
+    test_case<prepend<empty_list, int>, type_list<int>>();
+    test_case<prepend<type_list<int>, double>, type_list<double, int>>();
+    test_case<prepend<type_list<int, double>, char>, type_list<char, int, double>>();
 
-    TL::test_operation<
-        empty,
-        TArgs<integrals, TValue<bool, false>>,
-        TArgs<doubles, Value<bool, false>>,
-        TArgs<empty_list, Value<bool, true>>
-    >();
+    test_case<push_front<empty_list, int>, type_list<int>>();
+    test_case<push_front<type_list<int>, double>, type_list<double, int>>();
+    test_case<push_front<type_list<int, double>, char>, type_list<char, int, double>>();
 
-    TL::test_operation_with_tester<
-        test_get_type,
-        TArgs<integrals, TValue<int, 0>, char>,
-        TArgs<doubles, Value<int, 0>, double>,
-        TArgs<integrals, Value<int, 1>, short>,
-        TArgs<integrals, Value<int, 2>, int>
-    >();
-
-    TL::test_operation<
-        type_count,
-        TArgs<integrals, int, TValue<int, 1>>,
-        TArgs<integrals, std::string, Value<int, 0>>,
-        TArgs<doubles, double, Value<int, 1>>,
-        TArgs<doubles, int, Value<int, 0>>,
-        TArgs<empty_list, int, Value<int, 0>>,
-        TArgs<empty_list, double, Value<int, 0>>
-    >();
-*/
     std::cout << "I did it!\n";
     return 0;
 }
