@@ -62,6 +62,9 @@ namespace TL {
         enum { value = impl::list_size<typename TList::result_type>::value }  ;
     };
 
+    template <typename TList>
+    inline constexpr int length_v = length<TList>::value;
+
 
     /*
      * Forward declaration
@@ -76,6 +79,9 @@ namespace TL {
         enum { value =  impl::list_type_count<typename TList::result_type, T>::value };
     };
 
+    template <typename TList, typename Type>
+    inline constexpr int type_count_v = type_count<TList, Type>::value;
+
 
     /*
      * Forward declaration
@@ -88,6 +94,9 @@ namespace TL {
     {
         enum { value = impl::list_empty<typename TList::result_type>::value };
     };
+
+    template <typename TList>
+    inline constexpr bool empty_v = empty<TList>::value;
 
 
     /*
@@ -103,6 +112,9 @@ namespace TL {
         using type = typename impl::list_get_type<typename TList::result_type, N>::type;
     };
 
+    template <typename TList, std::size_t N>
+    using get_type_t = typename get_type<TList, N>::type;
+
 
     /*
      * Forward declaration
@@ -116,6 +128,9 @@ namespace TL {
     {
         enum { value = impl::list_has_type<typename TList::result_type, Type>::value };
     };
+
+    template <typename TList, typename Type>
+    inline constexpr bool has_type_v = has_type<TList, Type>::value;
 
 
     /*
@@ -131,6 +146,9 @@ namespace TL {
         enum { value = impl::all_of_impl<typename TList::result_type, UnPred>::value };
     };
 
+    template <typename TList, template <class> class UnPred>
+    inline constexpr bool all_of_v = all_of<TList, UnPred>::value;
+
 
     /*
      * Forward declaration
@@ -144,6 +162,9 @@ namespace TL {
     {
         enum { value = impl::any_of_impl<typename TList::result_type, UnPred>::value };
     };
+
+    template <typename TList, template <class> class UnPred>
+    inline constexpr bool any_of_v = any_of<TList, UnPred>::value;
 
 
     /*
@@ -159,6 +180,8 @@ namespace TL {
         enum { value = impl::none_of_impl<typename TList::result_type, UnPred>::value };
     };
 
+    template <typename TList, template <class> class UnPred>
+    inline constexpr bool none_of_v = none_of<TList, UnPred>::value;
 
 
     /*
@@ -168,41 +191,67 @@ namespace TL {
     struct append;
 
     template <typename TList1, typename TList2>
-    struct append: requires::is_type_list<TList1>
+    struct append:  requires::is_type_list<TList1>,
+                    requires::is_not_nulltype<TList2>
     {
-    private:
-        using list1 = typename utilities::type_or_list<TList1>::result;
-        using list2 = typename utilities::type_or_list<TList2>::result;
-    public:
-        using type = type_list<typename impl::append_list<list1, list2>::type>;
+        using type = typename impl::append_impl<TList1, TList2>::type;
     };
-
-    template <typename TList>
-    inline constexpr int length_v = length<TList>::value;
-
-    template <typename TList>
-    inline constexpr bool empty_v = empty<TList>::value;
-
-    template <typename TList, typename Type>
-    inline constexpr bool has_type_v = has_type<TList, Type>::value;
-
-    template <typename TList, typename Type>
-    inline constexpr int type_count_v = type_count<TList, Type>::value;
-
-    template <typename TList, std::size_t N>
-    using get_type_t = typename get_type<TList, N>::type;
 
     template <typename T, typename U>
     using append_t = typename append<T, U>::type;
 
-    template <typename TList, template <class> class UnPred>
-    inline constexpr bool all_of_v = all_of<TList, UnPred>::value;
 
-    template <typename TList, template <class> class UnPred>
-    inline constexpr bool any_of_v = any_of<TList, UnPred>::value;
+    /*
+     * Forward declaration
+     * */
+    template <typename TList1, typename TList2>
+    struct prepend;
 
-    template <typename TList, template <class> class UnPred>
-    inline constexpr bool none_of_v = none_of<TList, UnPred>::value;
+    template <typename TList1, typename TList2>
+    struct prepend: requires::is_type_list<TList1>,
+                    requires::is_not_nulltype<TList2>
+    {
+        using type = typename impl::prepend_impl<TList1, TList2>::type;
+    };
+
+    template <typename T, typename U>
+    using prepend_t = typename prepend<T, U>::type;
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList, typename Type>
+    struct push_back;
+
+    template <typename TList, typename Type>
+    struct push_back:   requires::is_type_list<TList>,
+                        requires::is_plain_type<Type>,
+                        requires::is_not_nulltype<Type>
+    {
+        using type = typename append<TList, Type>::type;
+    };
+
+    template <typename T, typename U>
+    using push_back_t = typename push_back<T, U>::type;
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList, typename Type>
+    struct push_front;
+
+    template <typename TList, typename Type>
+    struct push_front:  requires::is_type_list<TList>,
+                        requires::is_plain_type<Type>,
+                        requires::is_not_nulltype<Type>
+    {
+        using type = typename prepend<TList, Type>::type;
+    };
+
+    template <typename T, typename U>
+    using push_front_t = typename push_front<T, U>::type;
 
 } //tl
 
@@ -429,53 +478,160 @@ namespace impl {
     /*
      * forward declaration
      * */
-    template <typename TList, typename TList2>
+    template <typename TList, typename T>
+    struct append_type;
+
+    template <typename ... Tp, typename T>
+    struct append_type<type_list<Tp...>, T>
+    {
+        using type = type_list<Tp..., T>;
+    };
+
+    template <typename T>
+    struct append_type<type_list<>, T>
+    {
+        using type = type_list<T>;
+    };
+
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList, typename ... Tp>
+    struct append_types;
+
+    template <typename TList, typename T, typename ... Tp>
+    struct append_types<TList, T, Tp...>
+    {
+        using new_type_list = typename append_type<TList, T>::type;
+        using type = typename append_types<new_type_list, Tp...>::type;
+    };
+
+    template <typename TList, typename T>
+    struct append_types<TList, T>
+    {
+        using type = typename append_type<TList, T>::type;
+    };
+
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList1, typename TList2>
     struct append_list;
 
+    template <typename TList1, typename ... Tp>
+    struct append_list<TList1, type_list<Tp...>>
+    {
+        using type = typename append_types<TList1, Tp...>::type;
+    };
+
+    template <typename TList>
+    struct append_list<TList, type_list<>>
+    {
+        using type = TList;
+    };
+
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList, typename T>
+    struct prepend_type;
+
+    template <typename ... Tp, typename T>
+    struct prepend_type<type_list<Tp...>, T>
+    {
+        using type = type_list<T, Tp...>;
+    };
+
+    template <typename T>
+    struct prepend_type<type_list<>, T>
+    {
+        using type = type_list<T>;
+    };
+
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList, typename ... Tp>
+    struct prepend_types;
+
+    template <typename TList, typename T, typename ... Tp>
+    struct prepend_types<TList, T, Tp...>
+    {
+        using new_type_list = typename prepend_type<TList, T>::type;
+        using type = typename prepend_types<new_type_list, Tp...>::type;
+    };
+
+    template <typename TList, typename T>
+    struct prepend_types<TList, T>
+    {
+        using type = typename prepend_type<TList, T>::type;
+    };
+
+
+    /*
+     * forward declaration
+     * */
     template <typename TList1, typename TList2>
-    struct append_list
+    struct prepend_list;
+
+    template <typename TList1, typename ... Tp>
+    struct prepend_list<TList1, type_list<Tp...>>
     {
-        using type = NullType;
+        using type = typename prepend_types<TList1, Tp...>::type;
     };
 
-    //many to many
-    template <typename Cur1, typename Next1, typename Cur2, typename Next2>
-    struct append_list<TypeList<Cur1, Next1>, TypeList<Cur2, Next2>>
+    template <typename TList>
+    struct prepend_list<TList, type_list<>>
     {
-        using type = TypeList<Cur1, typename append_list<Next1, TypeList<Cur2, Next2>>::type>;
+        using type = TList;
     };
 
-    template <typename Cur, typename Next, typename T>
-    struct append_list<TypeList<Cur, Next>, T>
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList1, typename TList2>
+    struct append_impl;
+
+    template <typename TList1, typename TList2>
+    struct append_impl
     {
-        using type = typename append_list<TypeList<Cur, Next>, SingletonList<T>>::type;
+        using type = typename append_type<TList1, TList2>::type;
     };
 
-    template <typename Cur, typename Next, typename T>
-    struct append_list<T, TypeList<Cur, Next>>
+    template <typename TList1, typename ... Tp>
+    struct append_impl<TList1, type_list<Tp...>>
     {
-        using type = typename append_list<SingletonList<T>, TypeList<Cur, Next>>::type;
+        using type = typename append_list<TList1, type_list<Tp...>>::type;
     };
 
-    template <typename Cur, typename Next>
-    struct append_list<EmptyList, TypeList<Cur, Next>>
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList1, typename TList2>
+    struct prepend_impl;
+
+    template <typename TList1, typename TList2>
+    struct prepend_impl
     {
-        using type = TypeList<Cur, Next>;
+        using type = typename prepend_type<TList1, TList2>::type;
     };
 
-    template <typename Cur, typename Next>
-    struct append_list<TypeList<Cur, Next>, EmptyList>
+    template <typename TList1, typename ... Tp>
+    struct prepend_impl<TList1, type_list<Tp...>>
     {
-        using type = TypeList<Cur, Next>;
+        using type = typename prepend_list<TList1, type_list<Tp...>>::type;
     };
 
-    template <>
-    struct append_list<EmptyList, EmptyList>
-    {
-        using type = EmptyList;
-    };
 
-} //traits
+
+
+} //impl
 } //tl
 
 
