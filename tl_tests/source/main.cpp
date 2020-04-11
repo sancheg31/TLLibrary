@@ -8,6 +8,7 @@
 #include "source/type_list.hpp"
 #include "source/TLUtility.hpp"
 #include "source/TLNulltype.hpp"
+#include "experimental/ExpandingPack.h"
 
 
 using namespace TL;
@@ -37,6 +38,23 @@ struct test_false
 
 int main()
 {
+
+    using test_list = experimental::type_list<int, int, int>;
+    using preffered = experimental::type_list<int, double, int>;
+    using actual = typename experimental::replace<test_list, double, 1>::result;
+
+    using list_before = typename experimental::replace<test_list, double, 1>::list_before;
+    using list_after = typename experimental::replace<test_list, double, 1>::list_after;
+
+    static_assert(std::is_same_v<actual, preffered>, "uupsie");
+    static_assert(std::is_same_v<list_before, experimental::type_list<int>>, "uupsie2");
+    static_assert(std::is_same_v<list_after, experimental::type_list<int>>,
+            "uupsie3");
+
+    using test_list_2 = experimental::type_list<int, double, char>;
+    static_assert(std::is_same_v<typename experimental::reverse<test_list_2>::result,
+            experimental::type_list<char, double, int>>, "uupsie4");
+
     test_case<length<integrals>, TValue<int, 5>>();
     test_case<length<doubles>, TValue<int, 2>>();
     test_case<length<empty_list>, TValue<int, 0>>();
