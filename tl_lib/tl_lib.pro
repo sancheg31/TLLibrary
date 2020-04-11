@@ -22,6 +22,7 @@ INCLUDEPATH += experimental
 SOURCES +=
 
 HEADERS += \
+    experimental/ExpandingPack.h \
     experimental/literals.hpp \
     source/TLNulltype.hpp \
     source/TLNode.hpp \
