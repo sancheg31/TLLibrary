@@ -40,6 +40,9 @@ namespace TL {
     template <typename TList, typename Type>
     struct last_type_index;
 
+    template <typename TList, template <class> class Property>
+    struct find_type;
+
     template <typename TList, template <class> class UnPred>
     struct all_of;
 
@@ -48,8 +51,6 @@ namespace TL {
 
     template <typename TList, template <class> class UnPred>
     struct none_of;
-
-
 
     template <typename TList1, typename TList2>
     struct append;
@@ -85,6 +86,9 @@ namespace TL {
 
         template <typename TList, typename Type, std::size_t I = 0, int Position = -1>
         struct last_type_index_impl;
+
+        template <typename TList, template <class> class Property>
+        struct find_type_impl;
 
 
         template <typename TList, template <class> class UnPred>

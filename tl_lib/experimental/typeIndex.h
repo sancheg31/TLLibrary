@@ -32,7 +32,7 @@ namespace experimental {
                             requires::is_plain_type<Type>,
                             requires::is_not_nulltype<Type>
     {
-        enum { value = typename last_type_index_impl<TList, Type>::value };
+        enum { value = last_type_index_impl<TList, Type>::value };
     };
 
 
