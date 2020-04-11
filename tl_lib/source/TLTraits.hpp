@@ -47,6 +47,19 @@ namespace traits {
     /*
      * Forward declaration
      * */
+    template <typename TList>
+    struct is_plain_type;
+
+    template <typename ... Tp>
+    struct is_plain_type<type_list<Tp...>>: false_argument { };
+
+    template <typename TList>
+    struct is_plain_type: true_argument { };
+
+
+    /*
+     * Forward declaration
+     * */
     template <typename T, typename U>
     struct is_same;
 

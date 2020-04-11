@@ -21,6 +21,19 @@ namespace requires {
     /*
      * Forward declaration
      * */
+
+    template <typename Type>
+    struct is_plain_type;
+
+    template <typename Type>
+    struct is_plain_type: traits::is_plain_type<Type>
+    {
+        static_assert(is_plain_type<Type>::value, "argument is not a plain type");
+    };
+
+    /*
+     * Forward declaration
+     * */
     template <class T>
     struct has_result_type;
 
