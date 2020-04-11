@@ -39,22 +39,6 @@ struct test_false
 int main()
 {
 
-    using test_list = experimental::type_list<int, int, int>;
-    using preffered = experimental::type_list<int, double, int>;
-    using actual = typename experimental::replace<test_list, double, 1>::type;
-
-    using list_before = typename experimental::replace<test_list, double, 1>::list_before;
-    using list_after = typename experimental::replace<test_list, double, 1>::list_after;
-
-    static_assert(std::is_same_v<actual, preffered>, "uupsie");
-    static_assert(std::is_same_v<list_before, experimental::type_list<int>>, "uupsie2");
-    static_assert(std::is_same_v<list_after, experimental::type_list<int>>,
-            "uupsie3");
-
-    using test_list_2 = experimental::type_list<int, double, char>;
-    static_assert(std::is_same_v<typename experimental::reverse<test_list_2>::type,
-            experimental::type_list<char, double, int>>, "uupsie4");
-
     test_case<length<integrals>, TValue<int, 5>>();
     test_case<length<doubles>, TValue<int, 2>>();
     test_case<length<empty_list>, TValue<int, 0>>();
@@ -84,6 +68,24 @@ int main()
     test_case<get_type<doubles, 1>, double>();
     test_case<get_type<doubles, 0>, float>();
     test_case<get_type<integrals, 4>, double>();
+
+
+    test_case<type_index<integrals, char>, TValue<int, 0>>();
+    test_case<type_index<integrals, double>, TValue<int, 4>>();
+    test_case<type_index<type_list<>, int>, TValue<int, -1>>();
+    test_case<type_index<doubles, double>, TValue<int, 1>>();
+    test_case<type_index<doubles, int>, TValue<int, -1>>();
+
+    test_case<last_type_index<integrals, char>, TValue<int, 0>>();
+    test_case<last_type_index<integrals, double>, TValue<int, 4>>();
+    test_case<last_type_index<type_list<>, int>, TValue<int, -1>>();
+    test_case<last_type_index<doubles, double>, TValue<int, 1>>();
+    test_case<last_type_index<doubles, int>, TValue<int, -1>>();
+    test_case<last_type_index<type_list<int, int>, int>, TValue<int, 1>>();
+    test_case<last_type_index<type_list<int, double, int>, int>, TValue<int, 2>>();
+    test_case<last_type_index<type_list<double, double, double>, double>, TValue<int, 2>>();
+
+
 
     test_case<all_of<empty_list, test_true>, TValue<bool, true>>();
     test_case<all_of<empty_list, test_false>, TValue<bool, true>>();
