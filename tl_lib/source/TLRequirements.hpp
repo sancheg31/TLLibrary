@@ -98,13 +98,13 @@ namespace requires {
     /*
      * Forward declaration
      * */
-    template <std::size_t I, std::size_t N>
-    struct less_than;
+    template <int X, int Y, template <class> class Relation>
+    struct satisfies_relation;
 
-    template <std::size_t I, std::size_t N>
-    struct less_than
+    template <int X, int Y, template <class> class Relation>
+    struct satisfies_relation
     {
-        static_assert(I < N, "index is out of range");
+        static_assert(Relation<std::size_t>(X, Y), "relation is not satisfied");
     };
 
 } //requires

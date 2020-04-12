@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <type_traits>
+#include <functional>
 
 #include "TLfwd.hpp"
 #include "TLNode.hpp"
@@ -70,6 +71,22 @@ namespace TL {
     /*
      * Forward declaration
      * */
+    template <typename TList>
+    struct empty;
+
+    template <typename TList>
+    struct empty: requires::is_type_list<TList>
+    {
+        enum { value = impl::empty_impl<TList>::value };
+    };
+
+    template <typename TList>
+    inline constexpr bool empty_v = empty<TList>::value;
+
+
+    /*
+     * Forward declaration
+     * */
     template <typename TList, typename T>
     struct type_count;
 
@@ -87,34 +104,47 @@ namespace TL {
     /*
      * Forward declaration
      * */
-    template <typename TList>
-    struct empty;
-
-    template <typename TList>
-    struct empty: requires::is_type_list<TList>
-    {
-        enum { value = impl::empty_impl<TList>::value };
-    };
-
-    template <typename TList>
-    inline constexpr bool empty_v = empty<TList>::value;
-
-
-    /*
-     * Forward declaration
-     * */
     template <typename TList, std::size_t N>
     struct get_type;
 
     template <typename TList, std::size_t N>
     struct get_type:    requires::is_type_list<TList>,
-                        requires::less_than<N, length<TList>::value>
+                        requires::satisfies_relation<N, length<TList>::value, std::less>
+
     {
         using type = typename impl::get_type_impl<TList, N>::type;
     };
 
     template <typename TList, std::size_t N>
     using get_type_t = typename get_type<TList, N>::type;
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList>
+    struct first_type;
+
+    template <typename TList>
+    struct first_type:  requires::is_type_list<TList>,
+                        requires::satisfies_relation<length<TList>::value, 0, std::greater>
+    {
+        using type = typename get_type<TList, 0>::type;
+    };
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList>
+    struct last_type;
+
+    template <typename TList>
+    struct last_type:   requires::is_type_list<TList>,
+                        requires::satisfies_relation<length<TList>::value, 0, std::greater>
+    {
+        using type = typename get_type<TList, length<TList>::value - 1>::type;
+    };
 
 
     /*
@@ -299,11 +329,26 @@ namespace TL {
     template <typename T, typename U>
     using push_front_t = typename push_front<T, U>::type;
 
+
+    /*
+     *
+     * */
+    template <typename TList1, typename TList2>
+    struct equal;
+
+    template <typename TList1, typename TList2>
+    struct equal:   requires::is_type_list<TList1>,
+                    requires::is_type_list<TList2>
+    {
+        enum { value = impl::equal_impl<TList1, TList2>::value };
+    };
+
 } //tl
 
 
 namespace TL {
 namespace impl {
+
     /*
      * forward declaration
      * */

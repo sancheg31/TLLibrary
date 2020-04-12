@@ -22,14 +22,29 @@ namespace TL {
     template <typename TList>
     struct length;
 
-    template <typename TList, typename T>
-    struct type_count;
-
     template <typename TList>
     struct empty;
 
+    template <typename TList>
+    struct first_type;
+
+    template <typename TList>
+    struct last_type;
+
+    template <typename TList1, typename TList2>
+    struct equal;
+
+    template <typename TList, typename T>
+    struct type_count;
+
     template <typename TList, std::size_t N>
     struct get_type;
+
+    template <typename TList>
+    struct first_type;
+
+    template <typename TList>
+    struct last_type;
 
     template <typename TList, typename Type>
     struct has_type;
@@ -71,6 +86,9 @@ namespace TL {
 
         template <typename TList>
         struct empty_impl;
+
+        template <typename TList1, typename TList2>
+        struct equal_impl;
 
         template <typename TList, typename Type>
         struct type_count_impl;
@@ -194,8 +212,8 @@ namespace TL {
         template <typename Type>
         struct is_not_nulltype;
 
-        template <std::size_t I, std::size_t N>
-        struct less_than;
+        template <int X, int Y, template <class> class Relation>
+        struct satisfies_relation;
 
     } //requires
 
