@@ -68,6 +68,12 @@ namespace TL {
     struct none_of;
 
     template <typename TList1, typename TList2>
+    struct equal;
+
+    template <typename TList1, typename TList2>
+    struct not_equal;
+
+    template <typename TList1, typename TList2>
     struct append;
 
     template <typename TList1, typename TList2>
@@ -86,9 +92,6 @@ namespace TL {
 
         template <typename TList>
         struct empty_impl;
-
-        template <typename TList1, typename TList2>
-        struct equal_impl;
 
         template <typename TList, typename Type>
         struct type_count_impl;
@@ -118,6 +121,9 @@ namespace TL {
         template <typename TList, template <class> class UnPred>
         struct none_of_impl;
 
+
+        template <typename TList1, typename TList2, std::size_t N = length<TList1>::value, std::size_t I = 0>
+        struct equal_impl;
 
         template <typename TList, typename T>
         struct append_type;

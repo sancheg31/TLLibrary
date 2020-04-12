@@ -264,6 +264,31 @@ namespace TL {
      * Forward declaration
      * */
     template <typename TList1, typename TList2>
+    struct equal;
+
+    template <typename TList1, typename TList2>
+    struct equal:   requires::is_type_list<TList1>,
+                    requires::is_type_list<TList2>,
+                    requires::satisfies_relation<length<TList1>::value, length<TList2>::value, std::equal_to>
+    {
+        enum { value = impl::equal_impl<TList1, TList2>::value };
+    };
+
+    template <typename TList1, typename TList2>
+    struct not_equal;
+
+    template <typename TList1, typename TList2>
+    struct not_equal:   requires::is_type_list<TList1>,
+                    requires::is_type_list<TList2>
+    {
+        enum { value = !equal<TList1, TList2>::value };
+    };
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList1, typename TList2>
     struct append;
 
     template <typename TList1, typename TList2>
@@ -328,20 +353,6 @@ namespace TL {
 
     template <typename T, typename U>
     using push_front_t = typename push_front<T, U>::type;
-
-
-    /*
-     *
-     * */
-    template <typename TList1, typename TList2>
-    struct equal;
-
-    template <typename TList1, typename TList2>
-    struct equal:   requires::is_type_list<TList1>,
-                    requires::is_type_list<TList2>
-    {
-        enum { value = impl::equal_impl<TList1, TList2>::value };
-    };
 
 } //tl
 
@@ -581,6 +592,24 @@ namespace impl {
         enum { value = true };
     };
 
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList1, typename TList2, std::size_t N, std::size_t I>
+    struct equal_impl;
+
+    template <typename TList1, typename TList2, std::size_t N, std::size_t I>
+    struct equal_impl
+    {
+        enum { value = traits::is_same_v<get_type_t<TList1, I>, get_type_t<TList2, I>> && equal_impl<TList1, TList2, I + 1>::value };
+    };
+
+    template <typename TList1, typename TList2, std::size_t N>
+    struct equal_impl<TList1, TList2, N, N>
+    {
+        enum { value = true };
+    };
 
     /*
      * forward declaration
