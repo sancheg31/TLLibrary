@@ -73,13 +73,13 @@ namespace TL {
         struct empty_impl;
 
         template <typename TList, typename Type>
-        struct list_type_count;
+        struct type_count_impl;
 
-        template <typename TList, std::size_t N>
-        struct list_get_type;
+        template <typename TList, std::size_t N, std::size_t Index = 0>
+        struct get_type_impl;
 
         template <typename TList, typename Type>
-        struct list_has_type;
+        struct has_type_impl;
 
         template <typename TList, typename Type, std::size_t I = 0>
         struct type_index_impl;

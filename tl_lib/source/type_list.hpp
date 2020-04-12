@@ -77,7 +77,7 @@ namespace TL {
     struct type_count:  requires::is_type_list<TList>,
                         requires::is_not_nulltype<T>
     {
-        enum { value =  impl::list_type_count<typename TList::result_type, T>::value };
+        enum { value =  impl::type_count_impl<TList, T>::value };
     };
 
     template <typename TList, typename Type>
@@ -110,7 +110,7 @@ namespace TL {
     struct get_type:    requires::is_type_list<TList>,
                         requires::less_than<N, length<TList>::value>
     {
-        using type = typename impl::list_get_type<typename TList::result_type, N>::type;
+        using type = typename impl::get_type_impl<TList, N>::type;
     };
 
     template <typename TList, std::size_t N>
@@ -127,7 +127,7 @@ namespace TL {
     struct has_type:    requires::is_type_list<TList>,
                         requires::is_not_nulltype<Type>
     {
-        enum { value = impl::list_has_type<typename TList::result_type, Type>::value };
+        enum { value = impl::has_type_impl<TList, Type>::value  };
     };
 
     template <typename TList, typename Type>
@@ -339,67 +339,43 @@ namespace impl {
      * forward declaration
      * */
     template <typename TList, typename Type>
-    struct list_type_count;
+    struct type_count_impl;
 
-    template <typename T, typename U, typename Type>
-    struct list_type_count<TypeList<T, U>, Type>
+    template <typename T, typename ... Tp, typename Type>
+    struct type_count_impl<type_list<T, Tp...>, Type>
     {
-        enum { value = 0 + list_type_count<U, Type>::value };
+        enum { value = type_count_impl<type_list<Tp...>, Type>::value };
     };
 
-    template <typename U, typename Type>
-    struct list_type_count<TypeList<Type, U>, Type>
+    template <typename ... Tp, typename Type>
+    struct type_count_impl<type_list<Type, Tp...>, Type>
     {
-        enum { value = 1 + list_type_count<U, Type>::value };
-    };
-
-    template <typename T, typename Type>
-    struct list_type_count<TypeList<T, NullType>, Type>
-    {
-        enum { value = 0 };
+        enum { value = 1 + type_count_impl<type_list<Tp...>, Type>::value };
     };
 
     template <typename Type>
-    struct list_type_count<TypeList<Type, NullType>, Type>
+    struct type_count_impl<type_list<>, Type>
     {
-        enum { value = 1 };
+        enum { value = 0 };
     };
 
 
     /*
      * forward declaration
      * */
-    template <typename TList, std::size_t N>
-    struct list_get_type;
+    template <typename TList, std::size_t N, std::size_t Index>
+    struct get_type_impl;
 
-    template <typename T, typename U, std::size_t N>
-    struct list_get_type<TypeList<T, U>, N>
+    template <typename T, typename ... Tp, std::size_t N, std::size_t Index>
+    struct get_type_impl<type_list<T, Tp...>, N, Index>
     {
-        using type = typename list_get_type<U, N-1>::type;
+        using type = typename get_type_impl<type_list<Tp...>, N, Index + 1>::type;
     };
 
-    template <typename T, typename U>
-    struct list_get_type<TypeList<T, U>, 0>
+    template <typename T, typename ... Tp, std::size_t Index>
+    struct get_type_impl<type_list<T, Tp...>, Index, Index>
     {
         using type = T;
-    };
-
-    template <typename T>
-    struct list_get_type<TypeList<T, NullType>, 0>
-    {
-        using type = T;
-    };
-
-    template <typename T, std::size_t N>
-    struct list_get_type<TypeList<T, NullType>, N>: utilities::index_out_of_range<N>
-    {
-        using type = void;
-    };
-
-    template <std::size_t N>
-    struct list_get_type<TypeList<NullType, NullType>, N>: utilities::index_out_of_range<N>
-    {
-        using type = void;
     };
 
 
@@ -407,30 +383,12 @@ namespace impl {
      * forward declaration
      * */
     template <typename TList, typename Type>
-    struct list_has_type;
+    struct has_type_impl;
 
-    template <typename T, typename U, typename Type>
-    struct list_has_type<TypeList<T, U>, Type>
+    template <typename ... Tp, typename Type>
+    struct has_type_impl<type_list<Tp...>, Type>
     {
-        enum { value = list_has_type<U, Type>::value };
-    };
-
-    template <typename U, typename Type>
-    struct list_has_type<TypeList<Type, U>, Type>
-    {
-        enum { value = true };
-    };
-
-    template <typename T, typename Type>
-    struct list_has_type<TypeList<T, NullType>, Type>
-    {
-        enum { value = false };
-    };
-
-    template <typename Type>
-    struct list_has_type<TypeList<Type, NullType>, Type>
-    {
-        enum { value = true };
+        enum { value = (type_count<type_list<Tp...>, Type>::value > 0) };
     };
 
 
@@ -502,6 +460,7 @@ namespace impl {
     {
         using type = NullType;
     };
+
 
     /*
      * forward declaration
