@@ -41,12 +41,13 @@ namespace TL {
 
     template <typename TList>
      constexpr int size() {
-        return impl::list_size<typename TList::result_type>::value;
+        static_assert(traits::is_type_list<TList>::value, "type is not a type list");
+        return impl::length_impl<TList>::value;
     }
 
     template <typename ... Tp>
      constexpr int size(type_list<Tp...> &&) {
-        return impl::list_size<typename type_list<Tp...>::result_type>::value;
+        return impl::length_impl<type_list<Tp...>>::value;
     }
 
 
@@ -59,7 +60,7 @@ namespace TL {
     template <typename TList>
     struct length: requires::is_type_list<TList>
     {
-        enum { value = impl::list_size<typename TList::result_type>::value }  ;
+        enum { value = impl::length_impl<TList>::value }  ;
     };
 
     template <typename TList>
@@ -92,7 +93,7 @@ namespace TL {
     template <typename TList>
     struct empty: requires::is_type_list<TList>
     {
-        enum { value = impl::list_empty<typename TList::result_type>::value };
+        enum { value = impl::empty_impl<TList>::value };
     };
 
     template <typename TList>
@@ -307,40 +308,28 @@ namespace impl {
      * forward declaration
      * */
     template <typename TList>
-    struct list_size;
+    struct length_impl;
 
-    template <typename T, typename U>
-    struct list_size<TypeList<T, U>>
+    template <typename ... Tp>
+    struct length_impl<type_list<Tp...>>
     {
-        enum { value = 1 + list_size<U>::value };
-    };
-
-    template <typename T>
-    struct list_size<TypeList<T, NullType>>
-    {
-        enum { value = 1 };
-    };
-
-    template <>
-    struct list_size<TypeList<NullType, NullType>>
-    {
-        enum { value = 0 };
+        enum { value = sizeof...(Tp) };
     };
 
     /*
      * forward declaration
      * */
     template <typename TList>
-    struct list_empty;
+    struct empty_impl;
 
-    template <typename T, typename U>
-    struct list_empty<TypeList<T, U>>
+    template <typename ... Tp>
+    struct empty_impl<type_list<Tp...>>
     {
         enum { value = false };
     };
 
     template <>
-    struct list_empty<TypeList<NullType, NullType>>
+    struct empty_impl<type_list<>>
     {
         enum { value = true };
     };

@@ -67,10 +67,10 @@ namespace TL {
     namespace impl {
 
         template <typename TList>
-        struct list_size;
+        struct length_impl;
 
         template <typename TList>
-        struct list_empty;
+        struct empty_impl;
 
         template <typename TList, typename Type>
         struct list_type_count;
