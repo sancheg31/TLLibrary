@@ -74,6 +74,14 @@ int main()
     test_case<get_type<integrals, 4>, double>();
 
 
+    test_case<first_type<integrals>, char>();
+    test_case<first_type<doubles>, float>();
+
+
+    test_case<last_type<integrals>, double>();
+    test_case<last_type<doubles>, double>();
+
+
     test_case<type_index<integrals, char>, TValue<int, 0>>();
     test_case<type_index<integrals, double>, TValue<int, 4>>();
     test_case<type_index<type_list<>, int>, TValue<int, -1>>();

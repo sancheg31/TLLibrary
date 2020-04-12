@@ -104,7 +104,7 @@ namespace requires {
     template <int X, int Y, template <class> class Relation>
     struct satisfies_relation
     {
-        static_assert(Relation<std::size_t>(X, Y), "relation is not satisfied");
+        static_assert(Relation<int>{}(X, Y), "relation is not satisfied");
     };
 
 } //requires
