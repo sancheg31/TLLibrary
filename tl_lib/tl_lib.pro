@@ -28,8 +28,10 @@ HEADERS += \
     experimental/literals.hpp \
     experimental/typeIndex.h \
     source/TLIterator.hpp \
+    source/TLIteratorfwd.hpp \
     source/TLNode.hpp \
     source/TLNullType.hpp \
+    source/TLPredefinedHeaders.hpp \
     source/TLRequirements.hpp \
     source/TLTraits.hpp \
     source/TLUtility.hpp \

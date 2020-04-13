@@ -1,10 +1,9 @@
 #pragma once
 
-#include "type_list.hpp"
-#include "TLRequirements.hpp"
-#include "TLTraits.hpp"
+#include "TLfwd.hpp"
 
 namespace TL {
+
     template <typename TList, std::size_t I = 0>
     struct type_list_iterator;
 

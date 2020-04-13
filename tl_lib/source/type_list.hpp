@@ -5,7 +5,7 @@
 #include <functional>
 
 #include "TLfwd.hpp"
-#include "TLNode.hpp"
+#include "TLIterator.hpp"
 #include "TLTraits.hpp"
 #include "TLRequirements.hpp"
 
@@ -171,9 +171,9 @@ namespace TL {
     struct type_index;
 
     template <typename TList, typename Type>
-    struct type_index:    requires::is_type_list<TList>,
-                                requires::is_plain_type<Type>,
-                                requires::is_not_nulltype<Type>
+    struct type_index:  requires::is_type_list<TList>,
+                        requires::is_plain_type<Type>,
+                        requires::is_not_nulltype<Type>
     {
         enum { value =  impl::type_index_impl<TList, Type>::value };
     };
