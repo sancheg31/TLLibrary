@@ -4,12 +4,13 @@
 namespace TL {
 namespace testing {
 
+    TLTestBase::container_type TLTestBase::listOfTests_{};
 
     TLTestBase::TLTestBase(const std::string& name) {
-        listOfTests().emplace(name, this);
+        TLTestBase::listOfTests().emplace(name, this);
     }
 
-    TLTestBase::container_type& TLTestBase::listOfTests() {
+    auto TLTestBase::listOfTests() -> container_type& {
         return listOfTests_;
     }
 
