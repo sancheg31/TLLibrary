@@ -8,31 +8,65 @@
 
 namespace TL {
 
-    template <typename TList, std::size_t I>
+    template <typename TList, std::size_t I, std::size_t N>
+    struct iterator_properties;
+
+    template <typename TList, std::size_t I, std::size_t N>
+    struct iterator_properties:
+                        requires::satisfies_relation<I, N, std::less_equal>,
+                        requires::satisfies_relation<I, 0, std::greater_equal>
+    {
+        enum { size = N };
+        enum { at_start = std::equal_to<std::size_t>{}(I, 0), not_at_start = !at_start };
+        enum { at_end = std::equal_to<std::size_t>{}(I, N), not_at_end = !at_end };
+    };
+
+
+    template <typename TList, std::size_t I, bool, bool>
     struct type_list_iterator;
 
     template <typename TList, std::size_t I>
-    struct type_list_iterator: requires::is_type_list<TList>
+    struct type_list_iterator<TList, I, false, false>:
+            requires::is_type_list<TList>,
+            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
     {
-    private:
-
-        template <std::size_t N = length<TList>::value>
-        struct properties:  requires::satisfies_relation<I, N, std::less_equal>,
-                            requires::satisfies_relation<I, 0, std::greater_equal>
-        {
-            enum { value = N };
-            enum { at_start = std::equal_to<std::size_t>{}(I, 0), not_at_start = !at_start };
-            enum { at_end = std::equal_to<std::size_t>{}(I, N), not_at_end = !at_end };
-        };
-        properties<> ls{};
-
-
     public:
-        using type = std::enable_if_t<properties<>::not_at_end, typename get_type<TList, I>::type>;
+        using type = typename get_type<TList, I>::type;
         using list = TList;
-        using next = std::enable_if_t<properties<>::not_at_end, type_list_iterator<TList, I+1>>;
-        using prev = std::enable_if_t<properties<>::not_at_start, type_list_iterator<TList, I-1>>;
+        using next = type_list_iterator<TList, I+1>;
+        using prev = type_list_iterator<TList, I-1>;
     };
+
+    template <typename TList, std::size_t I>
+    struct type_list_iterator<TList, I, true, false>:
+            requires::is_type_list<TList>,
+            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
+    {
+    public:
+        using type = typename get_type<TList, I>::type;
+        using list = TList;
+        using next = type_list_iterator<TList, I+1>;
+    };
+
+    template <typename TList, std::size_t I>
+    struct type_list_iterator<TList, I, false, true>:
+            requires::is_type_list<TList>,
+            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
+    {
+    public:
+        using list = TList;
+        using prev = type_list_iterator<TList, I-1>;
+    };
+
+    template <typename TList, std::size_t I>
+    struct type_list_iterator<TList, I, true, true>:
+            requires::is_type_list<TList>,
+            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
+    {
+    public:
+        using list = TList;
+    };
+
 
     template <typename ... Tp>
     type_list_iterator<type_list<Tp...>, 0> begin(type_list<Tp...>&&) {

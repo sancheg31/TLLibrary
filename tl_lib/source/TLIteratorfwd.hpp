@@ -6,7 +6,11 @@
 
 namespace TL {
 
-    template <typename TList, std::size_t I>
+    template <typename TList, std::size_t I, std::size_t N = length<TList>::value>
+    struct iterator_properties;
+
+    template <typename TList, std::size_t I, bool = iterator_properties<TList, I>::at_start,
+                                            bool = iterator_properties<TList, I>::at_end>
     struct type_list_iterator;
 
     template <typename ... Tp>
