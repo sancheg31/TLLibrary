@@ -132,6 +132,8 @@ int main()
     test_case<any_of<integrals, is_int>, TValue<bool, true>>();
     test_case<any_of<doubles, is_int>, TValue<bool, false>>();
 
+    //test_case<equal<empty_list, empty_list>, TValue<bool, true>>();
+
 
     test_case<append<empty_list, int>, type_list<int>>();
     test_case<append<type_list<int>, double>, type_list<int, double>>();
