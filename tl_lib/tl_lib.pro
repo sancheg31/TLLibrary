@@ -24,8 +24,10 @@ SOURCES +=
 HEADERS += \
     experimental/ExpandingPack.h \
     experimental/FindOperations.h \
+    experimental/TypeListIterator.h \
     experimental/literals.hpp \
     experimental/typeIndex.h \
+    source/TLIterator.hpp \
     source/TLNode.hpp \
     source/TLNullType.hpp \
     source/TLRequirements.hpp \

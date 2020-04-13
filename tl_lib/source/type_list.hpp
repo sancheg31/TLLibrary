@@ -268,8 +268,7 @@ namespace TL {
 
     template <typename TList1, typename TList2>
     struct equal:   requires::is_type_list<TList1>,
-                    requires::is_type_list<TList2>,
-                    requires::satisfies_relation<length<TList1>::value, length<TList2>::value, std::equal_to>
+                    requires::is_type_list<TList2>
     {
         enum { value = impl::equal_impl<TList1, TList2>::value };
     };
@@ -279,7 +278,7 @@ namespace TL {
 
     template <typename TList1, typename TList2>
     struct not_equal:   requires::is_type_list<TList1>,
-                    requires::is_type_list<TList2>
+                        requires::is_type_list<TList2>
     {
         enum { value = !equal<TList1, TList2>::value };
     };
