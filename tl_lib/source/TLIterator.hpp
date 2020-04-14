@@ -77,50 +77,41 @@ namespace TL {
     using iterator_prev = typename Iter::prev;
 
 
-    template <typename ... Tp>
-    type_list_iterator<type_list<Tp...>, 0> begin(type_list<Tp...>&&) {
-        return type_list_iterator<type_list<Tp...>, 0>{};
-    }
-
-    template <typename ... Tp>
-    type_list_iterator<type_list<Tp...>, length<type_list<Tp...>>::value> end(type_list<Tp...>&&) {
-        return type_list_iterator<type_list<Tp...>, length<type_list<Tp...>>::value>{};
-    }
+    template <typename TList>
+    struct begin
+    {
+        using result = type_list_iterator<TList, 0>;
+    };
 
     template <typename TList>
-    type_list_iterator<TList, 0> begin() {
-        return begin<TList>(TList{});
-    }
-
-    template <typename TList>
-    type_list_iterator<TList, length<TList>::value> end() {
-        return end<TList>(TList{});
-    }
+    struct end
+    {
+        using result = type_list_iterator<TList, length<TList>::value>;
+    };
 
     template <typename TList, std::size_t I, int Distance>
-    constexpr TL::type_list_iterator<TList, I + Distance>
-    advance(TL::type_list_iterator<TList, I> &&) {
-        return TL::type_list_iterator<TList, I + Distance>{};
-    }
+    struct advance<type_list_iterator<TList, I>, Distance>
+    {
+        using result = type_list_iterator<TList, I + Distance>;
+    };
 
     template <typename TList, std::size_t I>
-    constexpr TL::type_list_iterator<TList, I + 1>
-    next(TL::type_list_iterator<TList, I>&&) {
-        return typename TL::type_list_iterator<TList, I>::next{};
-    }
+    struct next<type_list_iterator<TList, I>>
+    {
+        using result = type_list_iterator<TList, I + 1>;
+    };
 
     template <typename TList, std::size_t I>
-    constexpr TL::type_list_iterator<TList, I-1>
-    prev(TL::type_list_iterator<TList, I>&&) {
-        return typename TL::type_list_iterator<TList, I>::previous{};
-    }
+    struct prev<type_list_iterator<TList, I>>
+    {
+        using result = type_list_iterator<TList, I - 1>;
+    };
 
     template <typename TList, std::size_t I1, std::size_t I2>
-    constexpr typename std::iterator_traits<TL::type_list_iterator<TList, I1>>::difference_type
-    distance(TL::type_list_iterator<TList, I1>&&, TL::type_list_iterator<TList, I2>&&) {
-        static_assert(I1 > I2, "undefined behaviour");
-        return I1 - I2;
-    }
+    struct distance<type_list_iterator<TList, I1>, type_list_iterator<TList, I2>>
+    {
+        inline constexpr static bool result = I1 - I2;
+    };
 
     template <typename TList, std::size_t I1, std::size_t I2>
     inline constexpr bool operator==(type_list_iterator<TList, I1>&&, type_list_iterator<TList, I2>&&) {
