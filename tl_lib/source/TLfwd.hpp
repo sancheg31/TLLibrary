@@ -30,12 +30,9 @@ namespace TL {
 
     template <typename TList>
     struct last_type;
-
-    template <typename TList1, typename TList2>
-    struct equal;
-
+    /*
     template <typename TList, typename T>
-    struct type_count;
+    struct type_count;*/
 
     template <typename TList, std::size_t N>
     struct get_type;
@@ -58,20 +55,14 @@ namespace TL {
     template <typename TList, template <class> class Property>
     struct find_type;
 
-    template <typename TList, template <class> class UnPred>
+    /*template <typename TList, template <class> class UnPred>
     struct all_of;
 
     template <typename TList, template <class> class UnPred>
     struct any_of;
 
     template <typename TList, template <class> class UnPred>
-    struct none_of;
-
-    template <typename TList1, typename TList2>
-    struct equal;
-
-    template <typename TList1, typename TList2>
-    struct not_equal;
+    struct none_of;*/
 
     template <typename TList1, typename TList2>
     struct append;
