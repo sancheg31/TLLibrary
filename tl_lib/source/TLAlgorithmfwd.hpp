@@ -19,7 +19,7 @@ namespace TL {
     struct find;
 
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
-    struct find_if;
+    struct find_type_if;
 
     template <typename InputIt1, typename InputIt2, typename T>
     struct type_count;
@@ -29,6 +29,9 @@ namespace TL {
 
     template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
     struct equal;
+
+    template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
+    struct same_types;
 
     template <typename TList, std::size_t I, std::size_t J>
     struct swap;
@@ -54,6 +57,33 @@ namespace TL {
 
     template <typename TList1, typename TList2>
     struct merge;
+
+    namespace impl {
+
+        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        struct all_of_impl;
+
+        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        struct none_of_impl;
+
+        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        struct any_of_impl;
+
+        template <typename InputIt, typename InputIt2, typename T>
+        struct find_type_impl;
+
+        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        struct find_type_if_impl;
+
+        template <typename InputIt1, typename InputIt2, typename T>
+        struct type_count_impl;
+
+        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        struct type_count_if_impl;
+
+        template <typename InIt1, typename InIt2, typename InIt3>
+        struct equal_impl;
+    }
 
 }
 

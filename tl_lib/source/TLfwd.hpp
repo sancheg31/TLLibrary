@@ -68,9 +68,6 @@ namespace TL {
         template <typename TList>
         struct empty_impl;
 
-        template <typename TList, typename Type>
-        struct type_count_impl;
-
         template <typename TList, std::size_t N, std::size_t Index = 0>
         struct get_type_impl;
 
