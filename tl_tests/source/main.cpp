@@ -12,6 +12,7 @@
 #include "experimental/ExpandingPack.h"
 
 
+
 using namespace TL;
 using namespace TL::testing;
 using namespace TL::utilities;
@@ -45,13 +46,13 @@ int main()
     test_case<length<empty_list>, TValue<int, 0>>();
     test_case<length<doubles_integrals>, TValue<int, 7>>();
 
-
+/*
     test_case<type_count<integrals, int>, TValue<int, 1>>();
     test_case<type_count<doubles, double>, TValue<int, 1>>();
     test_case<type_count<doubles, float>, TValue<int, 1>>();
     test_case<type_count<doubles, char>, TValue<int, 0>>();
     test_case<type_count<empty_list, double>, TValue<int, 0>>();
-
+*/
 
     test_case<empty<integrals>, TValue<bool, false>>();
     test_case<empty<doubles>, TValue<bool, false>>();
@@ -99,7 +100,7 @@ int main()
     test_case<last_type_index<type_list<int, double, int>, int>, TValue<int, 2>>();
     test_case<last_type_index<type_list<double, double, double>, double>, TValue<int, 2>>();
 
-
+        /*
     test_case<find_type<integrals, is_int>, int>();
     test_case<find_type<integrals, test_true>, char>();
     test_case<find_type<doubles, test_false>, NullType>();
@@ -132,8 +133,7 @@ int main()
     test_case<any_of<integrals, test_false>, TValue<bool, false>>();
     test_case<any_of<integrals, is_int>, TValue<bool, true>>();
     test_case<any_of<doubles, is_int>, TValue<bool, false>>();
-
-    //test_case<equal<empty_list, empty_list>, TValue<bool, true>>();
+    */
 
 
     test_case<append<empty_list, int>, type_list<int>>();

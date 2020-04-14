@@ -39,12 +39,6 @@ namespace testing {
                         (std::is_same_v<typename get_type<TList, Index::value>::type, Result>), "get_type");
     };
 
-    template <typename TList, typename Type, typename Result>
-    struct test_type_count
-    {
-        static_assert(type_count<TList, Type>::value == Result(), "type_count");
-    };
-
     template <typename TList1, typename TList2, typename Result>
     struct test_append
     {
