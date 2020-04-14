@@ -67,6 +67,15 @@ namespace TL {
         using list = TList;
     };
 
+    template <typename Iter>
+    using iterator_type = typename Iter::type;
+    template <typename Iter>
+    using iterator_list = typename Iter::list;
+    template <typename Iter>
+    using iterator_next = typename Iter::next;
+    template <typename Iter>
+    using iterator_prev = typename Iter::prev;
+
 
     template <typename ... Tp>
     type_list_iterator<type_list<Tp...>, 0> begin(type_list<Tp...>&&) {
@@ -76,6 +85,16 @@ namespace TL {
     template <typename ... Tp>
     type_list_iterator<type_list<Tp...>, length<type_list<Tp...>>::value> end(type_list<Tp...>&&) {
         return type_list_iterator<type_list<Tp...>, length<type_list<Tp...>>::value>{};
+    }
+
+    template <typename TList>
+    type_list_iterator<TList, 0> begin() {
+        return begin<TList>(TList{});
+    }
+
+    template <typename TList>
+    type_list_iterator<TList, length<TList>::value> end() {
+        return end<TList>(TList{});
     }
 
     template <typename TList, std::size_t I, int Distance>
@@ -101,6 +120,21 @@ namespace TL {
     distance(TL::type_list_iterator<TList, I1>&&, TL::type_list_iterator<TList, I2>&&) {
         static_assert(I1 > I2, "undefined behaviour");
         return I1 - I2;
+    }
+
+    template <typename TList, std::size_t I1, std::size_t I2>
+    inline constexpr bool operator==(type_list_iterator<TList, I1>&&, type_list_iterator<TList, I2>&&) {
+        return (I1 == I2);
+    }
+
+    template <typename TList, std::size_t I1, std::size_t I2>
+    inline constexpr bool operator!=(type_list_iterator<TList, I1>&&, type_list_iterator<TList, I2>&&) {
+        return (I1 != I2);
+    }
+
+    template <typename TList, std::size_t I1, std::size_t I2>
+    inline constexpr bool operator<(type_list_iterator<TList, I1>&&, type_list_iterator<TList, I2>&&) {
+        return (I1 < I2);
     }
 
 
@@ -134,9 +168,10 @@ namespace std {
 
     template <typename TList1, typename TList2, std::size_t I1, std::size_t I2>
     struct is_same<TL::type_list_iterator<TList1, I1>,
-                    TL::type_list_iterator<TList2, I2>>:
-            TL::traits::is_same<TL::type_list_iterator<TList1, I1>,
-                                TL::type_list_iterator<TList2, I2>> { };
+                    TL::type_list_iterator<TList2, I2>>
+    {
+        enum { value = (I1 == I2) && (TL::traits::is_same<TList1, TList2>::value) };
+    };
 
     template <typename TList, std::size_t I, class Distance>
     constexpr void
