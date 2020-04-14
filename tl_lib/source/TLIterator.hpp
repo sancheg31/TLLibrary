@@ -110,7 +110,7 @@ namespace TL {
     template <typename TList, std::size_t I1, std::size_t I2>
     struct distance<type_list_iterator<TList, I1>, type_list_iterator<TList, I2>>
     {
-        inline constexpr static bool result = I1 - I2;
+        inline constexpr static bool result = (I2 - I1) > 0 ?(I2 - I1) : (I1 - I2);
     };
 
     template <typename TList, std::size_t I1, std::size_t I2>

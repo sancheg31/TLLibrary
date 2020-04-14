@@ -16,7 +16,7 @@ namespace TL {
     struct none_of;
 
     template <typename InputIt1, typename InputIt2, typename T>
-    struct find;
+    struct find_type;
 
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
     struct find_type_if;
@@ -35,6 +35,9 @@ namespace TL {
 
     template <typename TList, std::size_t I, std::size_t J>
     struct swap;
+
+    template <typename Iter1, typename Iter2>
+    struct swap_iter;
 
     template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
     struct swap_ranges;
@@ -60,29 +63,39 @@ namespace TL {
 
     namespace impl {
 
-        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        template <typename TIterStart, template <class> class UnPred, int Distance>
         struct all_of_impl;
 
-        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        template <typename TIterStart, template <class> class UnPred, int Distance>
         struct none_of_impl;
 
-        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        template <typename TIterStart, template <class> class UnPred, int Distance>
         struct any_of_impl;
 
-        template <typename InputIt, typename InputIt2, typename T>
+        template <typename TIterStart, typename T, int Distance>
         struct find_type_impl;
 
-        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        template <typename TIterStart, template <class> class UnPred, int Distance>
         struct find_type_if_impl;
 
-        template <typename InputIt1, typename InputIt2, typename T>
+        template <typename TIterStart, typename T, int Distance>
         struct type_count_impl;
 
-        template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+        template <typename TIterStart, template <class> class UnPred, int Distance>
         struct type_count_if_impl;
 
-        template <typename InIt1, typename InIt2, typename InIt3>
+        template <typename TIterStart, typename TIterStart2, int Distance>
         struct equal_impl;
+
+        template <typename TList, std::size_t I, std::size_t J>
+        struct swap_impl;
+
+        template <typename TIter1, typename TIter2>
+        struct swap_iter_impl;
+
+        template <typename TIterStart, typename TIterStart2, int Distance>
+        struct swap_ranges_impl;
+
     }
 
 }
