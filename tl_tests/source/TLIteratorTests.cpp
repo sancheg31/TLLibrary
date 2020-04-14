@@ -10,14 +10,17 @@ void TLIteratorTests::emptyList_list_returnEmptyList_success() {
 
 void TLIteratorTests::emptyList_type_failure() {
     //(void)it_type<e_iter<0>>{};
+    //(void)it_type<e_iter<empty_list_size>>{};
 }
 
 void TLIteratorTests::emptyList_next_failure() {
     //(void)it_next<e_iter<0>>{};
+    //(void)it_next<e_iter<empty_list_size>>{};
 }
 
 void TLIteratorTests::emptyList_prev_failure() {
     //(void)it_prev<e_iter<0>>{};
+    //(void)it_prev<e_iter<empty_list_size>>{};
 }
 
 void TLIteratorTests::singletonList_list_success() {
@@ -101,18 +104,17 @@ void TLIteratorTests::doublesList_list_success() {
 }
 
 void TLIteratorTests::doublesList_typeAtEnd_failure() {
-    //(void)it_type<i_iter<doubles_size>>{};
+    //(void)it_type<d_iter<doubles_size>>{};
+    //(void)it_type<d_iter<doubles_size+1>>{};
 }
 
 void TLIteratorTests::doublesList_nextAtEnd_failure() {
-    //(void)it_next<i_iter<doubles_size>>{};
+    //(void)it_next<d_iter<doubles_size>>{};
 }
 
 void TLIteratorTests::doublesList_prevAtBegin_failure() {
-    //(void)it_prev<i_iter<0>>{};
+    //(void)it_prev<d_iter<0>>{};
 }
-
-
 
 } //testing
 } //tl

@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <algorithm>
 
 #include "TLPredefinedTesters.hpp"
 #include "TLTest.hpp"
