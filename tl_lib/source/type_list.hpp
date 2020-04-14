@@ -40,18 +40,6 @@ namespace TL {
     };
 
 
-    template <typename TList>
-     constexpr int size() {
-        static_assert(traits::is_type_list<TList>::value, "type is not a type list");
-        return impl::length_impl<TList>::value;
-    }
-
-    template <typename ... Tp>
-     constexpr int size(type_list<Tp...> &&) {
-        return impl::length_impl<type_list<Tp...>>::value;
-    }
-
-
     /*
      * Forward declaration
      * */
@@ -82,23 +70,6 @@ namespace TL {
 
     template <typename TList>
     inline constexpr bool empty_v = empty<TList>::value;
-
-
-    /*
-     * Forward declaration
-     * */
-    template <typename TList, typename T>
-    struct type_count;
-
-    template <typename TList, typename T>
-    struct type_count:  requires::is_type_list<TList>,
-                        requires::is_not_nulltype<T>
-    {
-        enum { value =  impl::type_count_impl<TList, T>::value };
-    };
-
-    template <typename TList, typename Type>
-    inline constexpr int type_count_v = type_count<TList, Type>::value;
 
 
     /*
@@ -365,10 +336,22 @@ namespace impl {
     template <typename TList, typename Type>
     struct has_type_impl;
 
-    template <typename ... Tp, typename Type>
-    struct has_type_impl<type_list<Tp...>, Type>
+    template <typename T, typename ... Tp, typename Type>
+    struct has_type_impl<type_list<T, Tp...>, Type>
     {
-        enum { value = (type_count<type_list<Tp...>, Type>::value > 0) };
+        enum { value = has_type_impl<type_list<Tp...>, Type>::value };
+    };
+
+    template <typename ... Tp, typename Type>
+    struct has_type_impl<type_list<Type, Tp...>, Type>
+    {
+        enum { value = true };
+    };
+
+    template <typename Type>
+    struct has_type_impl<type_list<>, Type>
+    {
+        enum { value = false };
     };
 
 
@@ -576,7 +559,7 @@ namespace impl {
 
 
 
-    template <typename TList, std::size_t, typename TResult = type_list<>>
+    template <typename TList, std::size_t, typename TResult>
     struct list_before_index;
 
     template <typename T, typename ... Tp, std::size_t I, typename TResult>
@@ -592,7 +575,7 @@ namespace impl {
         using type = TResult;
     };
 
-    template <typename TList, std::size_t, typename TResult = type_list<>>
+    template <typename TList, std::size_t, typename TResult>
     struct list_after_index;
 
     template <typename T, typename ... Tp, std::size_t I, typename TResult>
@@ -607,7 +590,7 @@ namespace impl {
         using type = typename TL::impl::append_types<TResult, Tp...>::type;
     };
 
-    template <typename TList, std::size_t I, typename TResult = type_list<>>
+    template <typename TList, std::size_t I, typename TResult>
     struct list_without_index;
 
     template <typename T, typename ... Tp, std::size_t I, typename TResult>

@@ -27,11 +27,14 @@ namespace TL {
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
     struct type_count_if;
 
-    template <typename InputStart, typename InputEnd, typename Input2Start>
+    template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
     struct equal;
 
     template <typename TList, std::size_t I, std::size_t J>
     struct swap;
+
+    template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
+    struct swap_ranges;
 
 
     template <typename TList, typename T, typename U>

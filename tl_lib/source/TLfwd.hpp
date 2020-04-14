@@ -109,6 +109,19 @@ namespace TL {
         template <typename TList1, typename TList2>
         struct prepend_impl;
 
+        template <typename TList, std::size_t I, typename TResult = type_list<>>
+        struct list_before_index;
+
+        template <typename TList, std::size_t I, typename TResult = type_list<>>
+        struct list_after_index;
+
+        template <typename TList, std::size_t I, typename TResult = type_list<>>
+        struct list_without_index;
+
+        template <typename TList, std::size_t I>
+        struct partition_by_index;
+
+
         template <typename TList, typename Type, std::size_t Index>
         struct set_type_impl;
 

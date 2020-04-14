@@ -182,6 +182,34 @@ namespace TL {
         inline static constexpr bool result = type_count_if_impl<InputIt1, InputIt2, predicate>::value;
     };
 
+    template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
+    struct equal;
+
+    template <typename InIt1, typename InIt2, typename InIt3>
+    struct equal_impl;
+
+    template <typename InIt1, typename InIt2, typename InIt3>
+    struct equal
+    {
+        inline static constexpr bool result = equal_impl<InIt1, InIt2, InIt3>::value;
+    };
+
+    template <typename InIt1, typename InIt2, typename InIt3>
+    struct equal_impl
+    {
+        using type_1 = iterator_type<InIt1>;
+        using type_2 = iterator_type<InIt3>;
+        inline static constexpr bool result = traits::is_same<type_1, type_2>::value &&
+                                                equal_impl<iterator_next<InIt1>, InIt2, iterator_next<InIt3>>::value;
+    };
+
+    template <typename InIt, typename InIt2>
+    struct equal_impl<InIt, InIt, InIt2>
+    {
+        inline static constexpr bool result = true;
+    };
+
+
 
 
 
