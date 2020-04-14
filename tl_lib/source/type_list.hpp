@@ -194,96 +194,6 @@ namespace TL {
         enum { value = impl::last_type_index_impl<TList, Type>::value };
     };
 
-
-    /*
-     * Forward declaration
-     * */
-    template <typename TList, template <class> class Property>
-    struct find_type;
-
-    template <typename TList, template <class> class Property>
-    struct find_type:   traits::is_type_list<TList>,
-                        traits::has_value_variable<Property<NullType>>
-    {
-        using type = typename impl::find_type_impl<TList, Property>::type;
-    };
-
-
-    /*
-     * Forward declaration
-     * */
-    template <typename TList, template <class> class UnPred>
-    struct all_of;
-
-    template <typename TList, template <class> class UnPred>
-    struct all_of:  requires::is_type_list<TList>,
-                    requires::has_value_variable<UnPred<NullType>>
-    {
-        enum { value = impl::all_of_impl<typename TList::result_type, UnPred>::value };
-    };
-
-    template <typename TList, template <class> class UnPred>
-    inline constexpr bool all_of_v = all_of<TList, UnPred>::value;
-
-
-    /*
-     * Forward declaration
-     * */
-    template <typename TList, template <class> class UnPred>
-    struct any_of;
-
-    template <typename TList, template <class> class UnPred>
-    struct any_of:  requires::is_type_list<TList>,
-                    requires::has_value_variable<UnPred<NullType>>
-    {
-        enum { value = impl::any_of_impl<typename TList::result_type, UnPred>::value };
-    };
-
-    template <typename TList, template <class> class UnPred>
-    inline constexpr bool any_of_v = any_of<TList, UnPred>::value;
-
-
-    /*
-     * Forward declaration
-     * */
-    template <typename TList, template <class> class UnPred>
-    struct none_of;
-
-    template <typename TList, template <class> class UnPred>
-    struct none_of: requires::is_type_list<TList>,
-                    requires::has_value_variable<UnPred<NullType>>
-    {
-        enum { value = impl::none_of_impl<typename TList::result_type, UnPred>::value };
-    };
-
-    template <typename TList, template <class> class UnPred>
-    inline constexpr bool none_of_v = none_of<TList, UnPred>::value;
-
-
-    /*
-     * Forward declaration
-     * */
-    template <typename TList1, typename TList2>
-    struct equal;
-
-    template <typename TList1, typename TList2>
-    struct equal:   requires::is_type_list<TList1>,
-                    requires::is_type_list<TList2>
-    {
-        enum { value = impl::equal_impl<TList1, TList2>::value };
-    };
-
-    template <typename TList1, typename TList2>
-    struct not_equal;
-
-    template <typename TList1, typename TList2>
-    struct not_equal:   requires::is_type_list<TList1>,
-                        requires::is_type_list<TList2>
-    {
-        enum { value = !equal<TList1, TList2>::value };
-    };
-
-
     /*
      * Forward declaration
      * */
@@ -352,6 +262,21 @@ namespace TL {
 
     template <typename T, typename U>
     using push_front_t = typename push_front<T, U>::type;
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList, typename Type, std::size_t Index>
+    struct set_type;
+
+    template <typename TList, typename Type, std::size_t Index>
+    struct set_type: requires::is_type_list<TList>,
+                     requires::is_plain_type<Type>,
+                     requires::satisfies_relation<Index, length<TList>::value, std::less>
+    {
+        using type = typename impl::set_type_impl<TList, Type, Index>::type;
+    };
+
 
 } //tl
 
@@ -494,120 +419,6 @@ namespace impl {
     struct last_type_index_impl<type_list<>, Type, I, Position>
     {
         enum { value = Position };
-    };
-
-
-    /*
-     * forward declaration
-     * */
-    template <typename TList, template <class> class Property>
-    struct find_type_impl;
-
-    template <typename T, typename ... Tp, template <class> class Property>
-    struct find_type_impl<type_list<T, Tp...>, Property>
-    {
-        using type = std::conditional_t<Property<T>::value, T,
-                                        typename find_type_impl<type_list<Tp...>, Property>::type>;
-    };
-
-    template <template <class> class Property>
-    struct find_type_impl<type_list<>, Property>
-    {
-        using type = NullType;
-    };
-
-
-    /*
-     * forward declaration
-     * */
-    template <typename TList, template <class> class UnPred>
-    struct all_of_impl;
-
-    template <typename T, typename U, template <class> class UnPred>
-    struct all_of_impl<TypeList<T, U>, UnPred>
-    {
-        enum { value = UnPred<T>::value && all_of_impl<U, UnPred>::value };
-    };
-
-    template <typename T, template <class> class UnPred>
-    struct all_of_impl<TypeList<T, NullType>, UnPred>
-    {
-        enum { value = UnPred<T>::value };
-    };
-
-    template <template <class> class UnPred>
-    struct all_of_impl<TypeList<NullType, NullType>, UnPred>
-    {
-        enum { value = true };
-    };
-
-
-    /*
-     * forward declaration
-     * */
-    template <typename TList, template <class> class UnPred>
-    struct any_of_impl;
-
-    template <typename T, typename U, template <class> class UnPred>
-    struct any_of_impl<TypeList<T, U>, UnPred>
-    {
-        enum { value = UnPred<T>::value || any_of_impl<U, UnPred>::value };
-    };
-
-    template <typename T, template <class> class UnPred>
-    struct any_of_impl<TypeList<T, NullType>, UnPred>
-    {
-        enum { value = UnPred<T>::value };
-    };
-
-    template <template <class> class UnPred>
-    struct any_of_impl<TypeList<NullType, NullType>, UnPred>
-    {
-        enum { value = false };
-    };
-
-
-    /*
-     * forward declaration
-     * */
-    template <typename TList, template <class> class UnPred>
-    struct none_of_impl;
-
-    template <typename T, typename U, template <class> class UnPred>
-    struct none_of_impl<TypeList<T, U>, UnPred>
-    {
-        enum { value = !UnPred<T>::value && none_of_impl<U, UnPred>::value };
-    };
-
-    template <typename T, template <class> class UnPred>
-    struct none_of_impl<TypeList<T, NullType>, UnPred>
-    {
-        enum { value = !UnPred<T>::value };
-    };
-
-    template <template <class> class UnPred>
-    struct none_of_impl<TypeList<NullType, NullType>, UnPred>
-    {
-        enum { value = true };
-    };
-
-
-    /*
-     * forward declaration
-     * */
-    template <typename TList1, typename TList2, std::size_t N, std::size_t I>
-    struct equal_impl;
-
-    template <typename TList1, typename TList2, std::size_t N, std::size_t I>
-    struct equal_impl
-    {
-        enum { value = traits::is_same_v<get_type_t<TList1, I>, get_type_t<TList2, I>> && equal_impl<TList1, TList2, I + 1>::value };
-    };
-
-    template <typename TList1, typename TList2, std::size_t N>
-    struct equal_impl<TList1, TList2, N, N>
-    {
-        enum { value = true };
     };
 
     /*
@@ -765,6 +576,75 @@ namespace impl {
 
 
 
+    template <typename TList, std::size_t, typename TResult = type_list<>>
+    struct list_before_index;
+
+    template <typename T, typename ... Tp, std::size_t I, typename TResult>
+    struct list_before_index<type_list<T, Tp...>, I, TResult>
+    {
+        using new_type_list = typename TL::impl::append_type<TResult, T>::type;
+        using type = typename list_before_index<type_list<Tp...>, I-1, new_type_list>::type;
+    };
+
+    template <typename T, typename ... Tp, typename TResult>
+    struct list_before_index<type_list<T, Tp...>, 0, TResult>
+    {
+        using type = TResult;
+    };
+
+    template <typename TList, std::size_t, typename TResult = type_list<>>
+    struct list_after_index;
+
+    template <typename T, typename ... Tp, std::size_t I, typename TResult>
+    struct list_after_index<type_list<T, Tp...>, I, TResult>
+    {
+        using type = typename list_after_index<type_list<Tp...>, I-1, TResult>::type;
+    };
+
+    template <typename T, typename ... Tp, typename TResult>
+    struct list_after_index<type_list<T, Tp...>, 0, TResult>
+    {
+        using type = typename TL::impl::append_types<TResult, Tp...>::type;
+    };
+
+    template <typename TList, std::size_t I, typename TResult = type_list<>>
+    struct list_without_index;
+
+    template <typename T, typename ... Tp, std::size_t I, typename TResult>
+    struct list_without_index<type_list<T, Tp...>, I, TResult>
+    {
+        using new_type_list = typename TL::impl::append_type<TResult, T>::type;
+        using type = typename  list_without_index<type_list<Tp...>, I-1, new_type_list>::type;
+    };
+
+    template <typename T, typename ... Tp, typename TResult>
+    struct list_without_index<type_list<T, Tp...>, 0, TResult>
+    {
+        using type = typename TL::impl::append_types<TResult, Tp...>::type;
+    };
+
+
+    template <typename TList, std::size_t I>
+    struct partition_by_index
+    {
+        using type = typename get_type<TList, I>::type;
+        using list_before_index = typename list_before_index<TList, I>::type;
+        using list_after_index = typename list_after_index<TList, I>::type;
+        using list_without_index = typename list_without_index<TList, I>::type;
+    };
+
+
+    template <typename TList, typename Type, std::size_t Index>
+    struct set_type_impl;
+
+    template <typename TList, typename Type, std::size_t Index>
+    struct set_type_impl
+    {
+        using partition = partition_by_index<TList, Index>;
+        using list_with_type = typename append_type<typename partition::list_before_index,
+                                                    Type>::type;
+        using type = typename append_list<list_with_type, typename partition::list_after_index>::type;
+    };
 
 } //impl
 } //tl

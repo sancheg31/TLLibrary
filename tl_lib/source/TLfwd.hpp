@@ -25,15 +25,6 @@ namespace TL {
     template <typename TList>
     struct empty;
 
-    template <typename TList>
-    struct first_type;
-
-    template <typename TList>
-    struct last_type;
-    /*
-    template <typename TList, typename T>
-    struct type_count;*/
-
     template <typename TList, std::size_t N>
     struct get_type;
 
@@ -52,17 +43,7 @@ namespace TL {
     template <typename TList, typename Type>
     struct last_type_index;
 
-    template <typename TList, template <class> class Property>
-    struct find_type;
 
-    /*template <typename TList, template <class> class UnPred>
-    struct all_of;
-
-    template <typename TList, template <class> class UnPred>
-    struct any_of;
-
-    template <typename TList, template <class> class UnPred>
-    struct none_of;*/
 
     template <typename TList1, typename TList2>
     struct append;
@@ -75,6 +56,9 @@ namespace TL {
 
     template <typename TList, typename Type>
     struct push_front;
+
+    template <typename TList, typename Type, std::size_t Index>
+    struct set_type;
 
     namespace impl {
 
@@ -98,23 +82,6 @@ namespace TL {
 
         template <typename TList, typename Type, std::size_t I = 0, int Position = -1>
         struct last_type_index_impl;
-
-        template <typename TList, template <class> class Property>
-        struct find_type_impl;
-
-
-        template <typename TList, template <class> class UnPred>
-        struct all_of_impl;
-
-        template <typename TList, template <class> class UnPred>
-        struct any_of_impl;
-
-        template <typename TList, template <class> class UnPred>
-        struct none_of_impl;
-
-
-        template <typename TList1, typename TList2, std::size_t N = length<TList1>::value, std::size_t I = 0>
-        struct equal_impl;
 
         template <typename TList, typename T>
         struct append_type;
@@ -141,6 +108,9 @@ namespace TL {
 
         template <typename TList1, typename TList2>
         struct prepend_impl;
+
+        template <typename TList, typename Type, std::size_t Index>
+        struct set_type_impl;
 
     } //impl
 
