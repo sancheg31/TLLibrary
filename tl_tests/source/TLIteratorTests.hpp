@@ -62,14 +62,6 @@ private:
     template <class T, class U>
     static constexpr bool is_same_v = traits::is_same<T, U>::value;
 
-    template <typename Iter>
-    using it_type = typename Iter::type;
-    template <typename Iter>
-    using it_list = typename Iter::list;
-    template <typename Iter>
-    using it_next = typename Iter::next;
-    template <typename Iter>
-    using it_prev = typename Iter::prev;
 
 };
 

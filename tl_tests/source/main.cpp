@@ -1,6 +1,9 @@
 
 #include <iostream>
 #include <algorithm>
+#include <type_traits>
+#include <string>
+#include <memory>
 
 #include "TLPredefinedTesters.hpp"
 #include "TLTest.hpp"
@@ -10,7 +13,6 @@
 #include "source/TLUtility.hpp"
 #include "source/TLNullType.hpp"
 #include "experimental/ExpandingPack.h"
-
 
 
 using namespace TL;
@@ -26,10 +28,14 @@ using empty_list = type_list<>;
 template <typename T>
 using is_int = traits::is_same<T, int>;
 
+
+
+
 template <class T>
 struct test_true
 {
     enum { value = true };
+
 };
 
 template <class T>
@@ -40,7 +46,6 @@ struct test_false
 
 int main()
 {
-
     test_case<length<integrals>, TValue<int, 5>>();
     test_case<length<doubles>, TValue<int, 2>>();
     test_case<length<empty_list>, TValue<int, 0>>();
