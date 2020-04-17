@@ -11,7 +11,6 @@
 
 namespace TL {
 
-
     /*
      * Forward declaration
      * */
@@ -47,7 +46,8 @@ namespace TL {
     struct length;
 
     template <typename TList>
-    struct length: requires::is_type_list<TList>
+    struct length:
+            requires::is_type_list<TList>
     {
         enum { value = impl::length_impl<TList>::value }  ;
     };
@@ -80,7 +80,7 @@ namespace TL {
 
     template <typename TList, std::size_t N>
     struct get_type:    requires::is_type_list<TList>,
-                        requires::satisfies_relation<N, length<TList>::value, std::less>
+                        requires::less<N, length<TList>::value>
 
     {
         using type = typename impl::get_type_impl<TList, N>::type;
@@ -98,7 +98,7 @@ namespace TL {
 
     template <typename TList>
     struct first_type:  requires::is_type_list<TList>,
-                        requires::satisfies_relation<length<TList>::value, 0, std::greater>
+                        requires::greater<length<TList>::value, 0>
     {
         using type = typename get_type<TList, 0>::type;
     };
@@ -112,7 +112,7 @@ namespace TL {
 
     template <typename TList>
     struct last_type:   requires::is_type_list<TList>,
-                        requires::satisfies_relation<length<TList>::value, 0, std::greater>
+                        requires::greater<length<TList>::value, 0>
     {
         using type = typename get_type<TList, length<TList>::value - 1>::type;
     };
@@ -155,7 +155,6 @@ namespace TL {
      * */
     template <typename TList, typename Type>
     struct last_type_index;
-
 
     template <typename TList, typename Type>
     struct last_type_index: requires::is_type_list<TList>,
@@ -243,7 +242,7 @@ namespace TL {
     template <typename TList, typename Type, std::size_t Index>
     struct set_type: requires::is_type_list<TList>,
                      requires::is_plain_type<Type>,
-                     requires::satisfies_relation<Index, length<TList>::value, std::less>
+                     requires::less<Index, length<TList>::value>
     {
         using type = typename impl::set_type_impl<TList, Type, Index>::type;
     };
@@ -559,6 +558,9 @@ namespace impl {
 
 
 
+    /*
+     * forward declaration
+     * */
     template <typename TList, std::size_t, typename TResult>
     struct list_before_index;
 
@@ -575,6 +577,10 @@ namespace impl {
         using type = TResult;
     };
 
+
+    /*
+     * forward declaration
+     * */
     template <typename TList, std::size_t, typename TResult>
     struct list_after_index;
 
@@ -590,6 +596,10 @@ namespace impl {
         using type = typename TL::impl::append_types<TResult, Tp...>::type;
     };
 
+
+    /*
+     * forward declaration
+     * */
     template <typename TList, std::size_t I, typename TResult>
     struct list_without_index;
 
@@ -607,6 +617,9 @@ namespace impl {
     };
 
 
+    /*
+     * forward declaration
+     * */
     template <typename TList, std::size_t I>
     struct partition_by_index
     {
@@ -617,6 +630,9 @@ namespace impl {
     };
 
 
+    /*
+     * forward declaration
+     * */
     template <typename TList, typename Type, std::size_t Index>
     struct set_type_impl;
 
@@ -626,7 +642,8 @@ namespace impl {
         using partition = partition_by_index<TList, Index>;
         using list_with_type = typename append_type<typename partition::list_before_index,
                                                     Type>::type;
-        using type = typename append_list<list_with_type, typename partition::list_after_index>::type;
+        using type = typename append_list<list_with_type,
+                                          typename partition::list_after_index>::type;
     };
 
 } //impl

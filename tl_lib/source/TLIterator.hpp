@@ -1,24 +1,19 @@
 #pragma once
 
-#include <functional>
-#include <iterator>
 
 #include "TLIteratorfwd.hpp"
 #include "TLRequirements.hpp"
 
 namespace TL {
 
-    template <typename TList, std::size_t I, std::size_t N>
-    struct iterator_properties;
-
-    template <typename TList, std::size_t I, std::size_t N>
-    struct iterator_properties:
-                        requires::satisfies_relation<I, N, std::less_equal>,
-                        requires::satisfies_relation<I, 0, std::greater_equal>
+    template <typename TList, std::size_t I>
+    struct iterator_properties<type_list_iterator<TList, I>>:
+                                                requires::in_range_inclusive<I, 0, length<TList>::value>
     {
-        enum { size = N };
-        enum { at_start = std::equal_to<std::size_t>{}(I, 0), not_at_start = !at_start };
-        enum { at_end = std::equal_to<std::size_t>{}(I, N), not_at_end = !at_end };
+        using list = TList;
+        inline static constexpr bool position = I;
+        inline static constexpr bool at_start = (I == 0);
+        inline static constexpr bool at_end = (I == length<TList>::value);
     };
 
 
@@ -27,96 +22,100 @@ namespace TL {
 
     template <typename TList, std::size_t I>
     struct type_list_iterator<TList, I, false, false>:
-            requires::is_type_list<TList>,
-            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
+                                        requires::is_type_list<TList>,
+                                        requires::in_range<I, 0, length<TList>::value>
     {
     public:
         using type = typename get_type<TList, I>::type;
-        using list = TList;
         using next = type_list_iterator<TList, I+1>;
         using prev = type_list_iterator<TList, I-1>;
     };
 
     template <typename TList, std::size_t I>
     struct type_list_iterator<TList, I, true, false>:
-            requires::is_type_list<TList>,
-            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
+                                        requires::is_type_list<TList>
     {
     public:
         using type = typename get_type<TList, I>::type;
-        using list = TList;
         using next = type_list_iterator<TList, I+1>;
     };
 
     template <typename TList, std::size_t I>
     struct type_list_iterator<TList, I, false, true>:
-            requires::is_type_list<TList>,
-            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
+                                        requires::is_type_list<TList>
     {
     public:
-        using list = TList;
         using prev = type_list_iterator<TList, I-1>;
     };
 
-    template <typename TList, std::size_t I>
-    struct type_list_iterator<TList, I, true, true>:
-            requires::is_type_list<TList>,
-            requires::satisfies_relation<I, iterator_properties<TList, I>::size, std::less_equal>
-    {
-    public:
-        using list = TList;
-    };
+    template <std::size_t I>
+    struct type_list_iterator<type_list<>, I, true, true>: requires::equal_to<I, 0> { };
 
-    template <typename Iter>
-    using iterator_type = typename Iter::type;
-    template <typename Iter>
-    using iterator_list = typename Iter::list;
-    template <typename Iter>
-    using iterator_next = typename Iter::next;
-    template <typename Iter>
-    using iterator_prev = typename Iter::prev;
+
+    template <typename TIter>
+    inline static constexpr std::size_t iterator_position = iterator_properties<TIter>::position;
+
+    template <typename TIter, typename = std::enable_if_t<traits::is_iterator<TIter>::value>>
+    using iterator_type = typename TIter::type;
+
+    template <typename TIter>
+    using iterator_list = typename iterator_properties<TIter>::list;
 
 
     template <typename TList>
-    struct begin
+    struct begin:
+            requires::is_type_list<TList>
     {
         using result = type_list_iterator<TList, 0>;
     };
 
     template <typename TList>
-    struct end
+    struct end:
+            requires::is_type_list<TList>
     {
         using result = type_list_iterator<TList, length<TList>::value>;
     };
 
-    template <typename TList, std::size_t I, int Distance>
-    struct advance<type_list_iterator<TList, I>, Distance>
+    template <typename TIter, int Distance>
+    struct advance:
+            requires::is_iterator<TIter>,
+            requires::less_equal<iterator_position<TIter> + Distance, length<iterator_list<TIter>>::value>
     {
-        using result = type_list_iterator<TList, I + Distance>;
+        using result = typename advance_impl<TIter, Distance>::result;
     };
 
-    template <typename TList, std::size_t I>
-    struct next<type_list_iterator<TList, I>>
+    template <typename TIter>
+    struct next:
+            requires::is_iterator<TIter>,
+            requires::less_equal<iterator_position<TIter>, length<iterator_list<TIter>>::value>
     {
-        using result = type_list_iterator<TList, I + 1>;
+        using result = typename TIter::next;
     };
 
-    template <typename TList, std::size_t I>
-    struct prev<type_list_iterator<TList, I>>
+    template <typename TIter>
+    struct prev:
+            requires::is_iterator<TIter>
     {
-        using result = type_list_iterator<TList, I - 1>;
+        using result = typename TIter::prev;
     };
 
-    template <typename TList, std::size_t I1, std::size_t I2>
-    struct distance<type_list_iterator<TList, I1>, type_list_iterator<TList, I2>>
+    template <typename TIter>
+    using iterator_next = typename next<TIter>::result;
+
+    template <typename TIter>
+    using iterator_prev = typename prev<TIter>::result;
+
+    template <typename TIter1, typename TIter2>
+    struct distance:
+            requires::is_iterator<TIter1, TIter2>,
+            requires::is_same<iterator_list<TIter1>, iterator_list<TIter2>>
     {
-        inline constexpr static bool result = (I2 - I1) > 0 ?(I2 - I1) : (I1 - I2);
+        inline constexpr static bool result = distance_impl<TIter1, TIter2>::result;
     };
 
-    template <typename TList, std::size_t I1, std::size_t I2>
-    inline constexpr bool operator==(type_list_iterator<TList, I1>&&, type_list_iterator<TList, I2>&&) {
-        return (I1 == I2);
-    }
+    template <typename TIter1, typename TIter2>
+    inline constexpr static bool iterator_distance = distance<TIter1, TIter2>::result;
+
 
     template <typename TList, std::size_t I1, std::size_t I2>
     inline constexpr bool operator!=(type_list_iterator<TList, I1>&&, type_list_iterator<TList, I2>&&) {
@@ -158,8 +157,7 @@ namespace std {
     };
 
     template <typename TList1, typename TList2, std::size_t I1, std::size_t I2>
-    struct is_same<TL::type_list_iterator<TList1, I1>,
-                    TL::type_list_iterator<TList2, I2>>
+    struct is_same<TL::type_list_iterator<TList1, I1>, TL::type_list_iterator<TList2, I2>>
     {
         enum { value = (I1 == I2) && (TL::traits::is_same<TList1, TList2>::value) };
     };
