@@ -136,6 +136,9 @@ namespace TL {
         template <typename TList>
         struct is_plain_type;
 
+        template <typename TIter>
+        struct is_iterator;
+
         template <class T>
         struct has_result_type;
 
@@ -164,15 +167,23 @@ namespace TL {
         template <std::size_t N>
         struct index_out_of_range;
 
+
     } //utilities
 
     namespace requires {
 
-        template <typename TList>
+        template <typename ... TLists>
         struct is_type_list;
 
-        template <typename TList>
+        template <typename ... Types>
         struct is_plain_type;
+
+        template <typename ... Types>
+        struct is_not_nulltype;
+
+        template <typename ... TIters>
+        struct is_iterator;
+
 
         template <class T>
         struct has_result_type;
@@ -186,10 +197,7 @@ namespace TL {
         template <class T>
         struct has_value_variable;
 
-        template <typename Type>
-        struct is_not_nulltype;
-
-        template <int X, int Y, template <class> class Relation>
+        template <std::size_t X, std::size_t Y, template <class = decltype(X)> class Relation>
         struct satisfies_relation;
 
     } //requires

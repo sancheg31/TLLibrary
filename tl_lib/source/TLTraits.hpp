@@ -2,6 +2,7 @@
 
 
 #include "TLfwd.hpp"
+#include "TLIteratorfwd.hpp"
 
 #include <type_traits>
 
@@ -50,12 +51,23 @@ namespace traits {
     template <typename TList>
     struct is_plain_type;
 
-    template <typename ... Tp>
-    struct is_plain_type<type_list<Tp...>>: false_argument { };
+    template <template <class...> class T, typename ... Tp>
+    struct is_plain_type<T<Tp...>>: false_argument { };
 
     template <typename TList>
     struct is_plain_type: true_argument { };
 
+    /*
+     * Forward declaration
+     * */
+    template <typename TIter>
+    struct is_iterator;
+
+    template <typename TList, std::size_t I>
+    struct is_iterator<type_list_iterator<TList, I>>: true_argument { };
+
+    template <typename TIter>
+    struct is_iterator: false_argument { };
 
     /*
      * Forward declaration
@@ -99,7 +111,7 @@ namespace traits {
     struct impl_has_value_type<T, std::void_t<typename T::value_type>>: true_argument { };
 
     template <typename T>
-    struct  has_value_type: public impl_has_value_type<T> { };
+    struct has_value_type: public impl_has_value_type<T> { };
 
 
     /*
@@ -115,7 +127,7 @@ namespace traits {
     struct impl_has_type_alias<T, std::void_t<typename T::type>>: true_argument { };
 
     template <class T>
-    struct  has_type_alias: public impl_has_type_alias<T> { };
+    struct has_type_alias: public impl_has_type_alias<T> { };
 
     /*
      * Forward declaration
@@ -135,6 +147,12 @@ namespace traits {
 
     template <typename TList>
     inline constexpr bool is_type_list_v = is_type_list<TList>::value;
+
+    template <typename Type>
+    inline constexpr bool is_plain_type_v = is_plain_type<Type>::value;
+
+    template <typename TIter>
+    inline constexpr bool is_iterator_v = is_iterator<TIter>::value;
 
     template <typename T>
     inline constexpr bool has_result_type_v = has_result_type<T>::value;

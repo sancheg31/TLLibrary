@@ -6,36 +6,51 @@
 namespace TL {
 namespace requires {
 
-    /*
-     * Forward declaration
-     * */
-    template <typename TList>
-    struct is_type_list;
 
     template <typename TList>
-    struct is_type_list: traits::is_type_list<TList>
+    struct is_type_list<TList>: traits::is_type_list<TList>
     {
-        static_assert(is_type_list<TList>::value, "argument is not a type list");
+        static_assert(traits::is_type_list<TList>::value, "argument is not a type list");
     };
 
-    /*
-     * Forward declaration
-     * */
+    template <typename ... TLists>
+    struct is_type_list: is_type_list<TLists>... { };
+
 
     template <typename Type>
-    struct is_plain_type;
-
-    template <typename Type>
-    struct is_plain_type: traits::is_plain_type<Type>
+    struct is_plain_type<Type>: traits::is_plain_type<Type>
     {
-        static_assert(is_plain_type<Type>::value, "argument is not a plain type");
+        static_assert(traits::is_plain_type<Type>::value, "argument is not a plain type");
     };
 
-    /*
-     * Forward declaration
-     * */
-    template <class T>
-    struct has_result_type;
+    template <typename ... Types>
+    struct is_plain_type: is_plain_type<Types>... { };
+
+
+    template <typename Type>
+    struct is_not_nulltype<Type>
+    {
+        static_assert(!traits::is_same<NullType, Type>::value, "NullType is an invalid template argument");
+    };
+
+    template <typename ... Types>
+    struct is_not_nulltype: is_not_nulltype<Types>... { };
+
+
+    template <typename TIter>
+    struct is_iterator<TIter>: traits::is_iterator<TIter>
+    {
+        static_assert(traits::is_iterator<TIter>::value, "argument is not an iterator");
+    };
+
+    template <typename ... TIters>
+    struct is_iterator: is_iterator<TIters>... { };
+
+    template <typename T, typename U>
+    struct is_same: traits::is_same<T, U>
+    {
+        static_assert(is_same<T, U>::value, "types are not same");
+    };
 
     template <class T>
     struct has_result_type: traits::has_result_type<T>
@@ -43,25 +58,11 @@ namespace requires {
         static_assert(has_result_type<T>::value, "type has no alias named result_type");
     };
 
-
-    /*
-     * Forward declaration
-     * */
-    template <class T>
-    struct has_value_type;
-
     template <class T>
     struct has_value_type: traits::has_value_type<T>
     {
         static_assert(has_value_type<T>::value, "type has no alias named value_type");
     };
-
-
-    /*
-     * Forward declaration
-     * */
-    template <class T>
-    struct has_type_alias;
 
     template <class T>
     struct has_type_alias: traits::has_type_alias<T>
@@ -69,44 +70,44 @@ namespace requires {
         static_assert(has_type_alias<T>::value, "type has no alias named type");
     };
 
-    /*
-     * Forward declaration
-     * */
-    template <class T>
-    struct has_value_variable;
-
     template <class T>
     struct has_value_variable: traits::has_value_variable<T>
     {
         static_assert(has_value_variable<T>::value, "type has no member named value");
     };
 
-
-    /*
-     * Forward declaration
-     * */
-    template <typename Type>
-    struct is_not_nulltype;
-
-    template <typename Type>
-    struct is_not_nulltype
-    {
-        static_assert(!traits::is_same<NullType, Type>::value, "NullType is an invalid template argument");
-    };
-
-
-    /*
-     * Forward declaration
-     * */
-    template <int X, int Y, template <class> class Relation>
-    struct satisfies_relation;
-
-    template <int X, int Y, template <class> class Relation>
+    template <std::size_t X, std::size_t Y, template <class> class Relation>
     struct satisfies_relation
     {
-        static_assert(Relation<int>{}(X, Y), "relation is not satisfied");
+        static_assert(Relation<std::size_t>{}(X, Y), "relation is not satisfied");
     };
+
+    template <auto X, auto Y>
+    struct less: satisfies_relation<X, Y, std::less> { };
+
+    template <auto X, auto Y>
+    struct greater: satisfies_relation<X, Y, std::greater> { };
+
+    template <auto X, auto Y>
+    struct less_equal: satisfies_relation<X, Y, std::less_equal> { };
+
+    template <auto X, auto Y>
+    struct  greater_equal: satisfies_relation<X, Y, std::greater_equal> { };
+
+    template <auto X, auto Y>
+    struct equal_to: satisfies_relation<X, Y, std::equal_to> { };
+
+    template <auto X, auto Y>
+    struct not_equal_to: satisfies_relation<X, Y, std::not_equal_to> { };
+
+    template <auto X, auto Lower, auto Upper>
+    struct in_range: greater<X, Lower>, less<X, Upper> { };
+
+    template <auto X, auto Lower, auto Upper>
+    struct in_range_inclusive: greater_equal<X, Lower>, less_equal<X, Upper>  { };
+
 
 } //requires
 } //tl
+
 
