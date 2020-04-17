@@ -12,7 +12,10 @@ namespace TL {
      * Forward declaration
      * */
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
-    struct all_of
+    struct all_of:
+            requires::is_iterator<InputIt1, InputIt2>,
+            requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
+            requires::has_value_variable<UnPred<NullType>>
     {
         inline constexpr static bool result = impl::all_of_impl<InputIt1, UnPred,
                                                                 distance<InputIt1, InputIt2>::result>::result;
@@ -23,7 +26,10 @@ namespace TL {
      * Forward declaration
      * */
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
-    struct none_of
+    struct none_of:
+            requires::is_iterator<InputIt1, InputIt2>,
+            requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
+            requires::has_value_variable<UnPred<NullType>>
     {
         inline constexpr static bool result = impl::none_of_impl<InputIt1, UnPred,
                                                                 distance<InputIt1, InputIt2>::result>::result;
@@ -34,7 +40,10 @@ namespace TL {
      * Forward declaration
      * */
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
-    struct any_of
+    struct any_of:
+            requires::is_iterator<InputIt1, InputIt2>,
+            requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
+            requires::has_value_variable<UnPred<NullType>>
     {
         inline constexpr static bool result = impl::any_of_impl<InputIt1, UnPred,
                                                                 distance<InputIt1, InputIt2>::result>::result;
@@ -45,7 +54,10 @@ namespace TL {
      * Forward declaration
      * */
     template <typename InputIt1, typename InputIt2, typename T>
-    struct find_type
+    struct find_type:
+            requires::is_iterator<InputIt1, InputIt2>,
+            requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
+            requires::is_plain_type<T>
     {
         using result = typename impl::find_type_impl<InputIt1, T,
                                                     distance<InputIt1, InputIt2>::result>::result;
@@ -56,7 +68,10 @@ namespace TL {
      * Forward declaration
      * */
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
-    struct find_type_if
+    struct find_type_if:
+            requires::is_iterator<InputIt1, InputIt2>,
+            requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
+            requires::has_value_variable<UnPred<NullType>>
     {
         using result = typename impl::find_type_if_impl<InputIt1, UnPred, distance<InputIt1, InputIt2>::result>::result;
     };
@@ -66,7 +81,10 @@ namespace TL {
      * Forward declaration
      * */
     template <typename InputIt1, typename InputIt2, typename T>
-    struct type_count
+    struct type_count:
+            requires::is_iterator<InputIt1, InputIt2>,
+            requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
+            requires::is_plain_type<T>
     {
         inline static constexpr bool result = impl::type_count_impl<InputIt1, T, distance<InputIt1, InputIt2>::result>::result;
     };
@@ -75,10 +93,14 @@ namespace TL {
     /*
      * Forward declaration
      * */
-    template <typename InIt1, typename InIt2, template <class> class UnPred>
-    struct type_count_if
+    template <typename InputIt1, typename InputIt2, template <class> class UnPred>
+    struct type_count_if:
+            requires::is_iterator<InputIt1, InputIt2>,
+            requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
+            requires::has_value_variable<UnPred<NullType>>
     {
-        inline static constexpr bool result = impl::type_count_if_impl<InIt1, UnPred, distance<InIt1, InIt2>::result>::result;
+        inline static constexpr bool result = impl::type_count_if_impl<InputIt1, UnPred,
+                                                                        distance<InputIt1, InputIt2>::result>::result;
     };
 
 
@@ -86,7 +108,9 @@ namespace TL {
      * Forward declaration
      * */
     template <typename InIt1, typename InIt2, typename InIt3>
-    struct equal
+    struct equal:
+            requires::is_iterator<InIt1, InIt2, InIt3>,
+            requires::is_same<iterator_list<InIt1>, iterator_list<InIt2>>
     {
         inline static constexpr bool result = impl::equal_impl<InIt1, InIt3, distance<InIt1, InIt2>::result>::value;
     };
@@ -96,7 +120,10 @@ namespace TL {
      * Forward declaration
      * */
     template <typename TList, std::size_t I, std::size_t J>
-    struct swap
+    struct swap:
+            requires::is_type_list<TList>,
+            requires::in_range_inclusive<I, 0, length<TList>::value - 1>,
+            requires::in_range_inclusive<J, 0, length<TList>::value - 1>
     {
         using result = typename impl::swap_impl<TList, I, J>::result;
     };
@@ -105,7 +132,8 @@ namespace TL {
      * Forward declaration
      * */
     template <typename TIter1, typename TIter2>
-    struct swap_iter
+    struct swap_iter:
+            requires::is_iterator<TIter1, TIter2>
     {
         using result = typename impl::swap_iter_impl<TIter1, TIter2>::result;
     };
@@ -114,7 +142,9 @@ namespace TL {
      * Forward declaration
      * */
     template <typename TIterStart, typename TIterEnd, typename TIterStart2>
-    struct swap_ranges
+    struct swap_ranges:
+                requires::is_iterator<TIterStart, TIterEnd, TIterStart2>,
+                requires::is_same<iterator_list<TIterStart>, iterator_list<TIterEnd>>
     {
         using result = typename impl::swap_ranges_impl<TIterStart, TIterStart2,
                                                         distance<TIterStart, TIterEnd>::result>::type;

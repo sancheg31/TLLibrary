@@ -92,7 +92,7 @@ namespace requires {
     struct less_equal: satisfies_relation<X, Y, std::less_equal> { };
 
     template <auto X, auto Y>
-    struct  greater_equal: satisfies_relation<X, Y, std::greater_equal> { };
+    struct greater_equal: satisfies_relation<X, Y, std::greater_equal> { };
 
     template <auto X, auto Y>
     struct equal_to: satisfies_relation<X, Y, std::equal_to> { };
@@ -101,7 +101,7 @@ namespace requires {
     struct not_equal_to: satisfies_relation<X, Y, std::not_equal_to> { };
 
     template <auto X, auto Lower, auto Upper>
-    struct in_range: greater<X, Lower>, less<X, Upper> { };
+    struct in_range_exclusive: greater<X, Lower>, less<X, Upper> { };
 
     template <auto X, auto Lower, auto Upper>
     struct in_range_inclusive: greater_equal<X, Lower>, less_equal<X, Upper>  { };

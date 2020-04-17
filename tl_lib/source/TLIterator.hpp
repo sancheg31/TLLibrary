@@ -23,7 +23,7 @@ namespace TL {
     template <typename TList, std::size_t I>
     struct type_list_iterator<TList, I, false, false>:
                                         requires::is_type_list<TList>,
-                                        requires::in_range<I, 0, length<TList>::value>
+                                        requires::in_range_exclusive<I, 0, length<TList>::value>
     {
     public:
         using type = typename get_type<TList, I>::type;
