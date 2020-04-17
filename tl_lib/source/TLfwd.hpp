@@ -63,6 +63,9 @@ namespace TL {
     template <typename TList>
     struct pop_front;
 
+    template <typename TIter1, typename TIter2>
+    struct erase;
+
     template <typename TList, typename Type, std::size_t Index>
     struct set_type;
 
@@ -117,6 +120,9 @@ namespace TL {
 
         template <typename TList>
         struct pop_front_impl;
+
+        template <typename TList, std::size_t I, std::size_t J>
+        struct erase_impl;
 
         template <typename TList, std::size_t I, typename TResult = type_list<>>
         struct list_before_index;

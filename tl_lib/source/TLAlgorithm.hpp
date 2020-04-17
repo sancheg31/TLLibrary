@@ -221,6 +221,16 @@ namespace TL {
     };
 
 
+    /*
+     * Forward declaration
+     * */
+    template <typename TIterStart, typename TIterEnd>
+    struct unique
+    {
+        using result = impl::unique_impl<TIterStart, TIterEnd>;
+    };
+
+
     namespace impl {
 
         template <typename TIterStart, template <class> class UnPred, int Distance>
@@ -421,6 +431,27 @@ namespace TL {
             using new_iter = std::conditional_t<condition::value, iterator_next<iterator_set<TNewIter, type>>,
                                                                     TNewIter>;
             using result = typename do_remove_if_impl<iterator_next<TIter>, new_iter, Distance - 1, UnPred>::result;
+        };
+
+        template <typename TIter, typename TNewIter, template <class> class UnPred>
+        struct do_remove_if_impl<TIter, TNewIter, 0, UnPred>
+        {
+            using result = typename erase<TNewIter, TIter>::type;
+        };
+
+        template <typename TIter, typename TIterEnd, std::size_t Distance>
+        struct unique_impl
+        {
+            using type = iterator_type<TIter>;
+            using end_iterator = typename remove_impl<TIter, Distance, type>::result;
+            using new_iterator = typename advance<end_iterator, iterator_position<TIter> - iterator_position<end_iterator>>::result;
+            using result = typename unique_impl<iterator_next<new_iterator>, TIterEnd, iterator_position<end_iterator> - 1>::result;
+        };
+
+        template <typename TIter, typename TIterEnd>
+        struct unique_impl<TIter, TIterEnd, 0>
+        {
+            using result = typename erase<TIter, TIterEnd>::type;
         };
 
     } //impl

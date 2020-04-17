@@ -277,6 +277,21 @@ namespace TL {
     };
 
 
+    /*
+     * Forward declaration
+     * */
+    template <typename TIter1, typename TIter2>
+    struct erase:
+            requires::is_iterator<TIter1, TIter2>,
+            requires::is_same<iterator_list<TIter1>, iterator_list<TIter2>>
+    {
+        using result = typename impl::erase_impl<iterator_list<TIter1>,
+                                                    iterator_position<TIter1>,
+                                                    iterator_position<TIter2>>::result;
+    };
+
+
+
 } //tl
 
 
@@ -693,6 +708,21 @@ namespace impl {
         using type = typename append_list<list_with_type,
                                           typename partition::list_after_index>::type;
     };
+
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList, std::size_t I, std::size_t J>
+    struct erase_impl
+    {
+        using index_i = partition_by_index<TList, I>;
+        using index_j = partition_by_index<TList, J>;
+        using before = typename index_i::list_before_index;
+        using after = typename index_j::list_after_index;
+        using type = typename append_list<before, after>::type;
+    };
+
 
 } //impl
 } //tl

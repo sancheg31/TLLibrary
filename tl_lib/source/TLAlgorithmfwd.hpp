@@ -49,6 +49,9 @@ namespace TL {
     template <typename TIter1, typename TIter2, template <class> class UnPred, typename U>
     struct replace_if;
 
+    template <typename TIter1, typename TIter2>
+    struct erase;
+
     template <typename TIter1, typename TIter2, typename T>
     struct remove;
 
@@ -58,8 +61,11 @@ namespace TL {
     template <typename TIter1, typename TIter2>
     struct reverse;
 
-    template <typename TList1, typename TList2>
+    template <typename TIterStart, typename TIterEnd, typename TIterStart2>
     struct merge;
+
+    template <typename TIter1, typename TIter2>
+    struct unique;
 
     namespace impl {
 
@@ -114,6 +120,17 @@ namespace TL {
         template <typename TIter, typename TNewIter, std::size_t Distance, template <class> class UnPred>
         struct do_remove_if_impl;
 
+        template <typename TIter1, typename TIter2, std::size_t Distance>
+        struct merge_impl;
+
+        template <typename TIter, typename TIter2, typename TNewIter, std::size_t Distance>
+        struct do_merge_impl;
+
+        template <typename TIter, typename TIterEnd, std::size_t Distance = distance<TIter, TIterEnd>::result>
+        struct unique_impl;
+
+        template <typename TIter, typename TNewIter, std::size_t Distance>
+        struct do_unique_impl;
     }
 
 }
