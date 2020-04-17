@@ -18,13 +18,13 @@ namespace requires {
 
 
     template <typename Type>
-    struct is_plain_type<Type>: traits::is_plain_type<Type>
+    struct is_not_type_list<Type>: traits::is_type_list<Type>
     {
-        static_assert(traits::is_plain_type<Type>::value, "argument is not a plain type");
+        static_assert(traits::is_type_list<Type>::value, "argument is not a plain type");
     };
 
     template <typename ... Types>
-    struct is_plain_type: is_plain_type<Types>... { };
+    struct is_not_type_list: is_plain_type<Types>... { };
 
 
     template <typename Type>

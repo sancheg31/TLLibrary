@@ -57,6 +57,12 @@ namespace TL {
     template <typename TList, typename Type>
     struct push_front;
 
+    template <typename TList>
+    struct pop_back;
+
+    template <typename TList>
+    struct pop_front;
+
     template <typename TList, typename Type, std::size_t Index>
     struct set_type;
 
@@ -105,6 +111,12 @@ namespace TL {
 
         template <typename TList1, typename TList2>
         struct prepend_impl;
+
+        template <typename TList, typename TResult = type_list<>>
+        struct pop_back_impl;
+
+        template <typename TList>
+        struct pop_front_impl;
 
         template <typename TList, std::size_t I, typename TResult = type_list<>>
         struct list_before_index;
@@ -176,14 +188,10 @@ namespace TL {
         struct is_type_list;
 
         template <typename ... Types>
-        struct is_plain_type;
-
-        template <typename ... Types>
         struct is_not_nulltype;
 
         template <typename ... TIters>
         struct is_iterator;
-
 
         template <class T>
         struct has_result_type;

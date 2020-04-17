@@ -43,19 +43,19 @@ namespace TL {
     struct swap_ranges;
 
 
-    template <typename TList, typename T, typename U>
+    template <typename TIter1, typename TIter2, typename T, typename U>
     struct replace;
 
-    template <typename TList, template <class> class UnPred, typename U>
+    template <typename TIter1, typename TIter2, template <class> class UnPred, typename U>
     struct replace_if;
 
-    template <typename TList, typename T>
+    template <typename TIter1, typename TIter2, typename T>
     struct remove;
 
-    template <typename TList, template <class> class UnPred>
+    template <typename TIter1, typename TIter2, template <class> class UnPred>
     struct remove_if;
 
-    template <typename TList>
+    template <typename TIter1, typename TIter2>
     struct reverse;
 
     template <typename TList1, typename TList2>
@@ -95,6 +95,24 @@ namespace TL {
 
         template <typename TIterStart, typename TIterStart2, int Distance>
         struct swap_ranges_impl;
+
+        template <typename TIter1, typename TIter2, bool>
+        struct reverse_impl;
+
+        template <typename TIter, std::size_t Distance, typename T, typename U>
+        struct replace_impl;
+
+        template <typename TIter, std::size_t Distance, template <class> class UnPred, typename U>
+        struct replace_if_impl;
+
+        template <typename TIter, std::size_t Distance, typename T>
+        struct remove_impl;
+
+        template <typename TIter, std::size_t Distance, template <class> class UnPred>
+        struct remove_if_impl;
+
+        template <typename TIter, typename TNewIter, std::size_t Distance, template <class> class UnPred>
+        struct do_remove_if_impl;
 
     }
 

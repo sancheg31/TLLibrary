@@ -143,7 +143,6 @@ namespace TL {
 
     template <typename TList, typename Type>
     struct type_index:  requires::is_type_list<TList>,
-                        requires::is_plain_type<Type>,
                         requires::is_not_nulltype<Type>
     {
         enum { value =  impl::type_index_impl<TList, Type>::value };
@@ -158,7 +157,6 @@ namespace TL {
 
     template <typename TList, typename Type>
     struct last_type_index: requires::is_type_list<TList>,
-                            requires::is_plain_type<Type>,
                             requires::is_not_nulltype<Type>
     {
         enum { value = impl::last_type_index_impl<TList, Type>::value };
@@ -206,7 +204,6 @@ namespace TL {
 
     template <typename TList, typename Type>
     struct push_back:   requires::is_type_list<TList>,
-                        requires::is_plain_type<Type>,
                         requires::is_not_nulltype<Type>
     {
         using type = typename append<TList, Type>::type;
@@ -224,7 +221,6 @@ namespace TL {
 
     template <typename TList, typename Type>
     struct push_front:  requires::is_type_list<TList>,
-                        requires::is_plain_type<Type>,
                         requires::is_not_nulltype<Type>
     {
         using type = typename prepend<TList, Type>::type;
@@ -236,12 +232,45 @@ namespace TL {
     /*
      * Forward declaration
      * */
+    template <typename TList>
+    struct pop_back;
+
+    template <typename TList>
+    struct pop_back:
+            requires::is_type_list<TList>,
+            requires::greater<length<TList>::value, 0>
+    {
+        using type = typename impl::pop_back_impl<TList>::type;
+    };
+
+    template <typename TList>
+    using pop_back_t = typename pop_back<TList>::type;
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList>
+    struct pop_front;
+
+    template <typename TList>
+    struct pop_front:
+            requires::is_type_list<TList>,
+            requires::greater<length<TList>::value, 0>
+    {
+        using type = typename impl::pop_front_impl<TList>::type;
+    };
+
+
+
+    /*
+     * Forward declaration
+     * */
     template <typename TList, typename Type, std::size_t Index>
     struct set_type;
 
     template <typename TList, typename Type, std::size_t Index>
     struct set_type: requires::is_type_list<TList>,
-                     requires::is_plain_type<Type>,
                      requires::less<Index, length<TList>::value>
     {
         using type = typename impl::set_type_impl<TList, Type, Index>::type;
@@ -556,6 +585,25 @@ namespace impl {
         using type = typename prepend_list<TList1, type_list<Tp...>>::type;
     };
 
+
+    /*
+     * forward declaration
+     * */
+    template <typename TList>
+    struct pop_front_impl;
+
+    template <typename T, typename ... Tp>
+    struct pop_front_impl<type_list<T, Tp...>>
+    {
+        using type = type_list<Tp...>;
+    };
+
+    template <typename T, typename ... Tp, typename TResult>
+    struct pop_back_impl<type_list<T, Tp...>, TResult>
+    {
+        using new_result = typename append_type<TResult, T>::type;
+        using type = typename pop_back_impl<type_list<Tp...>, new_result>::type;
+    };
 
 
     /*
