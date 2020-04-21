@@ -2,6 +2,8 @@
 
 #include <type_traits>
 
+namespace TL {
+
 #define GENERATE_VALUE_PROPERTY_METAFUNCTION(name) \
     template <typename T, class = std::void_t<>> \
     struct has_value_##name##_property_impl { \
@@ -52,3 +54,4 @@
     template <typename T, typename U = void> \
     static constexpr bool has_##name##_property = has_template_type_##name##_property_impl<T, U>::value;
 
+} //tl

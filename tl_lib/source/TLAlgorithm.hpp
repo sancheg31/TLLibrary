@@ -236,7 +236,7 @@ namespace TL {
         template <typename TIterStart, template <class> class UnPred, int Distance>
         struct all_of_impl
         {
-            inline constexpr static bool result = UnPred<iterator_type<TIterStart>>::value &&
+            inline constexpr static bool result = UnPred<iterator_value<TIterStart>>::value &&
                                                     all_of_impl<iterator_next<TIterStart>, UnPred, Distance - 1>::result;
         };
 
@@ -249,7 +249,7 @@ namespace TL {
         template <typename TIterStart, template <class> class UnPred, int Distance>
         struct none_of_impl
         {
-            inline constexpr static bool result = !UnPred<iterator_type<TIterStart>>::value &&
+            inline constexpr static bool result = !UnPred<iterator_value<TIterStart>>::value &&
                                                     none_of_impl<iterator_next<TIterStart>, UnPred, Distance - 1>::result;
         };
 
@@ -262,7 +262,7 @@ namespace TL {
         template <typename TIterStart, template <class> class UnPred, int Distance>
         struct any_of_impl
         {
-            inline constexpr static bool result = UnPred<iterator_type<TIterStart>>::value ||
+            inline constexpr static bool result = UnPred<iterator_value<TIterStart>>::value ||
                                                     any_of_impl<iterator_next<TIterStart>, UnPred, Distance - 1>::result;
         };
 
@@ -283,7 +283,7 @@ namespace TL {
         template <typename TIterStart, template <class> class UnPred, int Distance>
         struct find_type_if_impl
         {
-            using condition = UnPred<iterator_type<TIterStart>>;
+            using condition = UnPred<iterator_value<TIterStart>>;
             using true_type = TIterStart;
             using false_type = typename find_type_if_impl<iterator_next<TIterStart>, UnPred, Distance - 1>::result;
             using result = std::conditional<condition::value, true_type, false_type>;
@@ -307,7 +307,7 @@ namespace TL {
         template <typename TIterStart, template <class> class UnPred, int Distance>
         struct type_count_if_impl
         {
-            inline static constexpr bool result = UnPred<iterator_type<TIterStart>>::value +
+            inline static constexpr bool result = UnPred<iterator_value<TIterStart>>::value +
                                         type_count_if_impl<iterator_next<TIterStart>, UnPred, Distance - 1>::result;
         };
 
@@ -321,8 +321,8 @@ namespace TL {
         template <typename InIt1, typename InIt2, int Distance>
         struct equal_impl
         {
-            using type_1 = iterator_type<InIt1>;
-            using type_2 = iterator_type<InIt2>;
+            using type_1 = iterator_value<InIt1>;
+            using type_2 = iterator_value<InIt2>;
             inline static constexpr bool result = traits::is_same<type_1, type_2>::value &&
                                                     equal_impl<iterator_next<InIt1>, iterator_next<InIt2>, Distance - 1>::result;
         };
@@ -347,9 +347,9 @@ namespace TL {
         template <typename TIter1, typename TIter2>
         struct swap_iter_impl
         {
-            using type_1 = iterator_type<TIter1>;
-            using type_2 = iterator_type<TIter2>;
-            using result = type_list<iterator_set<TIter1, type_1>, iterator_set<TIter2, type_2>>;
+            using type_1 = iterator_value<TIter1>;
+            using type_2 = iterator_value<TIter2>;
+            using result = type_list<iterator_set_value<TIter1, type_1>, iterator_set_value<TIter2, type_2>>;
         };
 
 
@@ -388,8 +388,8 @@ namespace TL {
         template <typename TIter, std::size_t Distance, template <class> class UnPred, typename U>
         struct replace_if_impl
         {
-            using condition = UnPred<iterator_type<TIter>>;
-            using new_iter = std::conditional_t<condition::value, iterator_set<TIter, U>, TIter>;
+            using condition = UnPred<iterator_value<TIter>>;
+            using new_iter = std::conditional_t<condition::value, iterator_set_value<TIter, U>, TIter>;
             using result = typename replace_if_impl<iterator_next<new_iter>, Distance - 1, UnPred, U>::result;
         };
 
@@ -426,9 +426,9 @@ namespace TL {
         template <typename TIter, typename TNewIter, std::size_t Distance, template <class> class UnPred>
         struct do_remove_if_impl
         {
-            using type = iterator_type<TIter>;
+            using type = iterator_value<TIter>;
             using condition = UnPred<type>;
-            using new_iter = std::conditional_t<condition::value, iterator_next<iterator_set<TNewIter, type>>,
+            using new_iter = std::conditional_t<condition::value, iterator_next<iterator_set_value<TNewIter, type>>,
                                                                     TNewIter>;
             using result = typename do_remove_if_impl<iterator_next<TIter>, new_iter, Distance - 1, UnPred>::result;
         };
@@ -442,7 +442,7 @@ namespace TL {
         template <typename TIter, typename TIterEnd, std::size_t Distance>
         struct unique_impl
         {
-            using type = iterator_type<TIter>;
+            using type = iterator_value<TIter>;
             using end_iterator = typename remove_impl<TIter, Distance, type>::result;
             using new_iterator = typename advance<end_iterator, iterator_position<TIter> - iterator_position<end_iterator>>::result;
             using result = typename unique_impl<iterator_next<new_iterator>, TIterEnd, iterator_position<end_iterator> - 1>::result;

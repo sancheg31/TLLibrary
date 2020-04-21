@@ -64,7 +64,7 @@ namespace traits {
     struct is_iterator;
 
     template <typename TList, std::size_t I>
-    struct is_iterator<type_list_iterator<TList, I>>: true_argument { };
+    struct is_iterator<type_iterator<TList, I>>: true_argument { };
 
     template <typename TIter>
     struct is_iterator: false_argument { };

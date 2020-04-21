@@ -26,6 +26,7 @@ HEADERS += \
     experimental/FindOperations.h \
     experimental/literals.hpp \
     experimental/typeIndex.h \
+    source/TLMetaFunctionGenerators.hpp \
     source/TLAlgorithm.hpp \
     source/TLAlgorithmfwd.hpp \
     source/TLIterator.hpp \

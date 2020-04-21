@@ -14,12 +14,6 @@ namespace TL {
     struct type_list;
 
     template <typename TList>
-    constexpr int size();
-
-    template <typename ... Tp>
-    constexpr int size(type_list<Tp...>&&);
-
-    template <typename TList>
     struct length;
 
     template <typename TList>

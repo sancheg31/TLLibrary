@@ -332,31 +332,6 @@ namespace impl {
     /*
      * forward declaration
      * */
-    template <typename TList, typename Type>
-    struct type_count_impl;
-
-    template <typename T, typename ... Tp, typename Type>
-    struct type_count_impl<type_list<T, Tp...>, Type>
-    {
-        enum { value = type_count_impl<type_list<Tp...>, Type>::value };
-    };
-
-    template <typename ... Tp, typename Type>
-    struct type_count_impl<type_list<Type, Tp...>, Type>
-    {
-        enum { value = 1 + type_count_impl<type_list<Tp...>, Type>::value };
-    };
-
-    template <typename Type>
-    struct type_count_impl<type_list<>, Type>
-    {
-        enum { value = 0 };
-    };
-
-
-    /*
-     * forward declaration
-     * */
     template <typename TList, std::size_t N, std::size_t Index>
     struct get_type_impl;
 
@@ -472,17 +447,17 @@ namespace impl {
     template <typename TList, typename ... Tp>
     struct append_types;
 
-    template <typename TList, typename T, typename ... Tp>
-    struct append_types<TList, T, Tp...>
+    template <typename ...OldTypes, typename T, typename ... NewTypes>
+    struct append_types<type_list<OldTypes...>, T, NewTypes...>
     {
-        using new_type_list = typename append_type<TList, T>::type;
-        using type = typename append_types<new_type_list, Tp...>::type;
+        using new_type_list = typename append_type<type_list<OldTypes...>, T>::type;
+        using type = typename append_types<new_type_list, NewTypes...>::type;
     };
 
-    template <typename TList, typename T>
-    struct append_types<TList, T>
+    template <typename ...Types>
+    struct append_types<type_list<Types...>>
     {
-        using type = typename append_type<TList, T>::type;
+        using type = type_list<Types...>;
     };
 
 
@@ -492,10 +467,10 @@ namespace impl {
     template <typename TList1, typename TList2>
     struct append_list;
 
-    template <typename TList1, typename ... Tp>
-    struct append_list<TList1, type_list<Tp...>>
+    template <typename TList, typename ...NewTypes>
+    struct append_list<TList, type_list<NewTypes...>>
     {
-        using type = typename append_types<TList1, Tp...>::type;
+        using type = typename append_types<TList, NewTypes...>::type;
     };
 
     template <typename TList>
@@ -530,17 +505,17 @@ namespace impl {
     template <typename TList, typename ... Tp>
     struct prepend_types;
 
-    template <typename TList, typename T, typename ... Tp>
-    struct prepend_types<TList, T, Tp...>
+    template <typename ...OldTypes, typename T, typename ... NewTypes>
+    struct prepend_types<type_list<OldTypes...>, T, NewTypes...>
     {
-        using new_type_list = typename prepend_types<TList, Tp...>::type;
+        using new_type_list = typename prepend_types<type_list<OldTypes...>, NewTypes...>::type;
         using type = typename prepend_type<new_type_list, T>::type;
     };
 
-    template <typename TList, typename T>
-    struct prepend_types<TList, T>
+    template <typename ...OldTypes, typename T>
+    struct prepend_types<type_list<OldTypes...>, T>
     {
-        using type = typename prepend_type<TList, T>::type;
+        using type = typename prepend_type<type_list<OldTypes...>, T>::type;
     };
 
 
@@ -550,10 +525,10 @@ namespace impl {
     template <typename TList1, typename TList2>
     struct prepend_list;
 
-    template <typename TList1, typename ... Tp>
-    struct prepend_list<TList1, type_list<Tp...>>
+    template <typename TList, typename ... NewTypes>
+    struct prepend_list<TList, type_list<NewTypes...>>
     {
-        using type = typename prepend_types<TList1, Tp...>::type;
+        using type = typename prepend_types<TList, NewTypes...>::type;
     };
 
     template <typename TList>
@@ -561,7 +536,6 @@ namespace impl {
     {
         using type = TList;
     };
-
 
     /*
      * forward declaration
@@ -613,11 +587,18 @@ namespace impl {
         using type = type_list<Tp...>;
     };
 
+
     template <typename T, typename ... Tp, typename TResult>
     struct pop_back_impl<type_list<T, Tp...>, TResult>
     {
         using new_result = typename append_type<TResult, T>::type;
         using type = typename pop_back_impl<type_list<Tp...>, new_result>::type;
+    };
+
+    template <typename T, typename TResult>
+    struct pop_back_impl<type_list<T>, TResult>
+    {
+        using type = TResult;
     };
 
 
@@ -630,8 +611,8 @@ namespace impl {
     template <typename T, typename ... Tp, std::size_t I, typename TResult>
     struct list_before_index<type_list<T, Tp...>, I, TResult>
     {
-        using new_type_list = typename TL::impl::append_type<TResult, T>::type;
-        using type = typename list_before_index<type_list<Tp...>, I-1, new_type_list>::type;
+        using new_type_list = typename append_type<TResult, T>::type;
+        using type = typename list_before_index<type_list<Tp...>, I - 1, new_type_list>::type;
     };
 
     template <typename T, typename ... Tp, typename TResult>
@@ -656,7 +637,7 @@ namespace impl {
     template <typename T, typename ... Tp, typename TResult>
     struct list_after_index<type_list<T, Tp...>, 0, TResult>
     {
-        using type = typename TL::impl::append_types<TResult, Tp...>::type;
+        using type = typename append_types<type_list<>, Tp...>::type;
     };
 
 
@@ -666,17 +647,11 @@ namespace impl {
     template <typename TList, std::size_t I, typename TResult>
     struct list_without_index;
 
-    template <typename T, typename ... Tp, std::size_t I, typename TResult>
-    struct list_without_index<type_list<T, Tp...>, I, TResult>
+    template <typename ... Tp, std::size_t I, typename TResult>
+    struct list_without_index<type_list<Tp...>, I, TResult>
     {
-        using new_type_list = typename TL::impl::append_type<TResult, T>::type;
-        using type = typename  list_without_index<type_list<Tp...>, I-1, new_type_list>::type;
-    };
-
-    template <typename T, typename ... Tp, typename TResult>
-    struct list_without_index<type_list<T, Tp...>, 0, TResult>
-    {
-        using type = typename TL::impl::append_types<TResult, Tp...>::type;
+        using new_type_list = typename list_before_index<type_list<Tp...>, I, TResult>::type;
+        using type = typename list_after_index<type_list<Tp...>, I, new_type_list>::type;
     };
 
 
@@ -687,9 +662,9 @@ namespace impl {
     struct partition_by_index
     {
         using type = typename get_type<TList, I>::type;
-        using list_before_index = typename list_before_index<TList, I>::type;
-        using list_after_index = typename list_after_index<TList, I>::type;
-        using list_without_index = typename list_without_index<TList, I>::type;
+        using list_before_index = typename TL::impl::list_before_index<TList, I>::type;
+        using list_after_index = typename TL::impl::list_after_index<TList, I>::type;
+        using list_without_index = typename TL::impl::list_without_index<TList, I>::type;
     };
 
 
