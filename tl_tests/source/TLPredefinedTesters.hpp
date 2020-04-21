@@ -20,12 +20,6 @@ namespace testing {
         static_assert(empty<TList>::value == Result(), "test_empty");
     };
 
-    template <typename TList, typename Result>
-    struct test_size
-    {
-        static_assert((size<TList>() == Result()) && (size(TList{}) == Result()), "test_size");
-    };
-
     template <typename TList, typename Type, typename Result>
     struct test_has_type
     {

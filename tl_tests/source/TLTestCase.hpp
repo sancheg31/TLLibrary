@@ -22,7 +22,8 @@ namespace testing {
     {
         constexpr static Type actual = (Type)Operation::value;
         constexpr static Type expected = (Type)Value;
-        static_assert(expected == actual, "values are not equal");
+        constexpr static bool result = (expected == actual);
+        //static_assert(expected == actual, "values are not equal");
     };
 
     template <class Operation, class Type>
@@ -30,7 +31,8 @@ namespace testing {
     {
         using actual = typename Operation::type;
         using expected = Type;
-        static_assert(traits::is_same<actual, expected>::value, "types are not equal");
+        constexpr static bool result = std::is_same<expected, actual>::value;
+        //static_assert(traits::is_same<actual, expected>::value, "types are not equal");
     };
 
 } //testing

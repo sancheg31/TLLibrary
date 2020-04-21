@@ -8,6 +8,8 @@ CONFIG += depend_includepath c++17 console
 CONFIG += qt
 CONFIG -= app_bundle
 
+include(gtest_dependency.pri)
+
 QT += testlib
 
 DESTDIR = $$PWD/../binaries/$$DESTINATION_PATH
@@ -24,17 +26,16 @@ INCLUDEPATH += ../tl_lib
 CONFIG -= app_bundle
 
 SOURCES += \
-        source/TLIteratorTests.cpp \
-        source/TLTestBase.cpp \
-        source/TLTestSuite.cpp \
+        source/TLTypeIteratorTests.cpp \
+        source/TLTypeListTests.cpp \
         source/main.cpp
 
 HEADERS += \
     experimental/TypeListTraitsTest.hpp \
-    source/TLIteratorTests.hpp \
     source/TLPredefinedTesters.hpp \
     source/TLTest.hpp \
     source/TLTestBase.hpp \
     source/TLTestCase.hpp \
-    source/TLTestSuite.hpp \
+    source/TLTypeIteratorTests.hpp \
+    source/TLTypeListTests.hpp \
     source/TLTypeWrappers.hpp
