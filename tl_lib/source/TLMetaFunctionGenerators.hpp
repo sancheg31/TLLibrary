@@ -19,7 +19,7 @@ namespace TL {
     template <typename T> \
     static constexpr bool has_value_##name##_v = has_value_##name<T>::value;
 
-namespace {
+namespace testing {
     struct InnerTestValue1 { enum {test_value_1 = true }; };
     TL_HAS_NESTED_VALUE(test_value_1);
     static_assert(has_value_test_value_1<int>::value == false, "TL_HAS_NESTED_VALUE");
@@ -44,7 +44,7 @@ namespace {
     template <typename T, typename ... Tp> \
     static constexpr bool has_value_##name##_v = has_value_##name<T, Tp...>::value;
 
-namespace {
+namespace testing {
     struct InnerTestValue2 {
         template <typename T>
         inline static constexpr bool test_value_2 = true;
@@ -55,7 +55,7 @@ namespace {
     static_assert(has_value_test_value_2<InnerTestValue2, int>::value == true, "TL_HAS_NESTED_TEMPLATE_VALUE");
     static_assert(has_value_test_value_2<InnerTestValue2, InnerType>::value == true, "TL_HAS_NESTED_TEMPLATE_VALUE");
     static_assert(has_value_test_value_2<InnerTestValue2>::value == false, "TL_HAS_NESTED_TEMPLATE_VALUE");
-    static_assert(has_value_test_value_2_v<int, InnerType> == has_value_test_value_2<int>::value, "TL_HAS_NESTED_TEMPLATE_VALUE");
+    static_assert(has_value_test_value_2<int>::value == false, "TL_HAS_NESTED_TEMPLATE_VALUE");
 }
 
 #define TL_HAS_NESTED_TYPE(name) \
@@ -72,7 +72,7 @@ namespace {
     template <typename T> \
     static constexpr bool has_type_##name##_v = has_type_##name<T>::value;
 
-namespace {
+namespace testing {
     struct InnerTestType1 {
         using test_type_1 = void;
     };
@@ -100,7 +100,7 @@ namespace {
     template <typename T, typename ... Tp> \
     static constexpr bool has_type_##name##_v = has_type_##name<T, Tp...>::value;
 
-namespace {
+namespace testing {
     struct InnerTestType2 {
         template <typename T, typename U>
         using test_type_2 = void;
