@@ -52,21 +52,21 @@ TEST_F(TLTypeIteratorTests, TestValuePropertyContent) {
 }
 
 TEST_F(TLTypeIteratorTests, TestSetValuePropertyPresence) {
-    EXPECT_EQ(false, (has_type_set_value_v<empty_iter<0>>));
-    EXPECT_EQ(false, (has_type_set_value_v<empty_iter<empty_list_size>>));
-    EXPECT_EQ(true, (has_type_set_value_v<single_iter<0>>));
-    EXPECT_EQ(false, (has_type_set_value_v<single_iter<singleton_list_size>>));
-    EXPECT_EQ(true, (has_type_set_value_v<int_iter<0>>));
-    EXPECT_EQ(false, (has_type_set_value_v<int_iter<integrals_size>>));
-    EXPECT_EQ(true, (has_type_set_value_v<double_iter<0>>));
-    EXPECT_EQ(true, (has_type_set_value_v<double_iter<1>>));
-    EXPECT_EQ(false, (has_type_set_value_v<double_iter<doubles_size>>));
+    struct Inner { };
+    EXPECT_EQ(false, (has_type_set_value_v<empty_iter<0>, Inner>));
+    EXPECT_EQ(false, (has_type_set_value_v<empty_iter<empty_list_size>, Inner>));
+    EXPECT_EQ(true, (has_type_set_value_v<single_iter<0>, Inner>));
+    EXPECT_EQ(false, (has_type_set_value_v<single_iter<singleton_list_size>, Inner>));
+    EXPECT_EQ(true, (has_type_set_value_v<int_iter<0>, Inner>));
+    EXPECT_EQ(false, (has_type_set_value_v<int_iter<integrals_size>, Inner>));
+    EXPECT_EQ(true, (has_type_set_value_v<double_iter<0>, Inner>));
+    EXPECT_EQ(true, (has_type_set_value_v<double_iter<1>, Inner>));
+    EXPECT_EQ(false, (has_type_set_value_v<double_iter<doubles_size>, Inner>));
 }
 
 TEST_F(TLTypeIteratorTests, TestSetValuePropertyContent) {
     struct Inner { };
-    using new_it = iterator_set_value<single_iter<0>, Inner>;
-    EXPECT_EQ(true, (is_same_v<iterator_value<new_it>, Inner>));
+    EXPECT_EQ(true, (is_same_v<iterator_value<iterator_set_value<single_iter<0>, Inner>>, Inner>));
     EXPECT_EQ(true, (is_same_v<iterator_value<iterator_set_value<int_iter<0>, Inner>>, Inner>));
     EXPECT_EQ(true, (is_same_v<iterator_value<iterator_set_value<int_iter<integrals_size-1>, Inner>>, Inner>));
     EXPECT_EQ(true, (is_same_v<iterator_value<iterator_set_value<double_iter<doubles_size-1>, empty_list>>, empty_list>));

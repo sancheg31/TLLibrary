@@ -26,11 +26,11 @@ namespace testing {
 class TLTypeIteratorTests: public ::testing::Test, public TLTestBase
 {
 protected:
-    TL_HAS_TYPE(value)
-    TL_HAS_TYPE(list)
-    TL_HAS_TYPE(prev)
-    TL_HAS_TYPE(next)
-    TL_HAS_TEMPLATE_TYPE(set_value)
+    TL_HAS_NESTED_TYPE(value)
+    TL_HAS_NESTED_TYPE(list)
+    TL_HAS_NESTED_TYPE(prev)
+    TL_HAS_NESTED_TYPE(next)
+    TL_HAS_NESTED_TEMPLATE_TYPE(set_value)
 
     template <std::size_t I>
     using empty_iter = type_iterator<empty_list, I>;
