@@ -26,12 +26,11 @@ namespace testing {
 class TLTypeIteratorTests: public ::testing::Test, public TLTestBase
 {
 protected:
-    GENERATE_TYPE_PROPERTY_METAFUNCTION(value)
-    GENERATE_TEMPLATE_TYPE_PROPERTY_METAFUNCTION(set_value)
-
-    GENERATE_TYPE_PROPERTY_METAFUNCTION(list)
-    GENERATE_TYPE_PROPERTY_METAFUNCTION(next)
-    GENERATE_TYPE_PROPERTY_METAFUNCTION(prev)
+    TL_HAS_TYPE(value)
+    TL_HAS_TYPE(list)
+    TL_HAS_TYPE(prev)
+    TL_HAS_TYPE(next)
+    TL_HAS_TEMPLATE_TYPE(set_value)
 
     template <std::size_t I>
     using empty_iter = type_iterator<empty_list, I>;

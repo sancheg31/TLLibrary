@@ -9,14 +9,14 @@ namespace testing {
 
 
 TEST_F(TLTypeIteratorTests, TestListPropertyPresence) {
-    EXPECT_EQ(true, (has_list_property< iterator_properties<empty_iter<0>> >));
-    EXPECT_EQ(true, (has_list_property< iterator_properties<empty_iter<empty_list_size>> >));
-    EXPECT_EQ(true, (has_list_property< iterator_properties<single_iter<0>> >));
-    EXPECT_EQ(true, (has_list_property< iterator_properties<single_iter<singleton_list_size>> >));
-    EXPECT_EQ(true, (has_list_property< iterator_properties<int_iter<0>> >));
-    EXPECT_EQ(true, (has_list_property< iterator_properties<int_iter<integrals_size>> >));
-    EXPECT_EQ(true, (has_list_property< iterator_properties<double_iter<1>> >));
-    EXPECT_EQ(true, (has_list_property< iterator_properties<double_iter<doubles_size>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<empty_iter<0>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<empty_iter<empty_list_size>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<single_iter<0>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<single_iter<singleton_list_size>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<int_iter<0>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<int_iter<integrals_size>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<double_iter<1>> >));
+    EXPECT_EQ(true, (has_type_list_v< iterator_properties<double_iter<doubles_size>> >));
 }
 
 TEST_F(TLTypeIteratorTests, TestListPropertyContent) {
@@ -31,14 +31,14 @@ TEST_F(TLTypeIteratorTests, TestListPropertyContent) {
 }
 
 TEST_F(TLTypeIteratorTests, TestValuePropertyPresence) {
-    EXPECT_EQ(false, (has_value_property<empty_iter<0>>));
-    EXPECT_EQ(false, (has_value_property<empty_iter<empty_list_size>>));
-    EXPECT_EQ(true, (has_value_property<single_iter<0>>));
-    EXPECT_EQ(false, (has_value_property<single_iter<singleton_list_size>>));
-    EXPECT_EQ(true, (has_value_property<int_iter<0>>));
-    EXPECT_EQ(false, (has_value_property<int_iter<integrals_size>>));
-    EXPECT_EQ(true, (has_value_property<double_iter<1>>));
-    EXPECT_EQ(false, (has_value_property<double_iter<doubles_size>>));
+    EXPECT_EQ(false, (has_type_value_v<empty_iter<0>>));
+    EXPECT_EQ(false, (has_type_value_v<empty_iter<empty_list_size>>));
+    EXPECT_EQ(true, (has_type_value_v<single_iter<0>>));
+    EXPECT_EQ(false, (has_type_value_v<single_iter<singleton_list_size>>));
+    EXPECT_EQ(true, (has_type_value_v<int_iter<0>>));
+    EXPECT_EQ(false, (has_type_value_v<int_iter<integrals_size>>));
+    EXPECT_EQ(true, (has_type_value_v<double_iter<1>>));
+    EXPECT_EQ(false, (has_type_value_v<double_iter<doubles_size>>));
 }
 
 TEST_F(TLTypeIteratorTests, TestValuePropertyContent) {
@@ -52,15 +52,15 @@ TEST_F(TLTypeIteratorTests, TestValuePropertyContent) {
 }
 
 TEST_F(TLTypeIteratorTests, TestSetValuePropertyPresence) {
-    EXPECT_EQ(false, (has_set_value_property<empty_iter<0>>));
-    EXPECT_EQ(false, (has_set_value_property<empty_iter<empty_list_size>>));
-    EXPECT_EQ(true, (has_set_value_property<single_iter<0>>));
-    EXPECT_EQ(false, (has_set_value_property<single_iter<singleton_list_size>>));
-    EXPECT_EQ(true, (has_set_value_property<int_iter<0>>));
-    EXPECT_EQ(false, (has_set_value_property<int_iter<integrals_size>>));
-    EXPECT_EQ(true, (has_set_value_property<double_iter<0>>));
-    EXPECT_EQ(true, (has_set_value_property<double_iter<1>>));
-    EXPECT_EQ(false, (has_set_value_property<double_iter<doubles_size>>));
+    EXPECT_EQ(false, (has_type_set_value_v<empty_iter<0>>));
+    EXPECT_EQ(false, (has_type_set_value_v<empty_iter<empty_list_size>>));
+    EXPECT_EQ(true, (has_type_set_value_v<single_iter<0>>));
+    EXPECT_EQ(false, (has_type_set_value_v<single_iter<singleton_list_size>>));
+    EXPECT_EQ(true, (has_type_set_value_v<int_iter<0>>));
+    EXPECT_EQ(false, (has_type_set_value_v<int_iter<integrals_size>>));
+    EXPECT_EQ(true, (has_type_set_value_v<double_iter<0>>));
+    EXPECT_EQ(true, (has_type_set_value_v<double_iter<1>>));
+    EXPECT_EQ(false, (has_type_set_value_v<double_iter<doubles_size>>));
 }
 
 TEST_F(TLTypeIteratorTests, TestSetValuePropertyContent) {
@@ -74,15 +74,15 @@ TEST_F(TLTypeIteratorTests, TestSetValuePropertyContent) {
 }
 
 TEST_F(TLTypeIteratorTests, TestNextPropertyPresence) {
-    EXPECT_EQ(false, (has_next_property<empty_iter<0>>));
-    EXPECT_EQ(false, (has_next_property<empty_iter<empty_list_size>>));
-    EXPECT_EQ(true, (has_next_property<single_iter<0>>));
-    EXPECT_EQ(false, (has_next_property<single_iter<singleton_list_size>>));
-    EXPECT_EQ(true, (has_next_property<int_iter<0>>));
-    EXPECT_EQ(true, (has_next_property<int_iter<integrals_size - 1>>));
-    EXPECT_EQ(false, (has_next_property<int_iter<integrals_size>>));
-    EXPECT_EQ(true, (has_next_property<double_iter<0>>));
-    EXPECT_EQ(false, (has_next_property<double_iter<doubles_size>>));
+    EXPECT_EQ(false, (has_type_next_v<empty_iter<0>>));
+    EXPECT_EQ(false, (has_type_next_v<empty_iter<empty_list_size>>));
+    EXPECT_EQ(true, (has_type_next_v<single_iter<0>>));
+    EXPECT_EQ(false, (has_type_next_v<single_iter<singleton_list_size>>));
+    EXPECT_EQ(true, (has_type_next_v<int_iter<0>>));
+    EXPECT_EQ(true, (has_type_next_v<int_iter<integrals_size - 1>>));
+    EXPECT_EQ(false, (has_type_next_v<int_iter<integrals_size>>));
+    EXPECT_EQ(true, (has_type_next_v<double_iter<0>>));
+    EXPECT_EQ(false, (has_type_next_v<double_iter<doubles_size>>));
 }
 
 TEST_F(TLTypeIteratorTests, TestNextPropertyContent) {
@@ -99,15 +99,15 @@ TEST_F(TLTypeIteratorTests, TestNextPropertyContent) {
 }
 
 TEST_F(TLTypeIteratorTests, TestPrevPropertyPresence) {
-    EXPECT_EQ(false, (has_prev_property<empty_iter<0>>));
-    EXPECT_EQ(false, (has_prev_property<empty_iter<empty_list_size>>));
-    EXPECT_EQ(false, (has_prev_property<single_iter<0>>));
-    EXPECT_EQ(true, (has_prev_property<single_iter<singleton_list_size>>));
-    EXPECT_EQ(false, (has_prev_property<int_iter<0>>));
-    EXPECT_EQ(true, (has_prev_property<int_iter<integrals_size - 1>>));
-    EXPECT_EQ(true, (has_prev_property<int_iter<integrals_size>>));
-    EXPECT_EQ(false, (has_prev_property<double_iter<0>>));
-    EXPECT_EQ(true, (has_prev_property<double_iter<doubles_size>>));
+    EXPECT_EQ(false, (has_type_prev_v<empty_iter<0>>));
+    EXPECT_EQ(false, (has_type_prev_v<empty_iter<empty_list_size>>));
+    EXPECT_EQ(false, (has_type_prev_v<single_iter<0>>));
+    EXPECT_EQ(true, (has_type_prev_v<single_iter<singleton_list_size>>));
+    EXPECT_EQ(false, (has_type_prev_v<int_iter<0>>));
+    EXPECT_EQ(true, (has_type_prev_v<int_iter<integrals_size - 1>>));
+    EXPECT_EQ(true, (has_type_prev_v<int_iter<integrals_size>>));
+    EXPECT_EQ(false, (has_type_prev_v<double_iter<0>>));
+    EXPECT_EQ(true, (has_type_prev_v<double_iter<doubles_size>>));
 }
 
 TEST_F(TLTypeIteratorTests, TestPrevPropertyContent) {

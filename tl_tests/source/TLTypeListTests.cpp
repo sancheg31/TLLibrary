@@ -2,6 +2,7 @@
 
 #include "TLTypeListTests.hpp"
 
+#include "source/TLMetaFunctionGenerators.hpp"
 #include "source/type_list.hpp"
 #include "TLTestCase.hpp"
 
