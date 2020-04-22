@@ -3,12 +3,11 @@
 namespace TL {
 namespace testing {
 
-    template <typename T, T N>
+    template <auto N>
     struct TValue
     {
-        using type = T;
+        using type = decltype(N);
         inline constexpr static type value = N;
-        constexpr operator type() { return value; }
     };
 
     template <typename T>

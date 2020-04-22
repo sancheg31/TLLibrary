@@ -37,35 +37,35 @@ TEST_F(TLTypeListTests, TestHasTypeOperation) {
 }
 
 TEST_F(TLTypeListTests, TestGetTypeOperation) {
-    EXPECT_TRUE((test_case<get_type<singleton_list, 0>, singleton_0>::result));
-    EXPECT_TRUE((test_case<get_type<integrals, 0>, integrals_0>::result));
-    EXPECT_TRUE((test_case<get_type<integrals, 1>, integrals_1>::result));
-    EXPECT_TRUE((test_case<get_type<integrals, 2>, integrals_2>::result));
-    EXPECT_TRUE((test_case<get_type<integrals, 3>, integrals_3>::result));
-    EXPECT_TRUE((test_case<get_type<doubles, 0>, doubles_0>::result));
-    EXPECT_TRUE((test_case<get_type<doubles, 1>, doubles_1>::result));
+    EXPECT_TRUE((test_case<get_type<singleton_list, 0>, singleton_0>));
+    EXPECT_TRUE((test_case<get_type<integrals, 0>, integrals_0>));
+    EXPECT_TRUE((test_case<get_type<integrals, 1>, integrals_1>));
+    EXPECT_TRUE((test_case<get_type<integrals, 2>, integrals_2>));
+    EXPECT_TRUE((test_case<get_type<integrals, 3>, integrals_3>));
+    EXPECT_TRUE((test_case<get_type<doubles, 0>, doubles_0>));
+    EXPECT_TRUE((test_case<get_type<doubles, 1>, doubles_1>));
 }
 
 TEST_F(TLTypeListTests, TestFirstTypeOperation) {
-    EXPECT_TRUE((test_case<first_type<singleton_list>, singleton_0>::result));
-    EXPECT_TRUE((test_case<first_type<doubles>, doubles_0>::result));
-    EXPECT_TRUE((test_case<first_type<integrals>, integrals_0>::result));
+    EXPECT_TRUE((test_case<first_type<singleton_list>, singleton_0>));
+    EXPECT_TRUE((test_case<first_type<doubles>, doubles_0>));
+    EXPECT_TRUE((test_case<first_type<integrals>, integrals_0>));
 }
 
 TEST_F(TLTypeListTests, TestLastTypeOperation) {
-    EXPECT_TRUE((test_case<last_type<singleton_list>, singleton_0>::result));
-    EXPECT_TRUE((test_case<last_type<doubles>, doubles_1>::result));
-    EXPECT_TRUE((test_case<last_type<integrals>, integrals_3>::result));
+    EXPECT_TRUE((test_case<last_type<singleton_list>, singleton_0>));
+    EXPECT_TRUE((test_case<last_type<doubles>, doubles_1>));
+    EXPECT_TRUE((test_case<last_type<integrals>, integrals_3>));
 }
 
 TEST_F(TLTypeListTests, TestSetTypeOperation) {
-    EXPECT_TRUE((test_case<set_type<list_1, Inner2, 0>, list_2>::result));
-    EXPECT_TRUE((test_case<set_type<list_2, Inner3, 0>, list_3>::result));
-    EXPECT_TRUE((test_case<set_type<list_1_2, Inner1, 1>, list_1_1>::result));
-    EXPECT_TRUE((test_case<set_type<list_1, integrals, 0>, type_list<integrals>>::result));
-    EXPECT_TRUE((test_case<set_type<list_1, empty_list, 0>, type_list<empty_list>>::result));
-    EXPECT_TRUE((test_case<set_type<list_3_2_3, Inner1, 0>, list_1_2_3>::result));
-    EXPECT_TRUE((test_case<set_type<list_1_2_3, Inner3, 0>, list_3_2_3>::result));
+    EXPECT_TRUE((test_case<set_type<list_1, Inner2, 0>, list_2>));
+    EXPECT_TRUE((test_case<set_type<list_2, Inner3, 0>, list_3>));
+    EXPECT_TRUE((test_case<set_type<list_1_2, Inner1, 1>, list_1_1>));
+    EXPECT_TRUE((test_case<set_type<list_1, integrals, 0>, type_list<integrals>>));
+    EXPECT_TRUE((test_case<set_type<list_1, empty_list, 0>, type_list<empty_list>>));
+    EXPECT_TRUE((test_case<set_type<list_3_2_3, Inner1, 0>, list_1_2_3>));
+    EXPECT_TRUE((test_case<set_type<list_1_2_3, Inner3, 0>, list_3_2_3>));
 }
 
 TEST_F(TLTypeListTests, TestTypeIndexOperation) {
@@ -88,58 +88,58 @@ TEST_F(TLTypeListTests, TestLastTypeIndexOperation) {
 }
 
 TEST_F(TLTypeListTests, TestAppendOperation) {
-    EXPECT_TRUE((test_case<append<list_1_2, Inner3>, list_1_2_3>::result));
-    EXPECT_TRUE((test_case<append<list_2_1, Inner2>, list_2_1_2>::result));
-    EXPECT_TRUE((test_case<append<list_1, list_2>, list_1_2>::result));
+    EXPECT_TRUE((test_case<append<list_1_2, Inner3>, list_1_2_3>));
+    EXPECT_TRUE((test_case<append<list_2_1, Inner2>, list_2_1_2>));
+    EXPECT_TRUE((test_case<append<list_1, list_2>, list_1_2>));
 
-    EXPECT_TRUE((test_case<append<empty_list, list_2_1>, list_2_1>::result));
-    EXPECT_TRUE((test_case<append<empty_list, list_1_2_3>, list_1_2_3>::result));
-    EXPECT_TRUE((test_case<append<list_1, empty_list>, list_1>::result));
-    EXPECT_TRUE((test_case<append<list_1_2, empty_list>, list_1_2>::result));
-    EXPECT_TRUE((test_case<append<empty_list, empty_list>, empty_list>::result));
+    EXPECT_TRUE((test_case<append<empty_list, list_2_1>, list_2_1>));
+    EXPECT_TRUE((test_case<append<empty_list, list_1_2_3>, list_1_2_3>));
+    EXPECT_TRUE((test_case<append<list_1, empty_list>, list_1>));
+    EXPECT_TRUE((test_case<append<list_1_2, empty_list>, list_1_2>));
+    EXPECT_TRUE((test_case<append<empty_list, empty_list>, empty_list>));
 }
 
 TEST_F(TLTypeListTests, TestPrependOperation) {
-    EXPECT_TRUE((test_case<prepend<list_2, Inner1>, list_1_2>::result));
-    EXPECT_TRUE((test_case<prepend<list_2, list_1>, list_1_2>::result));
-    EXPECT_TRUE((test_case<prepend<list_1, list_2>, list_2_1>::result));
-    EXPECT_TRUE((test_case<prepend<list_2_3, Inner1>, list_1_2_3>::result));
+    EXPECT_TRUE((test_case<prepend<list_2, Inner1>, list_1_2>));
+    EXPECT_TRUE((test_case<prepend<list_2, list_1>, list_1_2>));
+    EXPECT_TRUE((test_case<prepend<list_1, list_2>, list_2_1>));
+    EXPECT_TRUE((test_case<prepend<list_2_3, Inner1>, list_1_2_3>));
 
-    EXPECT_TRUE((test_case<prepend<empty_list, list_2_1>, list_2_1>::result));
-    EXPECT_TRUE((test_case<prepend<empty_list, list_1_2_3>, list_1_2_3>::result));
-    EXPECT_TRUE((test_case<prepend<list_1, empty_list>, list_1>::result));
-    EXPECT_TRUE((test_case<prepend<list_1_2, empty_list>, list_1_2>::result));
-    EXPECT_TRUE((test_case<prepend<empty_list, empty_list>, empty_list>::result));
+    EXPECT_TRUE((test_case<prepend<empty_list, list_2_1>, list_2_1>));
+    EXPECT_TRUE((test_case<prepend<empty_list, list_1_2_3>, list_1_2_3>));
+    EXPECT_TRUE((test_case<prepend<list_1, empty_list>, list_1>));
+    EXPECT_TRUE((test_case<prepend<list_1_2, empty_list>, list_1_2>));
+    EXPECT_TRUE((test_case<prepend<empty_list, empty_list>, empty_list>));
 }
 
 TEST_F(TLTypeListTests, TestPushBackOperation) {
-    EXPECT_TRUE((test_case<push_back<list_1_2, Inner3>, list_1_2_3>::result));
-    EXPECT_TRUE((test_case<push_back<list_2_1, Inner2>, list_2_1_2>::result));
+    EXPECT_TRUE((test_case<push_back<list_1_2, Inner3>, list_1_2_3>));
+    EXPECT_TRUE((test_case<push_back<list_2_1, Inner2>, list_2_1_2>));
 
-    EXPECT_TRUE((test_case<push_back<empty_list, Inner1>, list_1>::result));
-    EXPECT_TRUE((test_case<push_back<empty_list, Inner2>, list_2>::result));
+    EXPECT_TRUE((test_case<push_back<empty_list, Inner1>, list_1>));
+    EXPECT_TRUE((test_case<push_back<empty_list, Inner2>, list_2>));
 }
 
 TEST_F(TLTypeListTests, TestPushFrontOperation) {
-    EXPECT_TRUE((test_case<push_front<list_2, Inner1>, list_1_2>::result));
-    EXPECT_TRUE((test_case<push_front<list_2_3, Inner1>, list_1_2_3>::result));
+    EXPECT_TRUE((test_case<push_front<list_2, Inner1>, list_1_2>));
+    EXPECT_TRUE((test_case<push_front<list_2_3, Inner1>, list_1_2_3>));
 
-    EXPECT_TRUE((test_case<push_front<empty_list, Inner1>, list_1>::result));
-    EXPECT_TRUE((test_case<push_front<empty_list, Inner2>, list_2>::result));
+    EXPECT_TRUE((test_case<push_front<empty_list, Inner1>, list_1>));
+    EXPECT_TRUE((test_case<push_front<empty_list, Inner2>, list_2>));
 }
 
 TEST_F(TLTypeListTests, TestPopBackOperation) {
-    EXPECT_TRUE((test_case<pop_back<list_1_2_3>, list_1_2>::result));
-    EXPECT_TRUE((test_case<pop_back<list_1_2>, list_1>::result));
-    EXPECT_TRUE((test_case<pop_back<list_1>, empty_list>::result));
-    EXPECT_TRUE((test_case<pop_back<list_2_1_2>, list_2_1>::result));
+    EXPECT_TRUE((test_case<pop_back<list_1_2_3>, list_1_2>));
+    EXPECT_TRUE((test_case<pop_back<list_1_2>, list_1>));
+    EXPECT_TRUE((test_case<pop_back<list_1>, empty_list>));
+    EXPECT_TRUE((test_case<pop_back<list_2_1_2>, list_2_1>));
 }
 
 TEST_F(TLTypeListTests, TestPopFrontOperation) {
-    EXPECT_TRUE((test_case<pop_front<list_1_2_3>, list_2_3>::result));
-    EXPECT_TRUE((test_case<pop_front<list_1_2>, list_2>::result));
-    EXPECT_TRUE((test_case<pop_front<list_1>, empty_list>::result));
-    EXPECT_TRUE((test_case<pop_front<list_2_1_2>, list_1_2>::result));
+    EXPECT_TRUE((test_case<pop_front<list_1_2_3>, list_2_3>));
+    EXPECT_TRUE((test_case<pop_front<list_1_2>, list_2>));
+    EXPECT_TRUE((test_case<pop_front<list_1>, empty_list>));
+    EXPECT_TRUE((test_case<pop_front<list_2_1_2>, list_1_2>));
 }
 
 
