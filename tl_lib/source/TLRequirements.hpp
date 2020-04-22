@@ -14,8 +14,9 @@ namespace requires {
     };
 
     template <typename ... TLists>
-    struct is_type_list: is_type_list<TLists>... { };
-
+    struct is_type_list {
+        static_assert((... && is_type_list<TLists>::value), "argument is not a type list");
+    };
 
     template <typename Type>
     struct is_not_nulltype<Type>
@@ -24,8 +25,9 @@ namespace requires {
     };
 
     template <typename ... Types>
-    struct is_not_nulltype: is_not_nulltype<Types>... { };
-
+    struct is_not_nulltype {
+        static_assert((... && is_not_nulltype<Types>::value), "NullType is an invalid template argument");
+    };
 
     template <typename TIter>
     struct is_iterator<TIter>: traits::is_iterator<TIter>
@@ -34,7 +36,9 @@ namespace requires {
     };
 
     template <typename ... TIters>
-    struct is_iterator: is_iterator<TIters>... { };
+    struct is_iterator {
+        static_assert((... && is_iterator<TIters>::value), "argument is not an iterator");
+    };
 
     template <typename T, typename U>
     struct is_same: traits::is_same<T, U>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TLAlgorithmfwd.hpp"
-#include "TLIterator.hpp"
+#include "TLTypeIterator.hpp"
 #include "TLTraits.hpp"
 
 #include <type_traits>
@@ -84,7 +84,7 @@ namespace TL {
             requires::is_iterator<InputIt1, InputIt2>,
             requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>
     {
-        inline static constexpr bool result = impl::type_count_impl<InputIt1, T, distance<InputIt1, InputIt2>::result>::result;
+        inline static constexpr std::size_t result = impl::type_count_impl<InputIt1, T, distance<InputIt1, InputIt2>::result>::result;
     };
 
 
@@ -97,20 +97,22 @@ namespace TL {
             requires::is_same<iterator_list<InputIt1>, iterator_list<InputIt2>>,
             requires::has_value_variable<UnPred<NullType>>
     {
-        inline static constexpr bool result = impl::type_count_if_impl<InputIt1, UnPred,
-                                                                        distance<InputIt1, InputIt2>::result>::result;
+        inline static constexpr std::size_t result =
+                impl::type_count_if_impl<InputIt1, UnPred, distance<InputIt1, InputIt2>::result>::result;
     };
 
 
     /*
      * Forward declaration
      * */
-    template <typename InIt1, typename InIt2, typename InIt3>
+    template <typename InIt1, typename InIt2, typename InIt3, template <class, class> class BinPred>
     struct equal:
             requires::is_iterator<InIt1, InIt2, InIt3>,
-            requires::is_same<iterator_list<InIt1>, iterator_list<InIt2>>
+            requires::is_same<iterator_list<InIt1>, iterator_list<InIt2>>,
+            requires::has_value_variable<BinPred<NullType, NullType>>
     {
-        inline static constexpr bool result = impl::equal_impl<InIt1, InIt3, distance<InIt1, InIt2>::result>::value;
+        inline static constexpr bool result =
+                        impl::equal_impl<InIt1, InIt3, distance<InIt1, InIt2>::result, BinPred>::result;
     };
 
 
@@ -233,7 +235,7 @@ namespace TL {
 
     namespace impl {
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct all_of_impl
         {
             inline constexpr static bool result = UnPred<iterator_value<TIterStart>>::value &&
@@ -246,7 +248,7 @@ namespace TL {
             inline constexpr static bool result = true;
         };
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct none_of_impl
         {
             inline constexpr static bool result = !UnPred<iterator_value<TIterStart>>::value &&
@@ -259,7 +261,7 @@ namespace TL {
             inline constexpr static bool result = true;
         };
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct any_of_impl
         {
             inline constexpr static bool result = UnPred<iterator_value<TIterStart>>::value ||
@@ -269,10 +271,10 @@ namespace TL {
         template <typename TIterStart, template <class> class UnPred>
         struct any_of_impl<TIterStart, UnPred, 0>
         {
-            inline constexpr static bool result = true;
+            inline constexpr static bool result = false;
         };
 
-        template <typename TIterStart, typename T, int Distance>
+        template <typename TIterStart, typename T, std::size_t Distance>
         struct find_type_impl
         {
             template <typename Type>
@@ -280,13 +282,13 @@ namespace TL {
             using result = typename find_type_if_impl<TIterStart, predicate, Distance>::result;
         };
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct find_type_if_impl
         {
             using condition = UnPred<iterator_value<TIterStart>>;
             using true_type = TIterStart;
             using false_type = typename find_type_if_impl<iterator_next<TIterStart>, UnPred, Distance - 1>::result;
-            using result = std::conditional<condition::value, true_type, false_type>;
+            using result = std::conditional_t<condition::value, true_type, false_type>;
         };
 
         template <typename TIterStart, template <class> class UnPred>
@@ -295,19 +297,19 @@ namespace TL {
             using result = TIterStart;
         };
 
-        template <typename TIterStart, typename T, int Distance>
+        template <typename TIterStart, typename T, std::size_t Distance>
         struct type_count_impl
         {
             template <typename Type>
             using predicate = traits::is_same<T, Type>;
-            inline static constexpr bool result = type_count_if_impl<TIterStart, predicate, Distance>::result;
+            inline static constexpr std::size_t result = type_count_if_impl<TIterStart, predicate, Distance>::result;
         };
 
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct type_count_if_impl
         {
-            inline static constexpr bool result = UnPred<iterator_value<TIterStart>>::value +
+            inline static constexpr std::size_t result = UnPred<iterator_value<TIterStart>>::value +
                                         type_count_if_impl<iterator_next<TIterStart>, UnPred, Distance - 1>::result;
         };
 
@@ -318,17 +320,18 @@ namespace TL {
         };
 
 
-        template <typename InIt1, typename InIt2, int Distance>
+        template <typename InIt1, typename InIt2, std::size_t Distance,
+                    template <class, class> class BinPred>
         struct equal_impl
         {
             using type_1 = iterator_value<InIt1>;
             using type_2 = iterator_value<InIt2>;
-            inline static constexpr bool result = traits::is_same<type_1, type_2>::value &&
+            inline static constexpr bool result = BinPred<type_1, type_2>::value &&
                                                     equal_impl<iterator_next<InIt1>, iterator_next<InIt2>, Distance - 1>::result;
         };
 
-        template <typename InIt1, typename InIt2>
-        struct equal_impl<InIt1, InIt2, 0>
+        template <typename InIt1, typename InIt2, template <class, class> class BinPred>
+        struct equal_impl<InIt1, InIt2, 0, BinPred>
         {
             inline static constexpr bool result = true;
         };
@@ -353,7 +356,7 @@ namespace TL {
         };
 
 
-        template <typename TIterStart, typename TIterStart2, int Distance>
+        template <typename TIterStart, typename TIterStart2, std::size_t Distance>
         struct swap_ranges_impl
         {
             using new_iter = typename swap_iter<TIterStart, TIterStart2>::result;

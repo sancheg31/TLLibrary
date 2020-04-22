@@ -29,13 +29,13 @@ HEADERS += \
     source/TLMetaFunctionGenerators.hpp \
     source/TLAlgorithm.hpp \
     source/TLAlgorithmfwd.hpp \
-    source/TLIterator.hpp \
-    source/TLIteratorfwd.hpp \
     source/TLNode.hpp \
     source/TLNullType.hpp \
     source/TLPredefinedHeaders.hpp \
     source/TLRequirements.hpp \
     source/TLTraits.hpp \
+    source/TLTypeIterator.hpp \
+    source/TLTypeIteratorfwd.hpp \
     source/TLUtility.hpp \
     source/TLfwd.hpp \
     source/type_list.hpp
