@@ -6,15 +6,10 @@
 #include "source/TLfwd.hpp"
 #include "source/TLMetaFunctionGenerators.hpp"
 #include "source/TLTraits.hpp"
-#include "source/TLIterator.hpp"
+#include "source/TLTypeIterator.hpp"
 
 namespace TL {
 namespace testing {
-
-
-
-
-
 
 /**
  *  Static Assertions:
@@ -40,9 +35,6 @@ protected:
     using int_iter = type_iterator<integrals, I>;
     template <std::size_t I>
     using double_iter = type_iterator<doubles, I>;
-
-    template <typename T, typename U>
-    static constexpr bool is_same_v = std::is_same<T, U>::value;
 
 };
 

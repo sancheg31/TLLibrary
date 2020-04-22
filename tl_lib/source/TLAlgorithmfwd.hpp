@@ -2,7 +2,7 @@
 
 #include <type_traits>
 #include "TLfwd.hpp"
-#include "TLIteratorfwd.hpp"
+#include "TLTypeIteratorfwd.hpp"
 
 namespace TL {
 
@@ -27,10 +27,12 @@ namespace TL {
     template <typename InputIt1, typename InputIt2, template <class> class UnPred>
     struct type_count_if;
 
-    template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
+    template <typename InputItStart, typename InputItEnd, typename InputIt2Start,
+              template <class, class> class BinPred = traits::is_same>
     struct equal;
 
-    template <typename InputItStart, typename InputItEnd, typename InputIt2Start>
+    template <typename InputItStart, typename InputItEnd, typename InputIt2Start,
+              template <class, class> class BinPred = traits::is_same>
     struct same_types;
 
     template <typename TList, std::size_t I, std::size_t J>
@@ -69,28 +71,29 @@ namespace TL {
 
     namespace impl {
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct all_of_impl;
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct none_of_impl;
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct any_of_impl;
 
-        template <typename TIterStart, typename T, int Distance>
+        template <typename TIterStart, typename T, std::size_t Distance>
         struct find_type_impl;
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct find_type_if_impl;
 
-        template <typename TIterStart, typename T, int Distance>
+        template <typename TIterStart, typename T, std::size_t Distance>
         struct type_count_impl;
 
-        template <typename TIterStart, template <class> class UnPred, int Distance>
+        template <typename TIterStart, template <class> class UnPred, std::size_t Distance>
         struct type_count_if_impl;
 
-        template <typename TIterStart, typename TIterStart2, int Distance>
+        template <typename TIterStart, typename TIterStart2, std::size_t Distance,
+                  template <class, class> class BinPred = traits::is_same>
         struct equal_impl;
 
         template <typename TList, std::size_t I, std::size_t J>
@@ -99,7 +102,7 @@ namespace TL {
         template <typename TIter1, typename TIter2>
         struct swap_iter_impl;
 
-        template <typename TIterStart, typename TIterStart2, int Distance>
+        template <typename TIterStart, typename TIterStart2, std::size_t Distance>
         struct swap_ranges_impl;
 
         template <typename TIter1, typename TIter2, bool>

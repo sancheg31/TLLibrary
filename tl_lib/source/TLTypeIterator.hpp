@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "TLIteratorfwd.hpp"
+#include "TLTypeIteratorfwd.hpp"
 #include "TLRequirements.hpp"
 
 namespace TL {
@@ -83,6 +83,12 @@ namespace TL {
     template <typename TIter, std::size_t I>
     using iterator_advance = typename advance<TIter, I>::result;
 
+    template <typename TList, typename = std::enable_if_t<traits::is_type_list<TList>::value>>
+    using iterator_begin = typename begin<TList>::result;
+
+    template <typename TList, typename = std::enable_if_t<traits::is_type_list<TList>::value>>
+    using iterator_end = typename end<TList>::result;
+
     template <typename TIter1, typename TIter2>
     inline constexpr static bool iterator_distance = distance<TIter1, TIter2>::result;
 
@@ -139,7 +145,7 @@ namespace TL {
     private:
         enum { I1 = iterator_position<TIter1>, I2 = iterator_position<TIter2> };
     public:
-        inline constexpr static bool result = (I1 - I2 > 0) ? (I1 - I2) : (I2 - I1);
+        inline constexpr static std::size_t result = (I1 - I2 > 0) ? (I1 - I2) : (I2 - I1);
     };
 
 

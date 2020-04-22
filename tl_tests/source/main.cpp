@@ -22,28 +22,6 @@ using namespace TL;
 using namespace TL::testing;
 using namespace TL::utilities;
 
-using integrals = type_list<char, short, int, float, double>;
-using doubles = type_list<float, double>;
-using doubles_integrals = type_list<float, double, char, short, int, float, double>;
-using integrals_doubles = type_list<char, short, int, float, double, float, double>;
-using empty_list = type_list<>;
-
-template <typename T>
-using is_int = traits::is_same<T, int>;
-
-template <class T>
-struct test_true
-{
-    enum { value = true };
-
-};
-
-template <class T>
-struct test_false
-{
-    enum { value = false };
-};
-
 int main()
 {
 /*
