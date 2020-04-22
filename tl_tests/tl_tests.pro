@@ -26,12 +26,14 @@ INCLUDEPATH += ../tl_lib
 CONFIG -= app_bundle
 
 SOURCES += \
+        source/TLAlgorithmTests.cpp \
         source/TLTypeIteratorTests.cpp \
         source/TLTypeListTests.cpp \
         source/main.cpp
 
 HEADERS += \
     experimental/TypeListTraitsTest.hpp \
+    source/TLAlgorithmTests.hpp \
     source/TLPredefinedTesters.hpp \
     source/TLTest.hpp \
     source/TLTestBase.hpp \
