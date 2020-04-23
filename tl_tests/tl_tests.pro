@@ -27,6 +27,7 @@ CONFIG -= app_bundle
 
 SOURCES += \
         source/TLAlgorithmTests.cpp \
+        source/TLTypeIteratorOperationsTests.cpp \
         source/TLTypeIteratorTests.cpp \
         source/TLTypeListTests.cpp \
         source/main.cpp
@@ -38,6 +39,7 @@ HEADERS += \
     source/TLTest.hpp \
     source/TLTestBase.hpp \
     source/TLTestCase.hpp \
+    source/TLTypeIteratorOperationsTests.hpp \
     source/TLTypeIteratorTests.hpp \
     source/TLTypeListTests.hpp \
     source/TLTypeWrappers.hpp
