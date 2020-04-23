@@ -17,27 +17,19 @@ namespace testing {
     template <class... Ts>
     using void_t = typename make_void<Ts...>::type;
 
-    template <class Operation, class Result>
+    template <class TOperation, class TResult>
     bool test_case();
 
     template <class Operation, auto Value>
     bool test_case();
 
     template <typename TOperation, typename TResult, class = void_t<>>
-    struct test_case_impl;
-
-
-
-    template <class TOperation, class TResult>
-    bool test_case() {
-        return test_case_impl<TOperation, TResult>::result;
-    }
-
-    template <class TOperation, auto Value>
-    bool test_case() {
-        return test_case_impl<TOperation, TValue<Value>>::result;
-    }
-
+    struct test_case_impl
+    {
+        struct Inner { };
+        constexpr static bool result = 0;
+        static_assert(std::is_same<TOperation, Inner>::value, "no test case determined for arguments");
+    };
 
     template <class Operation, class Type>
     struct test_case_impl<Operation, Type, void_t<typename Operation::type>>
@@ -64,8 +56,20 @@ namespace testing {
     template <class TOperation, auto Value>
     struct test_case_impl<TOperation, TValue<Value>, void_t<decltype(TOperation::result)>>
     {
-        constexpr static bool result = (TOperation::result = Value);
+        constexpr static bool result = (TOperation::result == Value);
     };
+
+    template <class TOperation, class TResult>
+    bool test_case() {
+        return test_case_impl<TOperation, TResult>::result;
+    }
+
+    template <class TOperation, auto Value>
+    bool test_case() {
+        return test_case_impl<TOperation, TValue<Value>>::result;
+    }
+
+
 
 
 
