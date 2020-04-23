@@ -1,9 +1,21 @@
 #pragma once
 
+#include <gtest/gtest.h>
 
-class TLTypeIteratorOperationsTests
+#include "TLTestBase.hpp"
+#include "TLTestCase.hpp"
+#include "source/TLMetaFunctionGenerators.hpp"
+
+namespace TL {
+namespace testing {
+
+class TLTypeIteratorOperationsTests: public ::testing::Test, public TLTestBase
 {
-public:
-    TLTypeIteratorOperationsTests();
+protected:
+    TL_HAS_NESTED_TYPE(result)
+    TL_HAS_NESTED_VALUE(result)
 };
+
+} //testing
+}//tl
 
