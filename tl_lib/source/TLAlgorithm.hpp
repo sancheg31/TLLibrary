@@ -115,6 +115,19 @@ namespace TL {
                         impl::equal_impl<InIt1, InIt3, distance<InIt1, InIt2>::result, BinPred>::result;
     };
 
+    /*
+     * Forward declaration
+     * */
+    template <typename InIt1, typename InIt2, typename InIt3, template <class, class> class BinPred>
+    struct same_types:
+                requires::is_iterator<InIt1, InIt2, InIt3>,
+                requires::is_same<iterator_list<InIt1>, iterator_list<InIt2>>,
+                requires::has_value_variable<BinPred<NullType, NullType>>
+    {
+        inline static constexpr bool result =
+                                impl::same_types_impl<InIt1, InIt2, InIt3, BinPred>::result;
+    };
+
 
     /*
      * Forward declaration
@@ -327,7 +340,7 @@ namespace TL {
             using type_1 = iterator_value<InIt1>;
             using type_2 = iterator_value<InIt2>;
             inline static constexpr bool result = BinPred<type_1, type_2>::value &&
-                                                    equal_impl<iterator_next<InIt1>, iterator_next<InIt2>, Distance - 1>::result;
+                                        equal_impl<iterator_next<InIt1>, iterator_next<InIt2>, Distance - 1, BinPred>::result;
         };
 
         template <typename InIt1, typename InIt2, template <class, class> class BinPred>
@@ -336,6 +349,43 @@ namespace TL {
             inline static constexpr bool result = true;
         };
 
+        template <typename TIterStart, typename TIterEnd, typename TIterStart2,
+                  template <class, class> class BinPred>
+        struct same_types_impl
+        {
+
+            inline constexpr static std::size_t length = iterator_distance<TIterStart, TIterEnd>;
+            using second_end = iterator_advance<TIterStart2, length>;
+
+            using result = typename do_same_types_impl<TIterStart, TIterEnd,
+                                                       TIterStart2, second_end,
+                                                        BinPred, length, 0>::result;
+        };
+
+        template <typename InIt1, typename InIt2, typename InIt3, typename InIt4,
+                  template <class, class> class BinPred, std::size_t Length, std::size_t Offset>
+        struct do_same_types_impl
+        {
+            using current_type = iterator_value<iterator_advance<InIt1, Offset>>;
+
+            template <typename T>
+            using pred_adapter = BinPred<current_type, T>;
+
+            inline constexpr static std::size_t type_count_1 = type_count<InIt1, InIt2, current_type>::result;
+
+            inline constexpr static std::size_t type_count_2 =
+                        type_count_if<InIt3, InIt4, pred_adapter>::result;
+
+            inline constexpr static bool result = (type_count_1 == type_count_2) &&
+                        do_same_types_impl<InIt1, InIt2, InIt3, InIt4, BinPred, Length, Offset + 1>::result;
+        };
+
+        template <typename InIt1, typename InIt2, typename InIt3, typename InIt4,
+                  template <class, class> class BinPred, std::size_t Length>
+        struct do_same_types_impl<InIt1, InIt2, InIt3, InIt4, BinPred, Length, Length>
+        {
+            inline constexpr static bool result = true;
+        };
 
         template <typename TList, std::size_t I, std::size_t J>
         struct swap_impl

@@ -93,8 +93,16 @@ namespace TL {
         struct type_count_if_impl;
 
         template <typename TIterStart, typename TIterStart2, std::size_t Distance,
-                  template <class, class> class BinPred = traits::is_same>
+                  template <class, class> class BinPred>
         struct equal_impl;
+
+        template <typename TIterStart, typename TIterEnd, typename TIterStart2,
+                  template <class, class> class BinPred>
+        struct same_types_impl;
+
+        template <typename TIterStart, typename TIterEnd, typename TIterStart2, typename TIterEnd2,
+                  template <class, class> class BinPred, std::size_t Length, std::size_t Offset = 0>
+        struct do_same_types_impl;
 
         template <typename TList, std::size_t I, std::size_t J>
         struct swap_impl;
