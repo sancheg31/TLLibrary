@@ -90,7 +90,7 @@ namespace TL {
     using iterator_end = typename end<TList>::result;
 
     template <typename TIter1, typename TIter2>
-    inline constexpr static bool iterator_distance = distance<TIter1, TIter2>::result;
+    inline constexpr static std::size_t iterator_distance = distance<TIter1, TIter2>::result;
 
 
     template <typename ... Tp>
@@ -108,7 +108,7 @@ namespace TL {
     template <typename TIter>
     struct next:
             requires::is_iterator<TIter>,
-            requires::less_equal<iterator_position<TIter>, length<iterator_list<TIter>>::value>
+            requires::less<iterator_position<TIter>, length<iterator_list<TIter>>::value>
     {
         using result = typename TIter::next;
     };
@@ -116,22 +116,36 @@ namespace TL {
     template <typename TIter>
     struct prev:
             requires::is_iterator<TIter>,
-            requires::greater_equal<iterator_position<TIter>, 0>
+            requires::greater<iterator_position<TIter>, 0>
     {
         using result = typename TIter::prev;
+    };
+
+    template <typename TIter, int Distance, bool b = (Distance > 0)>
+    struct advance_impl {
+        inline static constexpr int new_dist = Distance - 1;
+        using new_iter = iterator_next<TIter>;
+    };
+
+    template <typename TIter, int Distance>
+    struct advance_impl<TIter, Distance, false> {
+        inline static constexpr int new_dist = Distance + 1;
+        using new_iter = iterator_prev<TIter>;
     };
 
     template <typename TIter, int Distance>
     struct advance:
             requires::is_iterator<TIter>,
-            requires::in_range_exclusive<iterator_position<TIter> + Distance, 0, length<iterator_list<TIter>>::value>
+            requires::in_range_inclusive<iterator_position<TIter> + Distance, 0, length<iterator_list<TIter>>::value>
     {
-        using result = std::conditional<(Distance > 0), typename advance<iterator_next<TIter>, Distance - 1>::result,
-                                                        typename advance<iterator_prev<TIter>, Distance + 1>::result>;
+    private:
+        using impl = advance_impl<TIter, Distance>;
+    public:
+        using result = typename advance<typename impl::new_iter, impl::new_dist>::result;
     };
 
     template <typename TIter>
-    struct advance<TIter, 0>
+    struct advance<TIter, 0>: requires::is_iterator<TIter>
     {
         using result = TIter;
     };

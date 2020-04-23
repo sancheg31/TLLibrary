@@ -8,14 +8,14 @@ namespace requires {
 
 
     template <typename TList>
-    struct is_type_list<TList>: traits::is_type_list<TList>
+    struct is_type_list<TList>
     {
         static_assert(traits::is_type_list<TList>::value, "argument is not a type list");
     };
 
     template <typename ... TLists>
     struct is_type_list {
-        static_assert((... && is_type_list<TLists>::value), "argument is not a type list");
+        static_assert(((..., is_type_list<TLists>{}), true), "argument is not a type list");
     };
 
     template <typename Type>
@@ -26,48 +26,48 @@ namespace requires {
 
     template <typename ... Types>
     struct is_not_nulltype {
-        static_assert((... && is_not_nulltype<Types>::value), "NullType is an invalid template argument");
+        static_assert(((... && is_not_nulltype<Types>{}), true), "NullType is an invalid template argument");
     };
 
     template <typename TIter>
-    struct is_iterator<TIter>: traits::is_iterator<TIter>
+    struct is_iterator<TIter>
     {
         static_assert(traits::is_iterator<TIter>::value, "argument is not an iterator");
     };
 
     template <typename ... TIters>
     struct is_iterator {
-        static_assert((... && is_iterator<TIters>::value), "argument is not an iterator");
+        static_assert(((..., is_iterator<TIters>{}), true), "argument is not an iterator");
     };
 
     template <typename T, typename U>
-    struct is_same: traits::is_same<T, U>
+    struct is_same
     {
-        static_assert(is_same<T, U>::value, "types are not same");
+        static_assert(traits::is_same<T, U>::value, "types are not same");
     };
 
     template <class T>
-    struct has_result_type: traits::has_result_type<T>
+    struct has_result_type
     {
-        static_assert(has_result_type<T>::value, "type has no alias named result_type");
+        static_assert(traits::has_result_type<T>::value, "type has no alias named result_type");
     };
 
     template <class T>
-    struct has_value_type: traits::has_value_type<T>
+    struct has_value_type
     {
-        static_assert(has_value_type<T>::value, "type has no alias named value_type");
+        static_assert(traits::has_value_type<T>::value, "type has no alias named value_type");
     };
 
     template <class T>
-    struct has_type_alias: traits::has_type_alias<T>
+    struct has_type_alias
     {
-        static_assert(has_type_alias<T>::value, "type has no alias named type");
+        static_assert(traits::has_type_alias<T>::value, "type has no alias named type");
     };
 
     template <class T>
-    struct has_value_variable: traits::has_value_variable<T>
+    struct has_value_variable
     {
-        static_assert(has_value_variable<T>::value, "type has no member named value");
+        static_assert(traits::has_value_variable<T>::value, "type has no member named value");
     };
 
     template <std::size_t X, std::size_t Y, template <class> class Relation>

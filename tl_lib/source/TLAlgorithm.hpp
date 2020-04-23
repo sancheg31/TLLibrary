@@ -125,7 +125,7 @@ namespace TL {
                 requires::has_value_variable<BinPred<NullType, NullType>>
     {
         inline static constexpr bool result =
-                                impl::same_types_impl<InIt1, InIt2, InIt3, BinPred>::result;
+                                impl::same_types_impl<InIt1, InIt3, iterator_distance<InIt1, InIt2>, BinPred>::result;
     };
 
 
@@ -349,18 +349,24 @@ namespace TL {
             inline static constexpr bool result = true;
         };
 
-        template <typename TIterStart, typename TIterEnd, typename TIterStart2,
+        template <typename TIterStart, typename TIterStart2, std::size_t Distance,
                   template <class, class> class BinPred>
         struct same_types_impl
         {
+            using first_end = iterator_advance<TIterStart, Distance>;
+            using second_end = iterator_advance<TIterStart2, Distance>;
 
-            inline constexpr static std::size_t length = iterator_distance<TIterStart, TIterEnd>;
-            using second_end = iterator_advance<TIterStart2, length>;
-
-            using result = typename do_same_types_impl<TIterStart, TIterEnd,
-                                                       TIterStart2, second_end,
-                                                        BinPred, length, 0>::result;
+            inline constexpr static bool result = do_same_types_impl<TIterStart, first_end,
+                                                                     TIterStart2, second_end,
+                                                                     BinPred, Distance, 0>::result;
         };
+
+        template <typename TIterStart, typename TIterStart2, template <class, class> class BinPred>
+        struct same_types_impl<TIterStart, TIterStart2, 0, BinPred>
+        {
+            inline constexpr static bool result = true;
+        };
+
 
         template <typename InIt1, typename InIt2, typename InIt3, typename InIt4,
                   template <class, class> class BinPred, std::size_t Length, std::size_t Offset>
@@ -371,7 +377,8 @@ namespace TL {
             template <typename T>
             using pred_adapter = BinPred<current_type, T>;
 
-            inline constexpr static std::size_t type_count_1 = type_count<InIt1, InIt2, current_type>::result;
+            inline constexpr static std::size_t type_count_1 =
+                        type_count_if<InIt1, InIt2, pred_adapter>::result;
 
             inline constexpr static std::size_t type_count_2 =
                         type_count_if<InIt3, InIt4, pred_adapter>::result;
@@ -402,7 +409,7 @@ namespace TL {
         {
             using type_1 = iterator_value<TIter1>;
             using type_2 = iterator_value<TIter2>;
-            using result = type_list<iterator_set_value<TIter1, type_1>, iterator_set_value<TIter2, type_2>>;
+            using result = type_list<iterator_set_value<TIter1, type_2>, iterator_set_value<TIter2, type_1>>;
         };
 
 
@@ -418,7 +425,7 @@ namespace TL {
         template <typename TIterStart, typename TIterStart2>
         struct swap_ranges_impl<TIterStart, TIterStart2, 0>
         {
-            using result = TIterStart2;
+            using result = type_list<TIterStart, TIterStart2>;
         };
 
 

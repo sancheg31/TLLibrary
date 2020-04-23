@@ -96,7 +96,7 @@ namespace TL {
                   template <class, class> class BinPred>
         struct equal_impl;
 
-        template <typename TIterStart, typename TIterEnd, typename TIterStart2,
+        template <typename TIterStart, typename TIterStart2, std::size_t Distance,
                   template <class, class> class BinPred>
         struct same_types_impl;
 
