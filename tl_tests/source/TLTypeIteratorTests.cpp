@@ -123,29 +123,6 @@ TEST_F(TLTypeIteratorTests, TestPrevPropertyContent) {
     EXPECT_EQ(true, (is_same_v<iterator_prev<double_iter<doubles_size>>, double_iter<1>>));
 }
 
-TEST_F(TLTypeIteratorTests, TestPositionPropertyPresence) {
-    EXPECT_EQ(0, 1);
-}
-
-TEST_F(TLTypeIteratorTests, TestPositionPropertyContent) {
-    EXPECT_EQ(0, 1);
-}
-
-TEST_F(TLTypeIteratorTests, TestAdvancePropertyPresence) {
-    EXPECT_EQ(0, 1);
-}
-
-TEST_F(TLTypeIteratorTests, TestAdvancePropertyContent) {
-    EXPECT_EQ(0, 1);
-}
-
-TEST_F(TLTypeIteratorTests, TestDistancePropertyPresence) {
-    EXPECT_EQ(0, 1);
-}
-
-TEST_F(TLTypeIteratorTests, TestDistancePropertyContent) {
-    EXPECT_EQ(0, 1);
-}
 
 
 
