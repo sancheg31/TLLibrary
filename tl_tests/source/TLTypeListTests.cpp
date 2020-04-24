@@ -4,6 +4,7 @@
 
 #include "source/TLMetaFunctionGenerators.hpp"
 #include "source/type_list.hpp"
+#include "source/TLTypeIterator.hpp"
 #include "TLTestCase.hpp"
 
 namespace TL {
@@ -87,6 +88,14 @@ TEST_F(TLTypeListTests, TestLastTypeIndexOperation) {
     EXPECT_EQ((last_type_index<list_3_2_3, Inner3>::value), 2);
 }
 
+TEST_F(TLTypeListTests, TestSwapOperation) {
+    EXPECT_TRUE((test_case<swap<list_1_2_3, 0, 2>, list_3_2_1>()));
+    EXPECT_TRUE((test_case<swap<list_1_2, 0, 1>, list_2_1>()));
+    EXPECT_TRUE((test_case<swap<list_3_2_3, 1, 2>, list_3_3_2>()));
+    EXPECT_TRUE((test_case<swap<list_1_1, 0, 1>, list_1_1>()));
+    EXPECT_TRUE((test_case<swap<list_1, 0, 0>, list_1>()));
+}
+
 TEST_F(TLTypeListTests, TestAppendOperation) {
     EXPECT_TRUE((test_case<append<list_1_2, Inner3>, list_1_2_3>));
     EXPECT_TRUE((test_case<append<list_2_1, Inner2>, list_2_1_2>));
@@ -142,20 +151,15 @@ TEST_F(TLTypeListTests, TestPopFrontOperation) {
     EXPECT_TRUE((test_case<pop_front<list_2_1_2>, list_1_2>));
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+TEST_F(TLTypeListTests, TestEraseOperation) {
+    EXPECT_TRUE((test_case<erase<type_iterator<list_1_2, 1>, type_iterator<list_1_2, 2>>, list_1>()));
+    EXPECT_TRUE((test_case<erase<type_iterator<list_1_2_3, 0>, type_iterator<list_1_2_3, 3>>, empty_list>()));
+    EXPECT_TRUE((test_case<erase<type_iterator<list_1_2_1, 0>, type_iterator<list_1_2_1, 2>>, list_1>()));
+    EXPECT_TRUE((test_case<erase<type_iterator<list_1_2_3, 0>, type_iterator<list_1_2_3, 1>>, list_2_3>()));
+    EXPECT_TRUE((test_case<erase<type_iterator<list_1_2_1, 0>, type_iterator<list_1_2_1, 0>>, list_1_2_1>()));
+    EXPECT_TRUE((test_case<erase<type_iterator<list_1_2, 2>, type_iterator<list_1_2, 2>>, list_1_2>()));
+    EXPECT_TRUE((test_case<erase<type_iterator<empty_list, 0>, type_iterator<empty_list, 0>>, empty_list>()));
+}
 
 
 

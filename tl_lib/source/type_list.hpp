@@ -162,6 +162,22 @@ namespace TL {
         enum { value = impl::last_type_index_impl<TList, Type>::value };
     };
 
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList, std::size_t I, std::size_t J>
+    struct swap:
+            requires::is_type_list<TList>,
+            requires::in_range_inclusive<I, 0, length<TList>::value - 1>
+    {
+    private:
+        struct InRange: requires::in_range_inclusive<J, 0, length<TList>::value - 1> { };
+    public:
+        using result = typename impl::swap_impl<TList, I, J>::result;
+    };
+
+
     /*
      * Forward declaration
      * */
@@ -285,11 +301,10 @@ namespace TL {
             requires::is_iterator<TIter1, TIter2>,
             requires::is_same<iterator_list<TIter1>, iterator_list<TIter2>>
     {
-        using result = typename impl::erase_impl<iterator_list<TIter1>,
+        using type = typename impl::erase_impl<iterator_list<TIter1>,
                                                     iterator_position<TIter1>,
-                                                    iterator_position<TIter2>>::result;
+                                                    iterator_position<TIter2>>::type;
     };
-
 
 
 } //tl
@@ -540,6 +555,17 @@ namespace impl {
     /*
      * forward declaration
      * */
+    template <typename TList, std::size_t I, std::size_t J>
+    struct swap_impl
+    {
+        using type_1 = typename get_type<TList, I>::type;
+        using type_2 = typename get_type<TList, J>::type;
+        using result = typename set_type<typename set_type<TList, type_2, I>::type, type_1, J>::type;
+    };
+
+    /*
+     * forward declaration
+     * */
     template <typename TList1, typename TList2>
     struct append_impl;
 
@@ -658,13 +684,21 @@ namespace impl {
     /*
      * forward declaration
      * */
-    template <typename TList, std::size_t I>
+    template <typename TList, std::size_t I, std::size_t Length>
     struct partition_by_index
     {
         using type = typename get_type<TList, I>::type;
         using list_before_index = typename TL::impl::list_before_index<TList, I>::type;
         using list_after_index = typename TL::impl::list_after_index<TList, I>::type;
         using list_without_index = typename TL::impl::list_without_index<TList, I>::type;
+    };
+
+    template <typename TList, std::size_t Length>
+    struct partition_by_index<TList, Length, Length>
+    {
+        using list_before_index = TList;
+        using list_after_index = type_list<>;
+        using list_without_index = TList;
     };
 
 
@@ -684,7 +718,6 @@ namespace impl {
                                           typename partition::list_after_index>::type;
     };
 
-
     /*
      * forward declaration
      * */
@@ -695,9 +728,27 @@ namespace impl {
         using index_j = partition_by_index<TList, J>;
         using before = typename index_i::list_before_index;
         using after = typename index_j::list_after_index;
-        using type = typename append_list<before, after>::type;
+        using list_with_end_type = typename append_type_if_not_at_end<TList, before, J, length<TList>::value>::type;
+        using type = typename append_list<list_with_end_type, after>::type;
     };
 
+    template <typename TList, std::size_t Index>
+    struct erase_impl<TList, Index, Index>
+    {
+        using type = TList;
+    };
+
+    template <typename TSourceList, typename TDestList, std::size_t I, std::size_t Length>
+    struct append_type_if_not_at_end
+    {
+        using type = typename append_type<TDestList, typename get_type<TSourceList, I>::type>::type;
+    };
+
+    template <typename TSourceList, typename TDestList, std::size_t Length>
+    struct append_type_if_not_at_end<TSourceList, TDestList, Length, Length>
+    {
+        using type = TDestList;
+    };
 
 } //impl
 } //tl

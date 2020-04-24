@@ -38,6 +38,8 @@ namespace TL {
     struct last_type_index;
 
 
+    template <typename TList, std::size_t I, std::size_t J>
+    struct swap;
 
     template <typename TList1, typename TList2>
     struct append;
@@ -103,6 +105,9 @@ namespace TL {
         struct prepend_list;
 
 
+        template <typename TList, std::size_t I, std::size_t J>
+        struct swap_impl;
+
         template <typename TList1, typename TList2>
         struct append_impl;
 
@@ -115,9 +120,6 @@ namespace TL {
         template <typename TList>
         struct pop_front_impl;
 
-        template <typename TList, std::size_t I, std::size_t J>
-        struct erase_impl;
-
         template <typename TList, std::size_t I, typename TResult = type_list<>>
         struct list_before_index;
 
@@ -127,12 +129,18 @@ namespace TL {
         template <typename TList, std::size_t I, typename TResult = type_list<>>
         struct list_without_index;
 
-        template <typename TList, std::size_t I>
+        template <typename TList, std::size_t I, std::size_t Length = length<TList>::value>
         struct partition_by_index;
 
 
         template <typename TList, typename Type, std::size_t Index>
         struct set_type_impl;
+
+        template <typename TList, std::size_t I, std::size_t J>
+        struct erase_impl;
+
+        template <typename TSourceList, typename TDestList, std::size_t I, std::size_t Length>
+        struct append_type_if_not_at_end;
 
     } //impl
 

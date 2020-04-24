@@ -132,18 +132,6 @@ namespace TL {
     /*
      * Forward declaration
      * */
-    template <typename TList, std::size_t I, std::size_t J>
-    struct swap:
-            requires::is_type_list<TList>,
-            requires::in_range_inclusive<I, 0, length<TList>::value - 1>,
-            requires::in_range_inclusive<J, 0, length<TList>::value - 1>
-    {
-        using result = typename impl::swap_impl<TList, I, J>::result;
-    };
-
-    /*
-     * Forward declaration
-     * */
     template <typename TIter1, typename TIter2>
     struct swap_iter:
             requires::is_iterator<TIter1, TIter2>
@@ -394,14 +382,6 @@ namespace TL {
             inline constexpr static bool result = true;
         };
 
-        template <typename TList, std::size_t I, std::size_t J>
-        struct swap_impl
-        {
-            using type_1 = typename get_type<TList, I>::type;
-            using type_2 = typename get_type<TList, J>::type;
-            using result = typename set_type<typename set_type<TList, type_2, I>::type, type_1, J>::type;
-        };
-
 
         //add implementation with type pair
         template <typename TIter1, typename TIter2>
@@ -466,6 +446,7 @@ namespace TL {
             using condition = traits::is_same<T, Type>;
             using result = typename replace_if_impl<TIter, Distance, condition, U>::result;
         };
+
 
         template <typename TIter, std::size_t Distance, typename T>
         struct remove_impl

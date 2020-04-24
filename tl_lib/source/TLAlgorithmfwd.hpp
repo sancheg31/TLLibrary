@@ -35,9 +35,6 @@ namespace TL {
               template <class, class> class BinPred = traits::is_same>
     struct same_types;
 
-    template <typename TList, std::size_t I, std::size_t J>
-    struct swap;
-
     template <typename Iter1, typename Iter2>
     struct swap_iter;
 
@@ -103,9 +100,6 @@ namespace TL {
         template <typename TIterStart, typename TIterEnd, typename TIterStart2, typename TIterEnd2,
                   template <class, class> class BinPred, std::size_t Length, std::size_t Offset = 0>
         struct do_same_types_impl;
-
-        template <typename TList, std::size_t I, std::size_t J>
-        struct swap_impl;
 
         template <typename TIter1, typename TIter2>
         struct swap_iter_impl;

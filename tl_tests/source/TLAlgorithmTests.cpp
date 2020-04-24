@@ -437,5 +437,11 @@ TEST_F(TLAlgorithmTests, SwapRangesEmptyRangesDoesNothing) {
 }
 
 
+
+TEST_F(TLAlgorithmTests, EraseHasNestedTypeResult) {
+    EXPECT_EQ(1, 0);
+}
+
+
 } //testing
 } //tl
