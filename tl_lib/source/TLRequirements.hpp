@@ -18,6 +18,16 @@ namespace requires {
         static_assert(((..., is_type_list<TLists>{}), true), "argument is not a type list");
     };
 
+    template <typename TList>
+    struct is_index_list<IndexList> {
+        static_assert()
+    };
+
+    template <typename ... TLists>
+    struct is_index_list {
+
+    }
+
     template <typename Type>
     struct is_not_nulltype<Type>
     {
@@ -41,9 +51,15 @@ namespace requires {
     };
 
     template <typename T, typename U>
-    struct is_same
+    struct is_same<T, U>
     {
         static_assert(traits::is_same<T, U>::value, "types are not same");
+    };
+
+    template <typename T, typename ...Types>
+    struct is_same<T, Types...>
+    {
+        static_assert(((..., is_same<T, Types>{}), true), "types are not same");
     };
 
     template <class T>

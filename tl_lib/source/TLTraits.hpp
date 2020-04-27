@@ -49,6 +49,19 @@ namespace traits {
      * Forward declaration
      * */
     template <typename TList>
+    struct is_index_list;
+
+    template <auto ... Values>
+    struct is_index_list<index_list<Values...>>: true_argument { };
+
+    template <typename TList>
+    struct is_index_list: false_argument { };
+
+
+    /*
+     * Forward declaration
+     * */
+    template <typename TList>
     struct is_plain_type;
 
     template <template <class...> class T, typename ... Tp>
@@ -68,6 +81,19 @@ namespace traits {
 
     template <typename TIter>
     struct is_iterator: false_argument { };
+
+    /*
+     * Forward declaration
+     * */
+
+    template <typename TPair>
+    struct is_type_pair;
+
+    template <typename T, typename U>
+    struct is_type_pair<TypePair<T, U>>: true_argument { };
+
+    template <typename T>
+    struct is_type_pair: false_argument { };
 
     /*
      * Forward declaration

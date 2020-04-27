@@ -26,6 +26,10 @@ HEADERS += \
     experimental/FindOperations.h \
     experimental/literals.hpp \
     experimental/typeIndex.h \
+    source/TLIndexIterator.hpp \
+    source/TLIndexIteratorfwd.hpp \
+    source/TLIndexList.hpp \
+    source/TLIteratorBase.hpp \
     source/TLMetaFunctionGenerators.hpp \
     source/TLAlgorithm.hpp \
     source/TLAlgorithmfwd.hpp \
@@ -36,6 +40,8 @@ HEADERS += \
     source/TLTraits.hpp \
     source/TLTypeIterator.hpp \
     source/TLTypeIteratorfwd.hpp \
+    source/TLTypeManipulators.hpp \
+    source/TLTypePair.hpp \
     source/TLUtility.hpp \
     source/TLfwd.hpp \
     source/type_list.hpp

@@ -2,6 +2,7 @@
 
 
 #include "TLTypeIteratorfwd.hpp"
+#include "TLIteratorBase.hpp"
 #include "TLRequirements.hpp"
 
 namespace TL {

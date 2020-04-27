@@ -6,12 +6,15 @@
 namespace TL {
 
     struct NullType;
-
-    template <typename T, typename U>
-    struct TypeList;
-
+    
     template <typename ... Tp>
     struct type_list;
+
+    template <typename T, typename U>
+    struct TypePair;
+
+    template <auto ... Values>
+    struct IndexList;
 
     template <typename TList>
     struct length;
@@ -200,6 +203,9 @@ namespace TL {
 
         template <typename ... TIters>
         struct is_iterator;
+
+        template <typename ...Types>
+        struct is_same;
 
         template <class T>
         struct has_result_type;

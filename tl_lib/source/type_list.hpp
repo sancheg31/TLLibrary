@@ -18,24 +18,21 @@ namespace TL {
     struct type_list;
 
     template <typename T, typename ... Tp>
-    struct type_list<T, Tp...>: requires::is_not_nulltype<T>
+    struct type_list<T, Tp...>: requires::is_not_nulltype<T, Tp...>
     {
         using self_type = type_list<T, Tp...>;
-        using result_type = TypeList<T, typename type_list<Tp...>::result_type>;
     };
 
     template <typename T>
     struct type_list<T>: requires::is_not_nulltype<T>
     {
         using self_type = type_list<T>;
-        using result_type = TypeList<T, NullType>;
     };
 
     template <>
     struct type_list<>
     {
         using self_type = type_list<>;
-        using result_type = TypeList<NullType, NullType>;
     };
 
 
