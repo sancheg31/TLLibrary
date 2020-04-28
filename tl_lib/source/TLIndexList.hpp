@@ -100,10 +100,12 @@ namespace TL {
             using list_without_index = typename internal::list_without_index<IndexList<Values...>, I>::type;
         };
 
-        template <auto ... Values, std::size_t Length>
-        struct partition_by_index<IndexList<Values...>, Length, Length>
+        template <auto ... Values, std::size_t I>
+        struct partition_by_index<IndexList<Values...>, I, I>
         {
-
+            using list_before_index = typename internal::list_before_index<IndexList<Values...>, I>::type;
+            using list_after_index = typename internal::list_after_index<IndexList<Values...>, I>::type;
+            using list_without_index = typename internal::list_without_index<IndexList<Values...>, I>::type;
         };
 
     }

@@ -663,6 +663,12 @@ namespace impl {
         using type = typename append_types<type_list<>, Tp...>::type;
     };
 
+    template <typename TResult>
+    struct list_after_index<type_list<>, 0, TResult>
+    {
+        using type = TResult;
+    };
+
 
     /*
      * forward declaration
