@@ -44,6 +44,13 @@ HEADERS += \
     source/TLTypePair.hpp \
     source/TLUtility.hpp \
     source/TLfwd.hpp \
+    source/internal/TLBaseListPartitionDecls.hpp \
+    source/internal/TLBaseTypeListDefs.hpp \
+    source/internal/TLBaseTypeListModifyDefs.hpp \
+    source/internal/TLBaseTypeListPartitionDefs.hpp \
+    source/internal/TLBaseValueListDefs.hpp \
+    source/internal/TLBaseValueListModifyDefs.hpp \
+    source/internal/TLBaseValueListPartitionDefs.hpp \
     source/type_list.hpp
 
 message(tl-lib project dir: $${PWD})
